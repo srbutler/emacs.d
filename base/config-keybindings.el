@@ -1,3 +1,13 @@
+;;; package --- Summary:
+;; config-ess.el
+;;
+;;; Commentary:
+;;
+;;; Code:
+
+;; ensure ESS is installed
+;; (prelude-require-packages '(ess))
+
 ;;; KEYBINDINGS
 
 ;; set up keyboard to have mac-universal keybindings
@@ -11,10 +21,10 @@
 (global-set-key [(hyper c)] 'kill-ring-save)
 (global-set-key [(hyper s)] 'save-buffer)
 (global-set-key [(hyper l)] 'goto-line)
-;; (global-set-key [(hyper w)]
-;;                 (lambda () (interactive) (delete-window)))
 (global-set-key [(hyper x)] 'kill-region)
 (global-set-key [(hyper z)] 'undo)
+;; (global-set-key [(hyper w)]
+;;                 (lambda () (interactive) (delete-window)))
 
 ;; this function will switch the command and option bindings between
 ;; the standard layout and the more mac-centric layout (that will
@@ -34,8 +44,24 @@
 (if (null window-system)
     (define-key key-translation-map (kbd "C-\\") (kbd "C-;")))
 
+(use-package avy
+  :ensure t
+  :defer t)
+
 (use-package bind-key
   :ensure t)
+
+(use-package key-chord
+  :ensure t
+  :init (key-chord-mode +1)
+  :config
+  (key-chord-define-global "jj" 'avy-goto-word-1)
+  (key-chord-define-global "jl" 'avy-goto-line)
+  (key-chord-define-global "jk" 'avy-goto-char)
+  (key-chord-define-global "uu" 'undo-tree-visualize)
+  (key-chord-define-global "xx" 'execute-extended-command)
+  (key-chord-define-global "yy" 'browse-kill-ring)
+  )
 
 (use-package which-key
   :ensure t

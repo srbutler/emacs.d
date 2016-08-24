@@ -48,6 +48,7 @@
 (depends-on "ivy")
 (depends-on "js2-mode")
 (depends-on "julia-mode")
+(depends-on "key-chord")
 (depends-on "magit")
 (depends-on "magit-popup")
 (depends-on "markdown-mode")
