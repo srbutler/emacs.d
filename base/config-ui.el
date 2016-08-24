@@ -1,4 +1,8 @@
-
+;;; config-ui.el -- Summary
+;;
+;;; Commentary:
+;;
+;;; Code:
 
 
 ;;; BASIC INTERFACE SETTINGS
@@ -20,16 +24,6 @@
 ;; get rid of the blinking cursor
 (blink-cursor-mode -1)
 
-;; If launching Emacs as in windowing system, show the menu. If
-;; launching in a tty/terminal window, don't display the menu.
-(if window-system
-    (menu-bar-mode t)
-  (menu-bar-mode -1))
-
-;; disable toolbar
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
-
 ;; mode line settings
 (line-number-mode t)
 (column-number-mode t)
@@ -37,6 +31,9 @@
 
 ;; highlight the current line
 (global-hl-line-mode +1)
+
+;; delete on selection
+(setq delete-selection-mode +1)
 
 ;; revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode t)
@@ -61,7 +58,6 @@
  auto-save-default               nil
  blink-matching-paren            t          ;; blink matching parens
  delete-old-versions             t          ;; Old backups that is.
- delete-selection-mode           t          ;; delete the selection with a keypress
  disabled-command-function       nil        ;; Unhide the power functions.
  enable-local-variables          :all
  indent-tabs-mode                nil
@@ -79,6 +75,7 @@
  visible-bell                    nil
  x-stretch-cursor                t           ;; Stretch cursor for tab characters.
  )
+
 
 ;; setup helm for as many things as possible
 (use-package helm
@@ -148,6 +145,8 @@
             (define-key 'help-command (kbd "C-l") 'helm-locate-library)
            
             (helm-mode)
+            (setq helm-autoresize-max-height 40)
+            (setq helm-autoresize-min-height helm-autoresize-max-height)
             (helm-autoresize-mode nil))
   
   (substitute-key-definition 'find-tag 'helm-etags-select global-map)

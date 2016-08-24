@@ -46,7 +46,7 @@
 (use-package cider
   :defer t
   :ensure t
-  ;; :commands (cider cider-connect cider-jack-in)
+  :commands (cider cider-connect cider-jack-in)
   :init
   (setq cider-auto-select-error-buffer t
         cider-repl-pop-to-buffer-on-connect nil
@@ -66,10 +66,10 @@
   (add-hook 'cider-repl-mode-hook 'company-mode)
   (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
 
-  ;; :bind ("C-c C-v" . 'cider-send-and-evaluate-sexp)
+  :bind ("C-c C-v" . cider-send-and-evaluate-sexp)
 
   ;; (bind-key "C-x C-e" 'cider-eval-last-sexp clojure-mode-map)
-  (bind-key "C-c C-v" 'cider-send-and-evaluate-sexp)
+  ;; (bind-key "C-c C-v" 'cider-send-and-evaluate-sexp)
   )
 
 

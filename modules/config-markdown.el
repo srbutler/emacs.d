@@ -15,13 +15,6 @@
   (add-hook 'markdown-mode-hook 'yas-minor-mode)
   (add-hook 'markdown-mode-hook 'reftex-mode))
 
-;; pandoc
-(use-package pandoc-mode
-  :ensure t
-  :init (add-hook 'markdown-mode-hook 'pandoc-mode)
-  :config (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
-
-
 ;; set up mmm-mode to automatically load major modes for code highlighting
 (defun my-mmm-markdown-auto-class (lang &optional submode)
   "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.

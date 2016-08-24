@@ -5,13 +5,20 @@
 ;;; Code:
 
 ;; cask/pallet setup
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
 (cask-initialize)
 (require 'pallet)
 (pallet-mode t)
 
 ;; go to debug on error
-(setq debug-on-error t)
+;; (setq debug-on-error t)
 
 ;; Always load newest byte code
 (setq load-prefer-newer +1)
@@ -34,6 +41,7 @@
   (make-directory savefile-dir))
 
 ;; add the needed directories to the load-path
+(add-to-list 'load-path base-dir)
 (add-to-list 'load-path modules-dir)
 (add-to-list 'load-path vendor-dir)
 
@@ -66,6 +74,7 @@
 
 ;; load the language modules
 (load (expand-file-name "config-clojure.el" modules-dir))
+(load (expand-file-name "config-common-lisp.el" modules-dir))
 (load (expand-file-name "config-elisp.el" modules-dir))
 (load (expand-file-name "config-ess.el" modules-dir))
 (load (expand-file-name "config-haskell.el" modules-dir))
@@ -73,7 +82,6 @@
 (load (expand-file-name "config-markdown.el" modules-dir))
 (load (expand-file-name "config-org.el" modules-dir))
 (load (expand-file-name "config-python.el" modules-dir))
-(load (expand-file-name "config-web.el" modules-dir))
 
 ;;; init.el ends here
 
