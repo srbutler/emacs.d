@@ -173,26 +173,30 @@
 (use-package emmet-mode
   :ensure t
   :commands emmet-mode
+
   :init
   (add-hook 'sgml-mode-hook 'emmet-mode)
   (add-hook 'css-mode-hook  'emmet-mode)
   (add-hook 'html-mode-hook 'emmet-mode)
-  (add-hook 'nxml-mode-hook 'emmet-mode)
+
   :config
   (setq emmet-indentation 2
-        emmet-move-cursor-between-quotes t)
-  )
+        emmet-move-cursor-between-quotes t))
 
 ;; add a little configuration for xml files
 (use-package nxml-mode
   :mode (("\\.xml" . nxml-mode)
          ("\\.pom$" . nxml-mode))
+
   :config
   (setq nxml-child-indent 4
         nxml-attribute-indent 5
         nxml-auto-insert-xml-declaration-flag nil
         nxml-bind-meta-tab-to-complete-flag t
-        nxml-slash-auto-complete-flag t))
+        nxml-slash-auto-complete-flag t)
+  
+  (add-hook 'nxml-mode-hook 'smartparens-mode)
+  (add-hook 'nxml-mode-hook 'emmet-mode))
 
 
 ;; pandoc
@@ -202,10 +206,11 @@
   :config (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
 
 
-;; utility for regex conversion
+;; minor-mode and utility for regex conversion (perl <--> elisp)
 (use-package pcre2el
   :ensure t
-  :defer t)
+  :diminish (pcre-mode . "pcre")
+  :init (pcre-mode +1))
 
 
 ;; edit zsh/prezto files in sh-mode
@@ -236,8 +241,8 @@
 
 ;; add subwords into yaml-mode
 (use-package yaml-mode
-  :config
-  (add-hook 'yaml-mode-hook 'subword-mode))
+  :commands yaml-mode
+  :config (add-hook 'yaml-mode-hook 'subword-mode))
 
 (provide 'config-programming)
 ;;; config-programming.el ends here
