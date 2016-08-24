@@ -1,3 +1,9 @@
+;;; config-appearance.el -- Summary
+;;
+;;; Commentary:
+;;
+;;; Code:
+
 
 ;; WINDOW SETTINGS ---------------------------
 ;; set larger frame size
@@ -8,8 +14,17 @@
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 
-;; THEME SETTINGS -----------------------------
+;; If launching Emacs as in windowing system, show the menu. If
+;; launching in a tty/terminal window, don't display the menu.
+(if window-system
+    (menu-bar-mode t)
+  (menu-bar-mode -1))
 
+;; disable toolbar
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+
+;; THEME SETTINGS -----------------------------
 
 (use-package solarized-theme
   :ensure t
@@ -24,7 +39,7 @@
           solarized-use-less-bold t
           solarized-use-more-italic nil)
 
-    ;; make the mode-line underlining disappear?
+    ;; make the mode-line underlining disappear
     (setq x-use-underline-position-properties nil)
     (setq underline-minimum-offset 4)
     
@@ -34,16 +49,9 @@
 
   ;; general font locking
   (set-face-foreground 'font-lock-preprocessor-face "#cb4b16")
- ;; (set-face-foreground 'font-lock-variable-name-face "#b58900")
   (set-face-foreground 'font-lock-constant-face "#6c71c4")
   (set-face-attribute 'font-lock-constant-face nil :bold nil)
-  (set-face-attribute 'font-lock-builtin-face nil :bold t)
-
-  ;; git-gutter
-  ;; (set-face-foreground 'git-gutter:added "#859900")
-  ;; (set-face-foreground 'git-gutter:deleted "#dc322f")
-  ;; (set-face-foreground 'git-gutter:modified "#b58900")
-  )
+  (set-face-attribute 'font-lock-builtin-face nil :bold t))
 
 
 ;; FONT SETTINGS ------------------------------
@@ -57,12 +65,12 @@
 ;; set default font--first one found is selected
 (cond
  ((eq window-system nil) nil)
+ ((font-existsp "PragmataPro")
+  (set-face-attribute 'default nil :height 141 :font "PragmataPro"))
  ((font-existsp "Hasklig")
   (set-face-attribute 'default nil :height 141 :font "Hasklig"))
  ((font-existsp "Fira Code")
   (set-face-attribute 'default nil :height 141 :font "Fira Code"))
- ((font-existsp "PragmataPro")
-  (set-face-attribute 'default nil :height 141 :font "PragmataPro"))
  ((font-existsp "Monaco")
   (set-face-attribute 'default nil :height 131 :font "Monaco"))
  ((font-existsp "Menlo")
@@ -85,8 +93,8 @@
 ;; float (e.g 0.02): a scaling factor relative to current window's
 ;; default line height. if nil: add no extra spacing.
 
-;; (setq-default line-spacing 0.06) ;; tuned for Pragmata Pro
-(setq-default line-spacing 2)
+(setq-default line-spacing 0.06) ;; tuned for Pragmata Pro
+;; (setq-default line-spacing 2)
 
 
 ;; Enable emoji, and stop the UI from freezing when trying to display them.
@@ -121,4 +129,5 @@
     (set-char-table-range composition-function-table (car char-regexp)
                           `([,(cdr char-regexp) 0 font-shape-gstring]))))
 
-(provide 'config-appearance.el)
+(provide 'config-appearance)
+;;; config-appearance.el ends here

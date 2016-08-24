@@ -41,6 +41,7 @@
   (make-directory savefile-dir))
 
 ;; add the needed directories to the load-path
+(add-to-list 'load-path base-dir)
 (add-to-list 'load-path modules-dir)
 (add-to-list 'load-path vendor-dir)
 
@@ -73,6 +74,7 @@
 
 ;; load the language modules
 (load (expand-file-name "config-clojure.el" modules-dir))
+(load (expand-file-name "config-common-lisp.el" modules-dir))
 (load (expand-file-name "config-elisp.el" modules-dir))
 (load (expand-file-name "config-ess.el" modules-dir))
 (load (expand-file-name "config-haskell.el" modules-dir))
@@ -80,7 +82,6 @@
 (load (expand-file-name "config-markdown.el" modules-dir))
 (load (expand-file-name "config-org.el" modules-dir))
 (load (expand-file-name "config-python.el" modules-dir))
-(load (expand-file-name "config-web.el" modules-dir))
 
 ;;; init.el ends here
 

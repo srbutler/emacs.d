@@ -1,3 +1,9 @@
+;;; package --- Summary:
+;; config-ess.el
+;;
+;;; Commentary:
+;;
+;;; Code:
 
 (defun recompile-elc-on-save ()
   "Recompile your elc when saving an elisp file."
@@ -15,10 +21,10 @@
 (defun srb-emacs-lisp-mode-defaults ()
   "Sensible defaults for `emacs-lisp-mode'."
   (smartparens-strict-mode +1)
+  (paredit-mode +1)
   (rainbow-delimiters-mode +1)
   (eldoc-mode +1)
   (recompile-elc-on-save)
-  ;; (rainbow-mode +1)
   (setq mode-name "Elisp")
   )
 
@@ -28,3 +34,4 @@
                                   (run-hooks 'srb-emacs-lisp-mode-hook)))
 
 (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
+;;; config-elisp.el ends here
