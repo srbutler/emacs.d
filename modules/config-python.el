@@ -13,7 +13,8 @@
         ("\\.wsgi$" . python-mode)
   :interpreter ("python" . python-mode)
   :init (setq-default indent-tabs-mode nil)
-  :config (setq python-indent-offset 4))
+  :config
+  (setq python-indent-offset 4))
 
 (use-package elpy
   :ensure t
@@ -24,13 +25,18 @@
   (setq elpy-rpc-python-command "python3"
         elpy-rpc-backend "jedi")
 
+  (setq python-shell-interpreter "ipython3"
+        python-shell-interpreter-args "--simple-prompt --pprint")
+
+  ;; helps to prevent issues with ipython/jupyter shells
+  ;; https://github.com/jorgenschaefer/elpy/issues/908
+  (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
+  (setenv "JUPYTER_CONSOLE_TEST" "1")
+
+  
   ;; use ipython3 instead of standard interpreter
   (when (executable-find "ipython3")
     (elpy-use-ipython "ipython3"))
-
-  ;; (if (executable-find "ipython3")
-  ;;     (elpy-use-ipython "ipython3")
-  ;;   (elpy-use-ipython "ipython"))
 
   ;; set up elpy modules
   (setq elpy-modules '(elpy-module-sane-defaults
