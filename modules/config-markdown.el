@@ -13,7 +13,11 @@
   (add-hook 'markdown-mode-hook 'wrap-region-mode)
   (add-hook 'markdown-mode-hook 'turn-off-auto-fill)
   (add-hook 'markdown-mode-hook 'yas-minor-mode)
-  (add-hook 'markdown-mode-hook 'reftex-mode))
+  (add-hook 'markdown-mode-hook 'reftex-mode)
+
+  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
+  )
 
 ;; set up mmm-mode to automatically load major modes for code highlighting
 (defun my-mmm-markdown-auto-class (lang &optional submode)
