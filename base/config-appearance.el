@@ -44,7 +44,8 @@
     (setq underline-minimum-offset 4)
     
     (load-theme 'solarized-dark t))
-  :config 
+  :config
+  
   (defvar current-theme-name 'solarized-dark)
 
   ;; general font locking
@@ -66,7 +67,7 @@
 (cond
  ((eq window-system nil) nil)
  ((font-existsp "PragmataPro")
-  (set-face-attribute 'default nil :height 141 :font "PragmataPro"))
+  (set-face-attribute 'default nil :height 151 :font "PragmataPro"))
  ((font-existsp "Hasklig")
   (set-face-attribute 'default nil :height 141 :font "Hasklig"))
  ((font-existsp "Fira Code")

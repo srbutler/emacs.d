@@ -1,14 +1,13 @@
-;;; package --- Summary:
-;; config-ess.el
+;;; config-keybindings.el --- Summary:
 ;;
 ;;; Commentary:
 ;;
 ;;; Code:
 
-;; ensure ESS is installed
-;; (prelude-require-packages '(ess))
-
 ;;; KEYBINDINGS
+
+;; try and have a normal way to delete things
+(global-set-key (kbd "<delete>") 'delete-region)
 
 ;; set up keyboard to have mac-universal keybindings
 ;; meta => alt/control
