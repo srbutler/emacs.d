@@ -38,6 +38,21 @@
   )
 
 
+;; emmet mode for efficient xml/html entry
+(use-package emmet-mode
+  :ensure t
+  :commands emmet-mode
+
+  :init
+  (add-hook 'sgml-mode-hook 'emmet-mode)
+  (add-hook 'css-mode-hook  'emmet-mode)
+  (add-hook 'html-mode-hook 'emmet-mode)
+
+  :config
+  (setq emmet-indentation 2
+        emmet-move-cursor-between-quotes t))
+
+
 ;; syntax-checking
 (use-package flycheck
   :ensure t
@@ -82,11 +97,25 @@
   :bind ("C-x g" . magit-status))
 
 
+;; pandoc
+(use-package pandoc-mode
+  :ensure t
+  :init (add-hook 'markdown-mode-hook 'pandoc-mode)
+  :config (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+
+
 ;; hardcore parentheses management
 (use-package paredit
   :ensure t
   :diminish (paredit-mode . "par")
   :defer t)
+
+
+;; minor-mode and utility for regex conversion (perl <--> elisp)
+(use-package pcre2el
+  :ensure t
+  :diminish (pcre-mode . "pcre")
+  :init (pcre-mode +1))
 
 
 ;; project management and fast-switching
@@ -97,10 +126,16 @@
   (setq projectile-cache-file (expand-file-name  "projectile.cache" savefile-dir)))
 
 
+;; displays colors for color hex values
 (use-package rainbow-mode
-  :ensure t)
+  :ensure t
+  :defer t
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
+  (add-hook 'css-mode-hook 'rainbow-mode))
 
 
+;; makes parentheses colorful
 (use-package rainbow-delimiters-mode
   :config (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode))
 
@@ -169,23 +204,14 @@
 ;;; OTHER MODES ------------------------------------------
 ;; these are language modes that don't need their own file
 
-;; emmet mode for efficient entry
-(use-package emmet-mode
+(use-package json-mode
   :ensure t
-  :commands emmet-mode
+  :mode ("\\.json\\'" . json-mode))
 
-  :init
-  (add-hook 'sgml-mode-hook 'emmet-mode)
-  (add-hook 'css-mode-hook  'emmet-mode)
-  (add-hook 'html-mode-hook 'emmet-mode)
-
-  :config
-  (setq emmet-indentation 2
-        emmet-move-cursor-between-quotes t))
 
 ;; add a little configuration for xml files
 (use-package nxml-mode
-  :mode (("\\.xml" . nxml-mode)
+  :mode (("\\.xml\\'" . nxml-mode)
          ("\\.pom$" . nxml-mode))
 
   :config
@@ -197,20 +223,6 @@
   
   (add-hook 'nxml-mode-hook 'smartparens-mode)
   (add-hook 'nxml-mode-hook 'emmet-mode))
-
-
-;; pandoc
-(use-package pandoc-mode
-  :ensure t
-  :init (add-hook 'markdown-mode-hook 'pandoc-mode)
-  :config (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
-
-
-;; minor-mode and utility for regex conversion (perl <--> elisp)
-(use-package pcre2el
-  :ensure t
-  :diminish (pcre-mode . "pcre")
-  :init (pcre-mode +1))
 
 
 ;; edit zsh/prezto files in sh-mode
@@ -228,8 +240,8 @@
             (lambda ()
               (if (and buffer-file-name
                        (member (file-name-nondirectory buffer-file-name) pretzo-files))
-                  (sh-set-shell "zsh"))))
-  )
+                  (sh-set-shell "zsh")))))
+
 
 ;; set up skewer browser REPL
 (use-package skewer-mode
@@ -241,8 +253,69 @@
 
 ;; add subwords into yaml-mode
 (use-package yaml-mode
+  :mode (("\\.yml\\'" . yaml-mode)
+         ("\\.yaml\\'" . yaml-mode))
   :commands yaml-mode
   :config (add-hook 'yaml-mode-hook 'subword-mode))
+
+
+;; this function and list will download the appropriate major mode
+;; when it encouters a language file that needs one
+(defmacro lang-mode-auto-install (extension package mode)
+  "When file with EXTENSION is opened triggers auto-install of PACKAGE.
+PACKAGE is installed only if not already present.  The file is opened in MODE."
+  `(add-to-list 'auto-mode-alist
+                `(,extension . (lambda ()
+                                 (unless (package-installed-p ',package)
+                                   (package-install ',package))
+                                 (,mode)))))
+
+(defvar lang-mode-auto-install-alist
+  '(("\\.cmake\\'" cmake-mode cmake-mode)
+    ("CMakeLists\\.txt\\'" cmake-mode cmake-mode)
+    ("\\.coffee\\'" coffee-mode coffee-mode)
+    ("\\.csv\\'" csv-mode csv-mode)
+    ("\\.d\\'" d-mode d-mode)
+    ("\\.dart\\'" dart-mode dart-mode)
+    ("\\.elm\\'" elm-mode elm-mode)
+    ("\\.ex\\'" elixir-mode elixir-mode)
+    ("\\.exs\\'" elixir-mode elixir-mode)
+    ("\\.elixir\\'" elixir-mode elixir-mode)
+    ("\\.erl\\'" erlang erlang-mode)
+    ("\\.feature\\'" feature-mode feature-mode)
+    ("\\.go\\'" go-mode go-mode)
+    ("\\.groovy\\'" groovy-mode groovy-mode)
+    ("\\.haml\\'" haml-mode haml-mode)
+    ("\\.kt\\'" kotlin-mode kotlin-mode)
+    ("\\.kv\\'" kivy-mode kivy-mode)
+    ("\\.less\\'" less-css-mode less-css-mode)
+    ("\\.lua\\'" lua-mode lua-mode)
+    ("\\.ml\\'" tuareg tuareg-mode)
+    ("\\.pp\\'" puppet-mode puppet-mode)
+    ("\\.php\\'" php-mode php-mode)
+    ("\\.proto\\'" protobuf-mode protobuf-mode)
+    ("PKGBUILD\\'" pkgbuild-mode pkgbuild-mode)
+    ("\\.rs\\'" rust-mode rust-mode)
+    ("\\.sass\\'" sass-mode sass-mode)
+    ("\\.scala\\'" scala-mode scala-mode)
+    ("\\.slim\\'" slim-mode slim-mode)
+    ("\\.styl\\'" stylus-mode stylus-mode)
+    ("\\.swift\\'" swift-mode swift-mode)
+    ("\\.textile\\'" textile-mode textile-mode)
+    ("\\.thrift\\'" thrift thrift-mode)
+    ("\\.ts\\'" typescript-mode typescript-mode)
+    ("Dockerfile\\'" dockerfile-mode dockerfile-mode)))
+
+;; build auto-install mappings
+(mapc
+ (lambda (entry)
+   (let ((extension (car entry))
+         (package (cadr entry))
+         (mode (cadr (cdr entry))))
+     (unless (package-installed-p package)
+       (lang-mode-auto-install extension package mode))))
+ lang-mode-auto-install-alist)
+
 
 (provide 'config-programming)
 ;;; config-programming.el ends here
