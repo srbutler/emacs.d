@@ -4,14 +4,13 @@
 ;;
 ;;; Code:
 
-;; cask/pallet setup
-
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 (package-initialize)
 
+;; cask/pallet setup
 (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
 (cask-initialize)
 (require 'pallet)
@@ -47,6 +46,14 @@
 
 ;; set the custom file
 (setq-default custom-file (expand-file-name "custom.el" dotfiles-dir))
+
+;; setup savefiles/backups in a way that's not annoying
+(setq backup-directory-alist `(("." . "~/.emacs.d/savefile/"))
+      backup-by-copying t
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)
 
 ;; reduce the frequency of garbage collection by making it happen on
 ;; each 50MB of allocated data (the default is on every 0.76MB)

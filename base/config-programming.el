@@ -244,12 +244,22 @@
           (add-to-list 'auto-mode-alist `(,(format "\\%s\\'" file) . sh-mode)))
         pretzo-files)
 
-  ;; mark the shell as zshell
-  (add-hook 'sh-mode-hook
-            (lambda ()
-              (if (and buffer-file-name
-                       (member (file-name-nondirectory buffer-file-name) pretzo-files))
-                  (sh-set-shell "zsh")))))
+  ;; ;; mark the shell as zshell
+  ;; (add-hook 'sh-mode-hook
+  ;;           (lambda ()
+  ;;             (if (and buffer-file-name
+  ;;                      (member (file-name-nondirectory buffer-file-name) pretzo-files))
+  ;;                 (sh-set-shell "zsh"))))
+
+  ;; get a better "ll" setting
+  (add-hook 'eshell-mode-hook
+          (lambda ()
+            ;; The 'ls' executable requires the Gnu version on the Mac
+            (let ((ls (if (file-exists-p "/usr/local/bin/gls")
+                          "/usr/local/bin/gls"
+                        "/bin/ls")))
+              (defalias "ll" (concat ls " -AlohG --color=always")))))
+  )
 
 
 ;; set up skewer browser REPL

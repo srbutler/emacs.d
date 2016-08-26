@@ -5,11 +5,14 @@
 ;;; Code:
 
 
-;;; BASIC INTERFACE SETTINGS
-
 ;; put my user info
 (setq user-full-name "Steven Butler"
       user-mail-address "srbutler@gmail.com")
+
+;; open my work org file
+(defun open-kasisto-org ()
+  (interactive)
+  (find-file "~/Dropbox/Kasisto/kasisto.org"))
 
 ;; more useful frame title, that show either a file or a buffer name
 ;; (if the buffer isn't visiting a file)
@@ -33,7 +36,8 @@
 (global-hl-line-mode +1)
 
 ;; delete on selection
-(setq delete-selection-mode +1)
+;; (setq delete-selection-mode +1)
+(add-hook 'prog-mode-hook 'delete-selection-mode)
 
 ;; revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode t)
@@ -55,15 +59,13 @@
 
 ;; set some basic defaults
 (setq-default
- auto-save-default               nil
+ auto-save-default               t
  blink-matching-paren            t          ;; blink matching parens
- delete-old-versions             t          ;; Old backups that is.
  disabled-command-function       nil        ;; Unhide the power functions.
  enable-local-variables          :all
  indent-tabs-mode                nil
  indicate-empty-lines            nil
  inhibit-startup-message         t
- ;; initial-scratch-message         ";; the scratch buffer"
  kill-do-not-save-duplicates     t
  major-mode                      'text-mode
  require-final-newline           t
@@ -71,7 +73,6 @@
  show-trailing-whitespace        nil
  tab-width                       4
  truncate-lines                  t
- ;; vc-handled-backends             '(Git)
  visible-bell                    nil
  x-stretch-cursor                t           ;; Stretch cursor for tab characters.
  )
