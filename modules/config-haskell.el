@@ -51,23 +51,30 @@
              ("C-c C-c" . haskell-process-cabal-build)
              ("C-c C-k" . haskell-interactive-mode-clear)
              ("C-c c"   . haskell-process-cabal)
-             ))
+             )
 
-;;     ;; Indent the below lines on columns after the current column.
-;;     (define-key haskell-mode-map (kbd "C-<right>")
-;;       (lambda ()
-;;         (interactive)
-;;         (haskell-move-nested 1)))
-;;     ;; Same as above but backwards.
-;;     (define-key haskell-mode-map (kbd "C-<left>")
-;;       (lambda ()
-;;         (interactive)
-;;         (haskell-move-nested -1))))
+  ;; Indent the below lines on columns after the current column.
+  (define-key haskell-mode-map (kbd "C-<right>")
+    (lambda ()
+      (interactive)
+      (haskell-move-nested 1)))
+  ;; Same as above but backwards.
+  (define-key haskell-mode-map (kbd "C-<left>")
+    (lambda ()
+      (interactive)
+      (haskell-move-nested -1)))
+            
 
-;; ;; Useful to have these keybindings for .cabal files, too.
-;;   (defun haskell-cabal-hook ()
-;;     (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-;;     (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)
-;;     (define-key haskell-cabal-mode-map (kbd "C-`") 'haskell-interactive-bring)
-;;     (define-key haskell-cabal-mode-map [?\C-c ?\C-z] 'haskell-interactive-switch))
+  ;; Useful to have these keybindings for .cabal files, too.
+  (defun haskell-cabal-hook ()
+    (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
+    (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)
+    (define-key haskell-cabal-mode-map (kbd "C-`") 'haskell-interactive-bring)
+    (define-key haskell-cabal-mode-map [?\C-c ?\C-z] 'haskell-interactive-switch))
+  )
 
+(use-package flycheck-haskell
+  :commands flycheck-haskell-setup)
+
+(provide 'config-haskell)
+;;; config-haskell.el ends here

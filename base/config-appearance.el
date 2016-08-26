@@ -41,8 +41,9 @@
           solarized-use-more-italic nil)
 
     ;; make the mode-line underlining disappear
-    (setq x-use-underline-position-properties nil)
-    (setq underline-minimum-offset 4)
+    (setq x-underline-at-descent-line t)
+    ;; (setq x-use-underline-position-properties nil)
+    ;; (setq underline-minimum-offset 4)
     
     (load-theme 'solarized-dark t))
   :config

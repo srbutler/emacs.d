@@ -40,7 +40,7 @@
 
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
-  :diminish (eldoc-mode . "eldoc")
+  :diminish (turn-on-eldoc-mode . "eldoc")
   :init (add-hook 'prog-mode-hook 'turn-on-eldoc-mode))
 
 

@@ -4,6 +4,7 @@
 
 (depends-on "anti-zenburn-theme")
 (depends-on "async")
+(depends-on "auctex")
 (depends-on "avy")
 (depends-on "bind-key")
 (depends-on "cask")

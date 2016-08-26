@@ -88,26 +88,15 @@
 
           (setq helm-split-window-in-side-p           t
                 helm-buffers-fuzzy-matching           t
+                helm-M-x-fuzzy-match                  t
+                helm-recentf-fuzzy-match              t
                 helm-move-to-line-cycle-in-source     t
                 helm-ff-search-library-in-sexp        t
-                helm-ff-file-name-history-use-recentf t)
+                helm-ff-file-name-history-use-recentf t
+                helm-ff-skip-boring-files             t)
           
-          ;; (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
-          ;;       helm-input-idle-delay 0.01 ; this actually updates things reeeelatively quickly.
-          ;;       helm-scroll-amount 4 ; scroll 4 lines other window using M-/M-
-          ;;       helm-quick-update t ; do not display invisible candidates
-          ;;       helm-ff-search-library-in-sexp t ; search for library in require' anddeclare-function' sexp.
-          ;;       helm-split-window-in-side-p t ;; open helm buffer inside current window, not occupy whole other window
-          ;;       helm-candidate-number-limit 500 ; limit the number of displayed canidates
-          ;;       helm-ff-file-name-history-use-recentf t
-          ;;       ;; helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
-          ;;       helm-buffers-fuzzy-matching t ; fuzzy matching buffer names when non-nil - useful in helm-mini that lists buffers
-          ;;       helm-recentf-fuzzy-match t
-          ;;       helm-M-x-requires-pattern nil
-          ;;       helm-ff-skip-boring-files t
-          ;;       helm-M-x-fuzzy-match t)
-
           (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+
           ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
           ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
           ;; cannot change helm-command-prefix-key' oncehelm-config' is loaded.
@@ -133,7 +122,6 @@
          ("C-x C-r" . helm-recentf))
 
   :config (progn
-            ;; (define-key helm-map (kbd "") 'helm-execute-persistent-action) ; rebihnd tab to do persistent action
             (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
             (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
 
@@ -157,19 +145,28 @@
   ;; enable Helm version of Projectile with replacment commands
   (helm-projectile-on))
 
+
+;; get the PATH variable working correctly
+(use-package exec-path-from-shell
+  :ensure t
+  :init (exec-path-from-shell-initialize))
+
+
 ;; diminish keeps the modeline tidy
 (require 'diminish)
 
-;; save recent files
-(require 'recentf)
-(setq recentf-save-file (expand-file-name "recentf" savefile-dir)
-      recentf-max-saved-items 500
-      recentf-max-menu-items 15
-      ;; disable recentf-cleanup on Emacs start, because it can cause
-      ;; problems with remote files
-      recentf-auto-cleanup 'never)
-(recentf-mode +1)
 
+;; save recent files
+(use-package recentf
+  :init
+  (setq recentf-save-file (expand-file-name "recentf" savefile-dir)
+        recentf-max-saved-items 500
+        recentf-max-menu-items 15
+        ;; disable recentf-cleanup on Emacs start, because it can cause
+        ;; problems with remote files
+        recentf-auto-cleanup 'never)
+
+  (recentf-mode +1))
 
 ;; saveplace remembers your location in a file when saving files
 (require 'saveplace)
@@ -196,6 +193,7 @@
 (setq uniquify-separator "/")
 (setq uniquify-after-kill-buffer-p t)    ; rename after killing uniquified
 (setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
+
 
 ;; use shift + arrow keys to switch between visible buffers
 (require 'windmove)
