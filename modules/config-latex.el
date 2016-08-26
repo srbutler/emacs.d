@@ -18,7 +18,7 @@
     (add-hook 'LaTeX-mode-hook #'flyspell-mode)
     (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
     (add-hook 'LaTeX-mode-hook #'turn-on-auto-fill)
-    ;;(add-hook 'LaTeX-mode-hook #'(set-fill-column 80))
+
     (setq TeX-auto-save t
 	  TeX-parse-self t
 	  TeX-save-query nil
@@ -44,10 +44,9 @@
 
   ;; pandoc setup
   (add-hook 'TeX-mode-hook 'pandoc-mode)
-  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
+  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
 
-  )
-
+;; integrate reftex
 (use-package reftex
   :commands turn-on-reftex
   :diminish reftex-mode
@@ -87,12 +86,17 @@
           ("citetitle" "[{")
           ("citetitles" "[{")
           ("headlessfullcite" "[{")
-          )
-        )
+          ))
 
   ;; Default bibliography
-  (setq reftex-default-bibliography
-        '("/Users/srbutler/Documents/Bibliography/library.bib"))
+  ;; (setq reftex-default-bibliography
+  ;;       '("/Users/srbutler/Documents/Bibliography/library.bib"))
+
+  (if (string= (system-name) "KasistontLaptop.kitsys.net")
+      (setq reftex-default-bibliography
+            '("/Users/srbutler/Documents/library.bib/library.bib"))
+    (setq reftex-default-bibliography
+        '("/Users/srbutler/Documents/Bibliography/library.bib")))
   )
 
 (use-package bibtex

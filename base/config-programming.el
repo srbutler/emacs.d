@@ -38,6 +38,12 @@
   )
 
 
+;; display certain documentation in the minibuffer
+(use-package eldoc-mode
+  :diminish (eldoc-mode . "eldoc")
+  :init (add-hook 'prog-mode-hook 'turn-on-eldoc-mode))
+
+
 ;; emmet mode for efficient xml/html entry
 (use-package emmet-mode
   :ensure t
@@ -67,7 +73,10 @@
                  (message "FlyC: %s" (flycheck-error-message err)) (sit-for 1))
                errors))
        (setq flycheck-highlighting-mode nil
-             flycheck-display-errors-function 'srb/flycheck-display-errors-function))))
+             flycheck-display-errors-function 'srb/flycheck-display-errors-function)))
+
+  ;; flycheck
+  (set-face-foreground 'flycheck-fringe-info "#268bd2"))
 
 
 ;; have flycheck info appear in a popup

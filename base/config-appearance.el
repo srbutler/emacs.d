@@ -27,6 +27,7 @@
 ;; THEME SETTINGS -----------------------------
 
 (use-package solarized-theme
+  ;; :disabled nil
   :ensure t
   :init
   (progn
@@ -53,6 +54,12 @@
   (set-face-foreground 'font-lock-constant-face "#6c71c4")
   (set-face-attribute 'font-lock-constant-face nil :bold nil)
   (set-face-attribute 'font-lock-builtin-face nil :bold t))
+
+
+;; (use-package material-theme
+;;   :disabled t
+;;   :ensure t
+;;   :init (load-theme 'material t))
 
 
 ;; FONT SETTINGS ------------------------------
