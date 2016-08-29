@@ -4,22 +4,20 @@
 ;;
 ;;; Code:
 
-;; PROGRAMMING HELPER MODES -------------------------
-
 ;; autocompletion with company
 (use-package company
   :ensure t
   :diminish (company-mode . "comp")
   :init
-  (setq company-idle-delay 0.5)
-  (setq company-tooltip-limit 10)
-  (setq company-minimum-prefix-length 2)
-  ;; invert the navigation direction if the the completion popup-isearch-match
-  ;; is displayed on top (happens near the bottom of windows)
-  (setq company-tooltip-flip-when-above t)
+  (setq company-idle-delay            0.5
+        company-tooltip-limit         10
+        company-minimum-prefix-length 2
+        
+        ;; invert the navigation direction if the the completion popup-isearch-match
+        ;; is displayed on top (happens near the bottom of windows)
+        company-tooltip-flip-when-above t)
 
-  :config
-  (global-company-mode 1))
+  :config (global-company-mode 1))
 
 
 ;; set up dash integration
@@ -41,7 +39,7 @@
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
   :diminish (turn-on-eldoc-mode . "eldoc")
-  :init (add-hook 'prog-mode-hook 'turn-on-eldoc-mode))
+  :init (add-hook 'prog-mode-hook 'eldoc-mode))
 
 
 ;; emmet mode for efficient xml/html entry
@@ -55,7 +53,7 @@
   (add-hook 'html-mode-hook 'emmet-mode)
 
   :config
-  (setq emmet-indentation 2
+  (setq emmet-indentation                2
         emmet-move-cursor-between-quotes t))
 
 
@@ -75,8 +73,10 @@
        (setq flycheck-highlighting-mode nil
              flycheck-display-errors-function 'srb/flycheck-display-errors-function)))
 
-  ;; flycheck
-  (set-face-foreground 'flycheck-fringe-info "#268bd2"))
+  ;; change the info color when using solarized
+  (when (or (eq current-theme-name "solarized-dark")
+            (eq current-theme-name "solarized-light"))
+    (set-face-foreground 'flycheck-fringe-info "#268bd2")))
 
 
 ;; have flycheck info appear in a popup
@@ -93,11 +93,13 @@
   :init (global-git-gutter-mode t)
   :diminish git-gutter-mode
   :config
-  ;; git-gutter
-  (set-face-foreground 'git-gutter:added "#859900")
-  (set-face-foreground 'git-gutter:deleted "#dc322f")
-  (set-face-foreground 'git-gutter:modified "#b58900")
-  )
+  
+  ;; change the indicator colors to something nicer
+  (when (or (eq current-theme-name "solarized-dark")
+            (eq current-theme-name "solarized-light"))
+    (set-face-foreground 'git-gutter:added "#859900")
+    (set-face-foreground 'git-gutter:deleted "#dc322f")
+    (set-face-foreground 'git-gutter:modified "#b58900")))
 
 
 ;; set up magit for git
@@ -109,7 +111,9 @@
 ;; pandoc
 (use-package pandoc-mode
   :ensure t
-  :init (add-hook 'markdown-mode-hook 'pandoc-mode)
+  :init
+  (add-hook 'markdown-mode-hook 'pandoc-mode)
+  (add-hook 'org-mode-hook 'pandoc-mode)
   :config (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
 
 
@@ -131,7 +135,8 @@
 (use-package projectile
   :ensure t
   :diminish projectile-mode
-  :config (projectile-global-mode t)
+  :config
+  (projectile-global-mode t)
   (setq projectile-cache-file (expand-file-name  "projectile.cache" savefile-dir)))
 
 
@@ -213,12 +218,14 @@
 ;;; OTHER MODES ------------------------------------------
 ;; these are language modes that don't need their own file
 
+(use-package csv-mode
+  :ensure t
+  :mode ("\\.csv\\'" . csv-mode))
+
 (use-package json-mode
   :ensure t
   :mode ("\\.json\\'" . json-mode))
 
-
-;; add a little configuration for xml files
 (use-package nxml-mode
   :mode (("\\.xml\\'" . nxml-mode)
          ("\\.pom$" . nxml-mode))
@@ -278,8 +285,9 @@
   :config (add-hook 'yaml-mode-hook 'subword-mode))
 
 
-;; this function and list will download the appropriate major mode
+;; this macro and list will download the appropriate major mode
 ;; when it encouters a language file that needs one
+;; taken from emacs-prelude
 (defmacro lang-mode-auto-install (extension package mode)
   "When file with EXTENSION is opened triggers auto-install of PACKAGE.
 PACKAGE is installed only if not already present.  The file is opened in MODE."
@@ -293,7 +301,6 @@ PACKAGE is installed only if not already present.  The file is opened in MODE."
   '(("\\.cmake\\'" cmake-mode cmake-mode)
     ("CMakeLists\\.txt\\'" cmake-mode cmake-mode)
     ("\\.coffee\\'" coffee-mode coffee-mode)
-    ("\\.csv\\'" csv-mode csv-mode)
     ("\\.d\\'" d-mode d-mode)
     ("\\.dart\\'" dart-mode dart-mode)
     ("\\.elm\\'" elm-mode elm-mode)

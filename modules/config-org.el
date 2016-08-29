@@ -24,17 +24,6 @@
     (and (fboundp 'yas-expand) (yas-expand))))
 
 
-;; ;; prelude defaults
-;; (defun prelude-org-mode-defaults ()
-;;   (let ((oldmap (cdr (assoc 'prelude-mode minor-mode-map-alist)))
-;;         (newmap (make-sparse-keymap)))
-;;     (set-keymap-parent newmap oldmap)
-;;     (define-key newmap (kbd "C-c +") nil)
-;;     (define-key newmap (kbd "C-c -") nil)
-;;     (make-local-variable 'minor-mode-overriding-map-alist)
-;;     (push `(prelude-mode . ,newmap) minor-mode-overriding-map-alist))
-;;   )
-
 ;; set up org plus contribs for most swag
 (use-package org
   :mode ("\\.org\\'" . org-mode)
@@ -62,10 +51,6 @@
         org-replace-disputed-keys t
         ;; from prelude
         org-log-done t)
-
-  ;; ;; maintain prelude compatibility
-  ;; (setq prelude-org-mode-hook 'prelude-org-mode-defaults)
-  ;; (add-hook 'org-mode-hook (lambda () (run-hooks 'prelude-org-mode-hook)))
 
   ;; make windmove work in org-mode
   (add-hook 'org-shiftup-final-hook 'windmove-up)
@@ -96,7 +81,8 @@
   ;; enable LaTeX math-mode entry via CDLaTeX
   (use-package cdlatex-mode
     :init (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-    :diminish org-cdlatex)
+    :diminish org-cdlatex
+    )
 
   ;; downloaded from github, allows linguistics examples via linguex
   ;; or gb4e

@@ -38,6 +38,7 @@
 ;; delete on selection
 ;; (setq delete-selection-mode +1)
 (add-hook 'prog-mode-hook 'delete-selection-mode)
+(setq delete-active-region t)
 
 ;; revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode t)

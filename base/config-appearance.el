@@ -74,10 +74,10 @@
 ;; set default font--first one found is selected
 (cond
  ((eq window-system nil) nil)
- ((font-existsp "PragmataPro")
-  (set-face-attribute 'default nil :height 151 :font "PragmataPro"))
  ((font-existsp "Hasklig")
   (set-face-attribute 'default nil :height 141 :font "Hasklig"))
+ ((font-existsp "PragmataPro")
+  (set-face-attribute 'default nil :height 151 :font "PragmataPro"))
  ((font-existsp "Fira Code")
   (set-face-attribute 'default nil :height 141 :font "Fira Code"))
  ((font-existsp "Monaco")

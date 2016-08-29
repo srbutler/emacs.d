@@ -16,6 +16,7 @@
 (depends-on "color-theme-sanityinc-tomorrow")
 (depends-on "company")
 (depends-on "company-ghc")
+(depends-on "csv-mode")
 (depends-on "cython-mode")
 (depends-on "darkokai-theme")
 (depends-on "dash")
