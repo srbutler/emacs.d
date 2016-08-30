@@ -43,26 +43,34 @@
 (if (null window-system)
     (define-key key-translation-map (kbd "C-\\") (kbd "C-;")))
 
+;; linked to key-chords below
 (use-package avy
   :ensure t
   :defer t)
 
+;; used in a few places to define keybindings easily
+;; I think this a use-package dependency for the :bind command
 (use-package bind-key
   :ensure t)
 
+;; define a bunch of quick key combos for basic actions
+;; these are a mix of movement and helm calls for convenience
 (use-package key-chord
   :ensure t
   :init (key-chord-mode +1)
   :config
+  ;; quick helm calls
   (key-chord-define-global "bb" 'helm-buffers-list)
+  (key-chord-define-global "ff" 'helm-find-files)
+  (key-chord-define-global "xx" 'helm-M-x)
+
+  ;; quick avy calls
   (key-chord-define-global "jj" 'avy-goto-word-1)
   (key-chord-define-global "jl" 'avy-goto-line)
   (key-chord-define-global "jk" 'avy-goto-char)
-  (key-chord-define-global "uu" 'undo-tree-visualize)
-  (key-chord-define-global "xx" 'helm-M-x)
-  (key-chord-define-global "yy" 'browse-kill-ring)
   )
 
+;; cause I forget things
 (use-package which-key
   :ensure t
   :diminish which-key-mode
