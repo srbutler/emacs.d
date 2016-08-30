@@ -38,23 +38,8 @@
 
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
-  :diminish (turn-on-eldoc-mode . "eldoc")
+  :diminish (eldoc-mode . "eldoc")
   :init (add-hook 'prog-mode-hook 'eldoc-mode))
-
-
-;; emmet mode for efficient xml/html entry
-(use-package emmet-mode
-  :ensure t
-  :commands emmet-mode
-
-  :init
-  (add-hook 'sgml-mode-hook 'emmet-mode)
-  (add-hook 'css-mode-hook  'emmet-mode)
-  (add-hook 'html-mode-hook 'emmet-mode)
-
-  :config
-  (setq emmet-indentation                2
-        emmet-move-cursor-between-quotes t))
 
 
 ;; syntax-checking
@@ -267,14 +252,6 @@
                         "/bin/ls")))
               (defalias "ll" (concat ls " -AlohG --color=always")))))
   )
-
-
-;; set up skewer browser REPL
-(use-package skewer-mode
-  :ensure t
-  :commands skewer-mode run-skewer
-  :disabled t
-  :config (skewer-setup))
 
 
 ;; add subwords into yaml-mode
