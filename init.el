@@ -85,10 +85,10 @@
 (load (expand-file-name "config-elisp.el" modules-dir))
 (load (expand-file-name "config-ess.el" modules-dir))
 (load (expand-file-name "config-haskell.el" modules-dir))
-(load (expand-file-name "config-javascript.el" modules-dir))
 (load (expand-file-name "config-markdown.el" modules-dir))
 (load (expand-file-name "config-org.el" modules-dir))
 (load (expand-file-name "config-python.el" modules-dir))
+(load (expand-file-name "config-web-js.el" modules-dir))
 
 ;;; init.el ends here
 

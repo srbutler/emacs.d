@@ -27,6 +27,7 @@
 ;; emmet mode for efficient xml/html entry
 (use-package emmet-mode
   :ensure t
+  :diminish (emmet-mode . "emmet")
   :commands emmet-mode
 
   :init
@@ -43,6 +44,7 @@
 (use-package skewer-mode
   :ensure t
   :commands skewer-mode run-skewer
+  :diminish (skewer-mode . "skewer")
   :disabled t
   :config (skewer-setup))
 
@@ -53,8 +55,8 @@
          ("\\.es6\\'" . js2-mode)
          ("\\.ejs\\'" . js2-mode)
          ("\\.pac\\'" . js2-mode))
-  ;; :interpreter node
-  :commands js2-mode
+
+  ;; :commands js2-mode
   :config
   (setq js-basic-indent 2
         mode-name "JS2")
@@ -87,6 +89,7 @@
 (use-package tern
   :ensure t
   :commands tern-mode
+  :diminish (tern-mode . "tern")
   :init
   (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
   ;; Setup Tern as an autocomplete source.
