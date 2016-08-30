@@ -85,6 +85,7 @@
 (depends-on "simple-httpd")
 (depends-on "skewer-mode")
 (depends-on "slime")
+(depends-on "smart-mode-line")
 (depends-on "smartparens")
 (depends-on "solarized-theme")
 (depends-on "spinner")

@@ -31,6 +31,7 @@
   :ensure t
   :init
   (progn
+    ;; these variables need to be preset
     (setq solarized-distinct-doc-face t
           solarized-distinct-fringe-background nil
           solarized-emphasize-indicators nil
@@ -42,12 +43,12 @@
 
     ;; make the mode-line underlining disappear
     (setq x-underline-at-descent-line t)
-    ;; (setq x-use-underline-position-properties nil)
-    ;; (setq underline-minimum-offset 4)
-    
+
+    ;; finally load the theme
     (load-theme 'solarized-dark t))
-  :config
   
+  :config
+  ;; just a variable for calling later face changes
   (defvar current-theme-name 'solarized-dark)
 
   ;; general font locking
@@ -56,6 +57,12 @@
   (set-face-attribute 'font-lock-constant-face nil :bold nil)
   (set-face-attribute 'font-lock-builtin-face nil :bold t))
 
+;; make the mode-line nice and simple
+;; needs to be loaded after the theme
+(use-package smart-mode-line
+  :ensure t
+  :init (setq sml/no-confirm-load-theme t)
+  :config (sml/setup))
 
 ;; (use-package material-theme
 ;;   :disabled t
@@ -102,8 +109,8 @@
 ;; float (e.g 0.02): a scaling factor relative to current window's
 ;; default line height. if nil: add no extra spacing.
 
-(setq-default line-spacing 0.06) ;; tuned for Pragmata Pro
-;; (setq-default line-spacing 2)
+;; (setq-default line-spacing 0.06) ;; tuned for Pragmata Pro
+(setq-default line-spacing 2)
 
 
 ;; Enable emoji, and stop the UI from freezing when trying to display them.
