@@ -226,6 +226,11 @@
   (add-hook 'nxml-mode-hook 'emmet-mode))
 
 
+;; personal mode for phoenix grammars
+(use-package phoenix-grammar-mode
+  :load-path "~/.emacs.d/vendor/phoenix-grammar-mode")
+
+
 ;; edit zsh/prezto files in sh-mode
 (use-package sh-mode
   :config
