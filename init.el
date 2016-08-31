@@ -22,7 +22,6 @@
 ;; Always load newest byte code
 (setq load-prefer-newer +1)
 
-
 ;; get all the directory names
 (defvar dotfiles-dir (file-name-directory load-file-name)
   "The root dir of the Emacs Prelude distribution.")
