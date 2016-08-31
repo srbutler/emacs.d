@@ -43,6 +43,16 @@
 (if (null window-system)
     (define-key key-translation-map (kbd "C-\\") (kbd "C-;")))
 
+;; the opposite of fill-parapgraph
+(defun unfill-paragraph ()
+  "Take a multi-line paragraph and make it into a single line of text."
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)))
+
+ (define-key global-map "\M-Q" 'unfill-paragraph)
+
+
 ;; linked to key-chords below
 (use-package avy
   :ensure t
