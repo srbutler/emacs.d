@@ -13,7 +13,19 @@
   :interpreter ("python" . python-mode)
   :init (setq-default indent-tabs-mode nil)
   :config
-  (setq python-indent-offset 4))
+  (setq python-indent-offset 4)
+
+  ;; set custom keywords for python-mode
+  (font-lock-add-keywords 'python-mode
+                          '(
+                            ("[ \t]*\\<\\(from\\)\\>" 1 'font-lock-preprocessor-face)
+                            ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
+                            ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
+                            ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
+                            ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
+                            ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
+                            ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face)
+                            )))
 
 (use-package elpy
   :ensure t
@@ -75,31 +87,17 @@
   :mode (("\\.pyx\\'"  . cython-mode)
          ("\\.spyx\\'" . cython-mode)
          ("\\.pxd\\'"  . cython-mode)
-         ("\\.pxi\\'"  . cython-mode)))
-
-;; -------------------- FONT LOCK --------------------
-
-;; set custom keywords for python-mode
-(font-lock-add-keywords 'python-mode
-                        '(
-                          ("[ \t]*\\<\\(from\\)\\>" 1 'font-lock-preprocessor-face)
-                          ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
-                          ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
-                          ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
-                          ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
-                          ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
-                          ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face)
-                          ))
-
-(font-lock-add-keywords 'cython-mode
-                        '(
-                          ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
-                          ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
-                          ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
-                          ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
-                          ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
-                          ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face)
-                          ))
+         ("\\.pxi\\'"  . cython-mode))
+  :config
+  (font-lock-add-keywords 'cython-mode
+                          '(
+                            ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
+                            ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
+                            ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
+                            ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
+                            ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
+                            ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face)
+                            )))
 
 (provide 'lang-python)
 ;;; lang-python.el ends here
