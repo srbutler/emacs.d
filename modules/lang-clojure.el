@@ -1,5 +1,5 @@
 ;;; package --- Summary:
-;; config-clojure.el
+;; lang-clojure.el
 ;;
 ;;; Commentary:
 ;;
@@ -95,4 +95,4 @@
   (cljr-add-keybindings-with-prefix "C-c .")
   :diminish clj-refactor-mode)
 
-;;; config-clojure.el ends here
+;;; lang-clojure.el ends here

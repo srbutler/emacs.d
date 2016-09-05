@@ -58,6 +58,11 @@
        (setq flycheck-highlighting-mode nil
              flycheck-display-errors-function 'srb/flycheck-display-errors-function)))
 
+  ;; get rid of annoying contrasts when using certain themes
+  (set-face-background 'flycheck-fringe-info nil)
+  (set-face-background 'flycheck-fringe-error nil)
+  (set-face-background 'flycheck-fringe-warning nil)
+
   ;; change the info color when using solarized
   (when (or (eq current-theme-name "solarized-dark")
             (eq current-theme-name "solarized-light"))
@@ -146,27 +151,23 @@
   :init
   (progn
     (require 'smartparens-config)
-    (setq sp-base-key-bindings         'paredit
-          sp-autoskip-closing-pair     'always
-          sp-hybrid-kill-entire-symbol nil)
     (sp-use-paredit-bindings))
 
   ;; turn on smartparens for all programming modes
   (add-hook 'prog-mode-hook 'smartparens-mode)
   :config
+  (setq sp-base-key-bindings         'paredit
+        sp-autoskip-closing-pair     'always
+        sp-hybrid-kill-entire-symbol nil)
   (show-smartparens-global-mode +1))
 
 
-;; define a bunch of wrapping operations in many modes
+;; define a bunch of wrapping operations in text modes
 (use-package wrap-region
   :ensure t
   :diminish wrap-region-mode
+  :init (add-hook 'text-mode-hook 'wrap-region-mode)
   :config
-  ;; (wrap-region-global-mode t)
-
-  (add-hook 'text-mode-hook 'wrap-region-mode)
-  (add-hook 'lisp-mode-hook 'wrap-region-mode)
-
   (wrap-region-add-wrappers
    '(("(" ")")
      ("[" "]")
@@ -176,28 +177,29 @@
      ("\"" "\"")
      ("‘" "’"   "q")
      ("“" "”"   "Q")
-     ("*" "*"   "b"   org-mode)                 ; bolden
-     ("*" "*"   "*"   org-mode)                 ; bolden
-     ("/" "/"   "i"   org-mode)                 ; italics
-     ("/" "/"   "/"   org-mode)                 ; italics
-     ("~" "~"   "c"   org-mode)                 ; code
-     ("~" "~"   "~"   org-mode)                 ; code
-     ("=" "="   "v"   org-mode)                 ; verbatim
-     ("=" "="   "="   org-mode)                 ; verbatim
-     ("_" "_"   "u" '(org-mode markdown-mode))  ; underline
-     ("**" "**" "b"   markdown-mode)            ; bolden
-     ("*" "*"   "i"   markdown-mode)            ; italics
-     ;; ("`" "`"   "c" '(markdown-mode ruby-mode)) ; code
-     ("`" "'"   "c"   lisp-mode)                ; code
- )))
+     ("*" "*"   "b"   org-mode)                 ;; bolden
+     ("*" "*"   "*"   org-mode)                 ;; bolden
+     ("/" "/"   "i"   org-mode)                 ;; italics
+     ("/" "/"   "/"   org-mode)                 ;; italics
+     ("~" "~"   "c"   org-mode)                 ;; code
+     ("~" "~"   "~"   org-mode)                 ;; code
+     ("=" "="   "v"   org-mode)                 ;; verbatim
+     ("=" "="   "="   org-mode)                 ;; verbatim
+     ("_" "_"   "u"   org-mode)                 ;; underline
+     ("_" "_"   "u"   markdown-mode)            ;; underline
+     ("**" "**" "b"   markdown-mode)            ;; bolden
+     ("*" "*"   "i"   markdown-mode)            ;; italics
+     ("`" "`"   "c"   markdown-mode)            ;; code
+     )))
 
 
 ;; enable YASnippet globally
 (use-package yasnippet
   :ensure t
-  :init (add-hook 'prog-mode-hook 'yas-minor-mode)
+  :init
+  (add-hook 'prog-mode-hook 'yas-minor-mode)
+  (add-hook 'text-mode-hook 'yas-minor-mode)
   :config (yas-load-directory "~/.emacs.d/snippets")
-  ;;:diminish yas
   )
 
 ;;; OTHER MODES ------------------------------------------
@@ -234,28 +236,11 @@
 ;; edit zsh/prezto files in sh-mode
 (use-package sh-mode
   :config
-  (defvar pretzo-files '("zlogin" "zlogin" "zlogout" "zpretzorc" "zprofile" "zshenv" "zshrc"))
-
   ;; have the mode launch for any prezto files
+  (defvar pretzo-files '("zlogin" "zlogin" "zlogout" "zpretzorc" "zprofile" "zshenv" "zshrc"))
   (mapc (lambda (file)
           (add-to-list 'auto-mode-alist `(,(format "\\%s\\'" file) . sh-mode)))
         pretzo-files)
-
-  ;; ;; mark the shell as zshell
-  ;; (add-hook 'sh-mode-hook
-  ;;           (lambda ()
-  ;;             (if (and buffer-file-name
-  ;;                      (member (file-name-nondirectory buffer-file-name) pretzo-files))
-  ;;                 (sh-set-shell "zsh"))))
-
-  ;; get a better "ll" setting
-  (add-hook 'eshell-mode-hook
-          (lambda ()
-            ;; The 'ls' executable requires the Gnu version on the Mac
-            (let ((ls (if (file-exists-p "/usr/local/bin/gls")
-                          "/usr/local/bin/gls"
-                        "/bin/ls")))
-              (defalias "ll" (concat ls " -AlohG --color=always")))))
   )
 
 
@@ -303,7 +288,6 @@ PACKAGE is installed only if not already present.  The file is opened in MODE."
     ("\\.php\\'" php-mode php-mode)
     ("\\.proto\\'" protobuf-mode protobuf-mode)
     ("PKGBUILD\\'" pkgbuild-mode pkgbuild-mode)
-    ("\\.rs\\'" rust-mode rust-mode)
     ("\\.sass\\'" sass-mode sass-mode)
     ("\\.scala\\'" scala-mode scala-mode)
     ("\\.slim\\'" slim-mode slim-mode)

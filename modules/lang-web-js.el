@@ -1,4 +1,4 @@
-;;; config-web-js.el --- Summary:
+;;; lang-web-js.el --- Summary:
 ;;
 ;;; Commentary:
 ;;
@@ -119,5 +119,5 @@
         (lambda ()
           (ansi-color-for-comint-mode-on))))
 
-(provide 'config-web-js.el)
-;;; config-web.el ends here
+(provide 'lang-web-js.el)
+;;; lang-web.el ends here

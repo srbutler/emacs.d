@@ -1,8 +1,6 @@
-;;; package --- Summary:
-;; python-setup.el
+;;; lang-haskell.el --- Summary:
 ;;
 ;;; Commentary:
-;;
 ;;
 ;;; Code:
 
@@ -76,5 +74,5 @@
 (use-package flycheck-haskell
   :commands flycheck-haskell-setup)
 
-(provide 'config-haskell)
-;;; config-haskell.el ends here
+(provide 'lang-haskell)
+;;; lang-haskell.el ends here

@@ -24,11 +24,9 @@
 
 ;; get all the directory names
 (defvar dotfiles-dir (file-name-directory load-file-name)
-  "The root dir of the Emacs Prelude distribution.")
-(defvar base-dir (expand-file-name "base" dotfiles-dir)
-  "A directory for general configuration files.")
+  "The emacs.d root directory.")
 (defvar modules-dir (expand-file-name "modules" dotfiles-dir)
-  "A directory for the language configurations.")
+  "A directory for configuration files.")
 (defvar vendor-dir (expand-file-name "vendor" dotfiles-dir)
   "This directory houses packages that are not yet available in ELPA (or MELPA).")
 (defvar savefile-dir (expand-file-name "savefile" dotfiles-dir)
@@ -39,7 +37,6 @@
   (make-directory savefile-dir))
 
 ;; add the needed directories to the load-path
-(add-to-list 'load-path base-dir)
 (add-to-list 'load-path modules-dir)
 (add-to-list 'load-path vendor-dir)
 
@@ -73,21 +70,22 @@
         ))
 
 ;; load the settings files
-(load (expand-file-name "config-appearance.el" base-dir))
-(load (expand-file-name "config-keybindings.el" base-dir))
-(load (expand-file-name "config-programming.el" base-dir))
-(load (expand-file-name "config-ui.el" base-dir))
+(load (expand-file-name "config-appearance.el" modules-dir))
+(load (expand-file-name "config-keybindings.el" modules-dir))
+(load (expand-file-name "config-programming.el" modules-dir))
+(load (expand-file-name "config-ui.el" modules-dir))
 
 ;; load the language modules
-(load (expand-file-name "config-clojure.el" modules-dir))
-(load (expand-file-name "config-common-lisp.el" modules-dir))
-(load (expand-file-name "config-elisp.el" modules-dir))
-(load (expand-file-name "config-ess.el" modules-dir))
-(load (expand-file-name "config-haskell.el" modules-dir))
-(load (expand-file-name "config-markdown.el" modules-dir))
-(load (expand-file-name "config-org.el" modules-dir))
-(load (expand-file-name "config-python.el" modules-dir))
-(load (expand-file-name "config-web-js.el" modules-dir))
+(load (expand-file-name "lang-clojure.el" modules-dir))
+(load (expand-file-name "lang-common-lisp.el" modules-dir))
+(load (expand-file-name "lang-elisp.el" modules-dir))
+(load (expand-file-name "lang-ess.el" modules-dir))
+(load (expand-file-name "lang-haskell.el" modules-dir))
+(load (expand-file-name "lang-markdown.el" modules-dir))
+(load (expand-file-name "lang-org.el" modules-dir))
+(load (expand-file-name "lang-python.el" modules-dir))
+(load (expand-file-name "lang-rust.el" modules-dir))
+(load (expand-file-name "lang-web-js.el" modules-dir))
 
 ;;; init.el ends here
 

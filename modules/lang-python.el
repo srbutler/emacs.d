@@ -1,5 +1,4 @@
-;;; package --- Summary:
-;; python-setup.el
+;;; lang-python.el --- Summary:
 ;;
 ;;; Commentary:
 ;;
@@ -102,4 +101,5 @@
                           ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face)
                           ))
 
-;;; config-python.el ends here
+(provide 'lang-python)
+;;; lang-python.el ends here

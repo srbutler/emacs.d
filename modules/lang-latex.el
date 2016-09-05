@@ -1,5 +1,4 @@
-;;; package --- Summary:
-;; config-lagex.el
+;;; lang-lagex.el --- Summary:
 ;;
 ;;; Commentary:
 ;;  Taken from: https://github.com/Schnouki/dotfiles/, with
@@ -145,5 +144,5 @@
   ;; (setq default-justification 'left))
 (add-hook 'LaTeX-mode-hook #'srbutler/latex-auto-fill))
 
-
-;;; config-latex.el ends here
+(provide 'lang-latex)
+;;; lang-latex.el ends here

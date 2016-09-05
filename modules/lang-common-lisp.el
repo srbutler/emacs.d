@@ -1,4 +1,4 @@
-;;; config-common-lisp.el --- Summary:
+;;; lang-common-lisp.el --- Summary:
 ;;
 ;;; Commentary:
 ;;
@@ -51,3 +51,5 @@
      (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)))  
   )
 
+(provide 'lang-common-lisp)
+;;; lang-common-lisp.el ends here

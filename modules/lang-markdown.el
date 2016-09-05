@@ -1,5 +1,4 @@
-;;; package --- Summary:
-;; config-markdown.el
+;;; lang-markdown.el --- Summary:
 ;;
 ;;; Commentary:
 ;;
@@ -37,8 +36,8 @@ If SUBMODE is not provided, use `LANG-mode' by default."
   ;; set up mmm-modes automatically
   (setq mmm-global-mode 'maybe)
   (mapc 'my-mmm-markdown-auto-class
-        '("awk" "bibtex" "c" "clojure" "cpp" "css" "html" "lisp" "makefile"
-          "markdown" "python" "ruby" "sql" "stata" "xml"))
+        '("awk" "bibtex" "c" "clojure" "cpp" "css" "haskell" "html" "lisp"
+          "makefile" "markdown" "python" "ruby" "rust" "sql" "stata" "xml"))
   ;; Mode names that differ from the language name
   (my-mmm-markdown-auto-class "fortran" 'f90-mode)
   (my-mmm-markdown-auto-class "perl" 'cperl-mode)
@@ -54,4 +53,5 @@ If SUBMODE is not provided, use `LANG-mode' by default."
   ;; parse buffer upon this command
   (global-set-key (kbd "C-c m") 'mmm-parse-buffer))
 
-;; config-markdown.el ends here
+(provide 'lang-markdown)
+;; lang-markdown.el ends here

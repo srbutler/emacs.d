@@ -1,5 +1,4 @@
-;;; package --- Summary:
-;; config-ess.el
+;;; lang-ess.el --- Summary:
 ;;
 ;;; Commentary:
 ;;
@@ -58,4 +57,5 @@
           (ess-R-fl-keyword:F&T . t)))
   )
 
-;;; config-ess.el ends here
+(provide 'lang-ess)
+;;; lang-ess.el ends here

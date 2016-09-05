@@ -1,5 +1,4 @@
-;;; package --- Summary:
-;; org-setup.el
+;;; lang-org.el --- Summary:
 ;;
 ;;; Commentary:
 ;;
@@ -49,7 +48,6 @@
         org-export-with-smart-quotes t
         org-confirm-babel-evaluate nil
         org-replace-disputed-keys t
-        ;; from prelude
         org-log-done t)
 
   ;; make windmove work in org-mode
@@ -64,7 +62,6 @@
    '((emacs-lisp . t)
      (python     . t)
      (haskell    . t)
-     (clojure    . t)
      (sh         . t)
      ))
 
@@ -144,7 +141,7 @@
                ("\\subparagraph{%s}" . "\\subparagraph{%s}"))
              )
 
-;; kjhealy
+;; from kjhealy
 (add-to-list 'org-latex-classes
              '("memarticle"
                "\\documentclass[11pt,oneside,article]{memoir}\n\\usepackage{org-preamble-xelatex}"
@@ -154,7 +151,7 @@
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-;; kjhealy
+;; from kjhealy
 (add-to-list 'org-latex-classes
              '("membook"
                "\\documentclass[11pt,oneside]{memoir}\n\\usepackage{org-preamble-xelatex}"
@@ -314,5 +311,5 @@ the result as a time value."
                      (cdr expr))))
           `,@exprs))))
 
-
-;;; org-setup.el ends here
+(provide 'lang-org)
+;;; lang-org.el ends here

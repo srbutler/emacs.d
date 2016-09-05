@@ -1,5 +1,4 @@
-;;; package --- Summary:
-;; config-ess.el
+;;; packagelang-elisp.el --- Summary:
 ;;
 ;;; Commentary:
 ;;
@@ -20,13 +19,14 @@
 
 (defun srb-emacs-lisp-mode-defaults ()
   "Sensible defaults for `emacs-lisp-mode'."
-  (smartparens-strict-mode +1)
-  (paredit-mode +1)
-  (rainbow-delimiters-mode +1)
   (eldoc-mode +1)
+  (paredit-mode +1)
+  (rainbow-mode +1)
+  (rainbow-delimiters-mode +1)
   (recompile-elc-on-save)
-  (setq mode-name "Elisp")
-  )
+  (smartparens-strict-mode +1)
+  
+  (setq mode-name "Elisp"))
 
 (setq srb-emacs-lisp-mode-hook 'srb-emacs-lisp-mode-defaults)
 
@@ -34,4 +34,6 @@
                                   (run-hooks 'srb-emacs-lisp-mode-hook)))
 
 (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
-;;; config-elisp.el ends here
+
+(provide 'lang-elisp)
+;;; lang-elisp.el ends here

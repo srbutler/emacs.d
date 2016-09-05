@@ -11,13 +11,14 @@
 
 ;; open my work org file
 (defun open-kasisto-org ()
+  "Open the Kasisto org file."
   (interactive)
   (find-file "~/Dropbox/Kasisto/kasisto.org"))
 
 ;; more useful frame title, that show either a file or a buffer name
 ;; (if the buffer isn't visiting a file)
 (setq frame-title-format
-      '("" invocation-name " :: " (:eval (if (buffer-file-name)
+      '("" invocation-name ": " (:eval (if (buffer-file-name)
                                          (abbreviate-file-name (buffer-file-name))
                                        "%b"))))
 
@@ -32,13 +33,12 @@
 (column-number-mode t)
 (size-indication-mode t)
 
+
 ;; highlight the current line
 (global-hl-line-mode +1)
 
 ;; delete on selection
-;; (setq delete-selection-mode +1)
 (add-hook 'prog-mode-hook 'delete-selection-mode)
-(setq delete-active-region t)
 
 ;; revert buffers automatically when underlying files are changed externally
 (global-auto-revert-mode t)
@@ -55,14 +55,13 @@
                                          try-complete-lisp-symbol-partially
                                          try-complete-lisp-symbol))
 
-;; smart tab behavior - indent or complete
-(setq tab-always-indent 'complete)
 
 ;; set some basic defaults
 (setq-default
  auto-save-default               t
- blink-matching-paren            t          ;; blink matching parens
- disabled-command-function       nil        ;; Unhide the power functions.
+ blink-matching-paren            t
+ delete-active-region            t
+ disabled-command-function       nil         ;; don't prompt for some disabled functions
  enable-local-variables          :all
  indent-tabs-mode                nil
  indicate-empty-lines            nil
@@ -70,11 +69,13 @@
  kill-do-not-save-duplicates     t
  major-mode                      'text-mode
  require-final-newline           t
+ ring-bell-function              'ignore
  scroll-preserve-screen-position t
  show-trailing-whitespace        nil
+ tab-always-indent               'complete   ;; smart tab behavior - indent or complete
  tab-width                       4
  truncate-lines                  t
- visible-bell                    nil
+ visible-bell                    t
  x-stretch-cursor                t           ;; Stretch cursor for tab characters.
  )
 
@@ -94,7 +95,10 @@
                 helm-move-to-line-cycle-in-source     t
                 helm-ff-search-library-in-sexp        t
                 helm-ff-file-name-history-use-recentf t
-                helm-ff-skip-boring-files             t)
+                helm-ff-skip-boring-files             t
+                helm-autoresize-max-height            40
+                helm-autoresize-min-height            40
+                )
           
           (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 
@@ -123,9 +127,6 @@
          ("C-x C-r" . helm-recentf))
 
   :config (progn
-            (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-            (define-key helm-map (kbd "C-z") 'helm-select-action) ; list actions using C-z
-
             (define-key helm-ag-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
             (define-key helm-ag-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
             (define-key helm-ag-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
@@ -135,8 +136,8 @@
             (define-key 'help-command (kbd "C-l") 'helm-locate-library)
            
             (helm-mode)
-            (setq helm-autoresize-max-height 40)
-            (setq helm-autoresize-min-height helm-autoresize-max-height)
+            ;; (setq helm-autoresize-max-height 40)
+            ;; (setq helm-autoresize-min-height helm-autoresize-max-height)
             (helm-autoresize-mode nil))
   
   (substitute-key-definition 'find-tag 'helm-etags-select global-map)
