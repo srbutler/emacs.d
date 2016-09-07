@@ -70,8 +70,8 @@
   :init (key-chord-mode +1)
   :config
   ;; quick helm calls
-  (key-chord-define-global "bn" 'helm-buffers-list)
-  (key-chord-define-global "df" 'helm-find-files)
+  ;; (key-chord-define-global "bn" 'helm-buffers-list)
+  ;; (key-chord-define-global "df" 'helm-find-files)
   (key-chord-define-global "xx" 'helm-M-x)
 
   ;; quick avy calls
