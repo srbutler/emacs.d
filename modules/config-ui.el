@@ -147,6 +147,14 @@
   ;; enable Helm version of Projectile with replacment commands
   (helm-projectile-on))
 
+;; set up some of crux's convenience functions
+(use-package crux
+  :ensure t
+  :bind (("C-c o" . crux-open-with)
+         ("C-x 4 t" . crux-transpose-windows)
+         ("C-c I" . crux-find-user-init-file)
+         ("C-c S" . crux-find-shell-init-file)) )
+
 
 ;; get the PATH variable working correctly
 (use-package exec-path-from-shell
@@ -157,6 +165,10 @@
 ;; diminish keeps the modeline tidy
 (require 'diminish)
 
+(use-package idle-highlight-mode
+  :ensure t
+  :init
+  (add-hook 'prog-mode-hook 'idle-highlight-mode))
 
 ;; save recent files
 (use-package recentf
