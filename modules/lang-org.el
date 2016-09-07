@@ -78,7 +78,7 @@
   ;; enable LaTeX math-mode entry via CDLaTeX
   (use-package cdlatex-mode
     :init (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-    :diminish org-cdlatex
+    :diminish (org-cdlatex-mode . "ocdl")
     )
 
   ;; downloaded from github, allows linguistics examples via linguex
@@ -103,7 +103,6 @@
 
 
 ;; org-export settings
-
 (require 'ox-latex)
 (unless (boundp 'org-latex-classes)
   (setq org-latex-classes nil))

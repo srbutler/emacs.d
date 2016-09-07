@@ -28,42 +28,42 @@
 
 (defvar current-theme-name 'default)
 
-;; (use-package solarized-theme
-;;   ;; :disabled nil
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     ;; these variables need to be preset
-;;     (setq solarized-distinct-doc-face t
-;;           solarized-distinct-fringe-background nil
-;;           solarized-emphasize-indicators nil
-;;           solarized-high-contrast-mode-line nil
-;;           solarized-scale-org-headlines t
-;;           solarized-use-variable-pitch nil
-;;           solarized-use-less-bold t
-;;           solarized-use-more-italic nil)
-
-;;     ;; make the mode-line underlining disappear
-;;     (setq x-underline-at-descent-line t)
-
-;;     ;; finally load the theme
-;;     (load-theme 'solarized-dark t))
-  
-;;   :config
-;;   ;; just a variable for calling later face changes
-;;   (setq current-theme-name 'solarized-dark)
-
-;;   ;; general font locking
-;;   (set-face-foreground 'font-lock-preprocessor-face "#cb4b16")
-;;   (set-face-foreground 'font-lock-constant-face "#6c71c4")
-;;   (set-face-attribute 'font-lock-constant-face nil :bold nil)
-;;   (set-face-attribute 'font-lock-builtin-face nil :bold t))
-
-(use-package material-theme
-  ;;:disabled nil
+(use-package solarized-theme
+  ;; :disabled nil
   :ensure t
-  :init (load-theme 'material-light t)
-  :config (setq current-theme-name 'material-theme))
+  :init
+  (progn
+    ;; these variables need to be preset
+    (setq solarized-distinct-doc-face t
+          solarized-distinct-fringe-background nil
+          solarized-emphasize-indicators nil
+          solarized-high-contrast-mode-line nil
+          solarized-scale-org-headlines t
+          solarized-use-variable-pitch nil
+          solarized-use-less-bold t
+          solarized-use-more-italic nil)
+
+    ;; make the mode-line underlining disappear
+    (setq x-underline-at-descent-line t)
+
+    ;; finally load the theme
+    (load-theme 'solarized-dark t))
+  
+  :config
+  ;; just a variable for calling later face changes
+  (setq current-theme-name 'solarized-dark)
+
+  ;; general font locking
+  (set-face-foreground 'font-lock-preprocessor-face "#cb4b16")
+  (set-face-foreground 'font-lock-constant-face "#6c71c4")
+  (set-face-attribute 'font-lock-constant-face nil :bold nil)
+  (set-face-attribute 'font-lock-builtin-face nil :bold t))
+
+;; (use-package material-theme
+;;   ;;:disabled nil
+;;   :ensure t
+;;   :init (load-theme 'material-light t)
+;;   :config (setq current-theme-name 'material-theme))
 
 ;; (use-package leuven-theme
 ;;   :ensure t

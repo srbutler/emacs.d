@@ -48,7 +48,7 @@
 ;; integrate reftex
 (use-package reftex
   :commands turn-on-reftex
-  :diminish reftex-mode
+  :diminish (reftex-mode . "ref")
   :config
   (progn
     (setq reftex-plug-into-AUCTeX t

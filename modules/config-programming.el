@@ -101,6 +101,7 @@
 ;; pandoc
 (use-package pandoc-mode
   :ensure t
+  :diminish (pandoc-mode . "pandoc")
   :init
   (add-hook 'markdown-mode-hook 'pandoc-mode)
   (add-hook 'org-mode-hook 'pandoc-mode)
@@ -230,6 +231,7 @@
 
 ;; personal mode for phoenix grammars
 (use-package phoenix-grammar-mode
+  :mode ("\\.gra\\'" . phoenix-grammar-mode)
   :load-path "~/.emacs.d/vendor/phoenix-grammar-mode")
 
 
@@ -242,6 +244,11 @@
           (add-to-list 'auto-mode-alist `(,(format "\\%s\\'" file) . sh-mode)))
         pretzo-files)
   )
+
+;; for thrax/opengrm grammars (.grm)
+(use-package thrax-mode
+  :mode ("\\.grm\\'" . thrax-mode)
+  :load-path "~/.emacs.d/vendor/thrax-mode/")
 
 
 ;; add subwords into yaml-mode
