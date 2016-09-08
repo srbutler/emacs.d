@@ -83,8 +83,6 @@
   :config (sml/setup))
 
 
-
-
 ;; FONT SETTINGS ------------------------------
 
 ;; check if a font exists

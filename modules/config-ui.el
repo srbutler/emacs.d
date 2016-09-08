@@ -68,6 +68,7 @@
  inhibit-startup-message         t
  kill-do-not-save-duplicates     t
  major-mode                      'text-mode
+ next-line-add-newlines          t           ;; adds newline for C-n at end of buffer
  require-final-newline           t
  ring-bell-function              'ignore
  scroll-preserve-screen-position t
@@ -76,7 +77,7 @@
  tab-width                       4
  truncate-lines                  t
  visible-bell                    t
- x-stretch-cursor                t           ;; Stretch cursor for tab characters.
+ x-stretch-cursor                t           ;; stretch cursor for tab characters.
  )
 
 
