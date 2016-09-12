@@ -92,13 +92,24 @@
 ;; REPL and basic scheme hooks
 (use-package geiser
   :ensure t
-  :config (add-hook 'scheme-mode-hook 'geiser-mode)
+  :config
+  ;; run geiser whenever a scheme file is opened
+  (add-hook 'scheme-mode-hook 'geiser-mode)
 
+  ;; regular lisp defaults
   (add-hook 'geiser-mode-hook 'smartparens-strict-mode)
   (add-hook 'geiser-mode-hook 'paredit-mode)
   (add-hook 'geiser-mode-hook 'rainbow-delimiters-mode)
 
-  (eldoc-mode nil)
+  ;; turn off eldoc for geiser
+  (add-hook 'geiser-mode-hook (lambda () (eldoc-mode nil)))
+  
+  ;; default to racket
+  (setq geiser-default-implementation 'racket)
+
+  ;; hooks for geiser-REPL
+  (add-hook 'geiser-repl-mode-hook 'smartparens-mode)
+  (add-hook 'geiser-repl-mode-hook 'rainbow-delimiters-mode)
   )
 
 (provide 'lang-lisp)

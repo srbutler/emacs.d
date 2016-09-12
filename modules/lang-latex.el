@@ -90,7 +90,6 @@
   ;; Default bibliography
   ;; (setq reftex-default-bibliography
   ;;       '("/Users/srbutler/Documents/Bibliography/library.bib"))
-
   (if (string= (system-name) "KasistontLaptop.kitsys.net")
       (setq reftex-default-bibliography
             '("/Users/srbutler/Documents/library.bib/library.bib"))
