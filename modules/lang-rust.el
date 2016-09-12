@@ -17,7 +17,7 @@
   :ensure t
   :config
   (progn
-    (setq company-tooltip-align-annotations t ;
+    (setq company-tooltip-align-annotations t
           racer-cmd "/Users/srbutler/.cargo/bin/racer"
           racer-rust-src-path "/Users/srbutler/rust/src")
     (add-hook 'rust-mode-hook  #'racer-mode)
