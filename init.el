@@ -77,10 +77,9 @@
 
 ;; load the language modules
 (load (expand-file-name "lang-clojure.el" modules-dir))
-(load (expand-file-name "lang-common-lisp.el" modules-dir))
-(load (expand-file-name "lang-elisp.el" modules-dir))
 (load (expand-file-name "lang-ess.el" modules-dir))
 (load (expand-file-name "lang-haskell.el" modules-dir))
+(load (expand-file-name "lang-lisp.el" modules-dir))
 (load (expand-file-name "lang-markdown.el" modules-dir))
 (load (expand-file-name "lang-org.el" modules-dir))
 (load (expand-file-name "lang-python.el" modules-dir))
