@@ -208,7 +208,8 @@
 
 (use-package csv-mode
   :ensure t
-  :mode ("\\.csv\\'" . csv-mode))
+  :mode (("\\.csv\\'" . csv-mode)
+         ("\\.tsv\\'" . csv-mode)))
 
 (use-package json-mode
   :ensure t
@@ -243,6 +244,9 @@
   (mapc (lambda (file)
           (add-to-list 'auto-mode-alist `(,(format "\\%s\\'" file) . sh-mode)))
         pretzo-files)
+
+  ;; won't load zpreztorc on its own for some reason
+  (add-to-list 'auto-mode-alist "\\.zpreztorc\\'")
   )
 
 ;; for thrax/opengrm grammars (.grm)
