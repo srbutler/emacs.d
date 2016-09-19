@@ -58,11 +58,13 @@
 
 ;; set some basic defaults
 (setq-default
+ abbrev-file-name                "~/.emacs.d/savefile/abbrev_defs"
  auto-save-default               t
  blink-matching-paren            t
  delete-active-region            t
  disabled-command-function       nil         ;; don't prompt for some disabled functions
  enable-local-variables          :all
+ ffap-machine-p-known            'reject     ;; stop attempts at pinging websites on autocomplete
  indent-tabs-mode                nil
  indicate-empty-lines            nil
  inhibit-startup-message         t
@@ -148,13 +150,14 @@
   ;; enable Helm version of Projectile with replacment commands
   (helm-projectile-on))
 
+
 ;; set up some of crux's convenience functions
 (use-package crux
   :ensure t
   :bind (("C-c o" . crux-open-with)
          ("C-x 4 t" . crux-transpose-windows)
          ("C-c I" . crux-find-user-init-file)
-         ("C-c S" . crux-find-shell-init-file)) )
+         ("C-c S" . crux-find-shell-init-file)))
 
 
 ;; get the PATH variable working correctly
@@ -166,10 +169,13 @@
 ;; diminish keeps the modeline tidy
 (require 'diminish)
 
+
 (use-package idle-highlight-mode
+  :disabled t
   :ensure t
   :init
   (add-hook 'prog-mode-hook 'idle-highlight-mode))
+
 
 ;; save recent files
 (use-package recentf
@@ -180,8 +186,8 @@
         ;; disable recentf-cleanup on Emacs start, because it can cause
         ;; problems with remote files
         recentf-auto-cleanup 'never)
-
   (recentf-mode +1))
+
 
 ;; saveplace remembers your location in a file when saving files
 (require 'saveplace)
@@ -204,10 +210,10 @@
 
 ;; meaningful names for buffers with the same name
 (require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
-(setq uniquify-separator "/")
-(setq uniquify-after-kill-buffer-p t)    ; rename after killing uniquified
-(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
+(setq uniquify-buffer-name-style 'forward
+      uniquify-separator "/"
+      uniquify-after-kill-buffer-p t
+      uniquify-ignore-buffers-re "^\\*")
 
 
 ;; use shift + arrow keys to switch between visible buffers
@@ -216,3 +222,4 @@
 
 
 (provide 'config-ui)
+;;; config-ui.el ends here

@@ -4,7 +4,6 @@
 ;;
 ;;; Code:
 
-;;; KEYBINDINGS
 
 ;; try and have a normal way to delete things
 (global-set-key (kbd "<delete>") 'delete-region)
@@ -15,13 +14,19 @@
 (setq mac-option-modifier 'meta)
 (setq mac-command-modifier 'hyper)
 
-(global-set-key [(hyper a)] 'mark-whole-buffer)
-(global-set-key [(hyper v)] 'yank)
-(global-set-key [(hyper c)] 'kill-ring-save)
-(global-set-key [(hyper s)] 'save-buffer)
-(global-set-key [(hyper l)] 'goto-line)
-(global-set-key [(hyper x)] 'kill-region)
-(global-set-key [(hyper z)] 'undo)
+;; define key-commands that are common in text-editor interfaces
+(global-set-key [(hyper a)] 'mark-whole-buffer)      ;; select all
+(global-set-key [(hyper c)] 'kill-ring-save)         ;; copy
+(global-set-key [(hyper f)] 'search-forward)         ;; find
+(global-set-key [(hyper F)] 'search-forward-regexp)  ;; find with regexp
+(global-set-key [(hyper l)] 'goto-line)              ;; goto a line
+(global-set-key [(hyper o)] 'helm-find-files)        ;; open a file
+(global-set-key [(hyper r)] 'replace-string)         ;; find-and-replace
+(global-set-key [(hyper R)] 'replace-regexp)         ;; find-and-replace with regexp
+(global-set-key [(hyper s)] 'save-buffer)            ;; save file
+(global-set-key [(hyper v)] 'yank)                   ;; paste
+(global-set-key [(hyper x)] 'kill-region)            ;; cut
+(global-set-key [(hyper z)] 'undo)                   ;; undo
 ;; (global-set-key [(hyper w)]
 ;;                 (lambda () (interactive) (delete-window)))
 
@@ -42,6 +47,7 @@
 
 (if (null window-system)
     (define-key key-translation-map (kbd "C-\\") (kbd "C-;")))
+
 
 ;; the opposite of fill-parapgraph
 (defun unfill-paragraph ()
