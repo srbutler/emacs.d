@@ -135,6 +135,7 @@
 (use-package rainbow-mode
   :ensure t
   :defer t
+  :diminish (rainbow-mode . "rbow")
   :config
   (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
   (add-hook 'css-mode-hook 'rainbow-mode))

@@ -18,15 +18,15 @@
   (setq 
         haskell-compile-cabal-build-command "stack build"
         haskell-font-lock-symbols nil
-        haskell-interactive-mode-scroll-to-bottom t
-        haskell-process-auto-import-loaded-modules t
-        haskell-process-load-or-reload-prompt t
-        haskell-process-log t
-        haskell-process-suggest-remove-import-lines  t
+        ;; haskell-interactive-mode-scroll-to-bottom t
+        ;; haskell-process-auto-import-loaded-modules t
+        ;; haskell-process-load-or-reload-prompt t
+        ;; haskell-process-log t
+        ;; haskell-process-suggest-remove-import-lines  t
         haskell-process-type 'stack-ghci
         ;; haskell-process-type 'auto
         haskell-stylish-on-save t
-        haskell-completions-complete-operators t
+        ;; haskell-completions-complete-operators t
         ;; haskell-notify-p t
         ;; haskell-doc-show-reserved nil
         ;; haskell-indent-spaces 4
@@ -44,8 +44,21 @@
 ;;   :ensure t
 ;;   :init (add-to-list 'company-backends 'company-ghc))
 
-(use-package flycheck-haskell
-  :commands flycheck-haskell-setup)
+;; (use-package flycheck-haskell
+;;   :disabled t
+;;   :commands flycheck-haskell-setup)
+
+(use-package flycheck-stack
+  :ensure t
+  :init
+  (setq flycheck-check-syntax-automatically
+        '(save idle-change new-line mode-enabled))
+  
+  (add-hook 'haskell-mode-hook 'haskell-mode-flycheck-stack)
+  (defun haskell-mode-flycheck-stack ()
+    (flycheck-select-checker 'stack)
+    (flycheck-mode))
+  )
 
 (provide 'lang-haskell)
 ;;; lang-haskell.el ends here
