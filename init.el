@@ -76,6 +76,7 @@
 (load (expand-file-name "config-ui.el" modules-dir))
 
 ;; load the language modules
+(load (expand-file-name "lang-c.el" modules-dir))
 (load (expand-file-name "lang-clojure.el" modules-dir))
 (load (expand-file-name "lang-ess.el" modules-dir))
 (load (expand-file-name "lang-haskell.el" modules-dir))
