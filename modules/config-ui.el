@@ -62,6 +62,7 @@
  auto-save-default               t
  blink-matching-paren            t
  delete-active-region            t
+ delete-by-moving-to-trash       t
  disabled-command-function       nil         ;; don't prompt for some disabled functions
  enable-local-variables          :all
  ffap-machine-p-known            'reject     ;; stop attempts at pinging websites on autocomplete
@@ -69,6 +70,7 @@
  indicate-empty-lines            nil
  inhibit-startup-message         t
  kill-do-not-save-duplicates     t
+ linum-format                    " %4d "
  major-mode                      'text-mode
  next-line-add-newlines          t           ;; adds newline for C-n at end of buffer
  require-final-newline           t
@@ -212,7 +214,11 @@
 (use-package sr-speedbar
   :ensure t
   :config
-  (setq speedbar-use-images nil))
+  (setq sr-speedbar-right-side nil
+        speedbar-show-unknown-files t
+        speedbar-use-images nil)
+  
+  :bind ("C-c s" . sr-speedbar-toggle))
 
 
 ;; meaningful names for buffers with the same name

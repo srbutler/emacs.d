@@ -87,9 +87,10 @@
   ;; change the indicator colors to something nicer
   (when (or (eq current-theme-name "solarized-dark")
             (eq current-theme-name "solarized-light"))
-    (set-face-foreground 'git-gutter:added "#859900")
-    (set-face-foreground 'git-gutter:deleted "#dc322f")
-    (set-face-foreground 'git-gutter:modified "#b58900")))
+    (progn
+      (set-face-foreground 'git-gutter:added "#859900")
+      (set-face-foreground 'git-gutter:deleted "#dc322f")
+      (set-face-foreground 'git-gutter:modified "#b58900"))))
 
 
 ;; set up magit for git
@@ -157,11 +158,38 @@
 
   ;; turn on smartparens for all programming modes
   (add-hook 'prog-mode-hook 'smartparens-mode)
+  
   :config
-  (setq sp-base-key-bindings         'paredit
-        sp-autoskip-closing-pair     'always
-        sp-hybrid-kill-entire-symbol nil)
-  (show-smartparens-global-mode +1))
+  (setq sp-base-key-bindings          'paredit
+        sp-autoskip-closing-pair      'always
+        sp-hybrid-kill-entire-symbol  nil)
+  (show-smartparens-global-mode +1)
+
+  ;; smartparens defaults taken from graphene, to make bracket handling
+  ;; a little better
+  (defun graphene--sp-pair-on-newline (id action context)
+    "Put trailing pair on newline and return to point."
+    (save-excursion
+      (newline)
+      (indent-according-to-mode)))
+
+  (defun graphene--sp-pair-on-newline-and-indent (id action context)
+    "Open a new brace or bracket expression, with relevant newlines and indent. "
+    (graphene--sp-pair-on-newline id action context)
+    (indent-according-to-mode))
+
+  (sp-pair "{" nil :post-handlers
+           '(:add ((lambda (id action context)
+                     (graphene--sp-pair-on-newline-and-indent id action context)) "RET")))
+  
+  (sp-pair "[" nil :post-handlers
+           '(:add ((lambda (id action context)
+                     (graphene--sp-pair-on-newline-and-indent id action context)) "RET")))
+
+  (sp-local-pair '(markdown-mode gfm-mode) "*" "*"
+                 :unless '(sp-in-string-p)
+                 :actions '(insert wrap))
+  )
 
 
 ;; define a bunch of wrapping operations in text modes
@@ -203,6 +231,19 @@
   (add-hook 'text-mode-hook 'yas-minor-mode)
   :config (yas-load-directory "~/.emacs.d/snippets")
   )
+
+
+;;; FUNCTIONS --------------------------------------------
+
+;; taken from graphene; inserts ; at end of line
+(defun insert-semicolon-at-end-of-line ()
+  "Add a closing semicolon from anywhere in the line."
+  (interactive)
+  (save-excursion
+    (end-of-line)
+    (insert ";")))
+(global-set-key (kbd "C-;") 'insert-semicolon-at-end-of-line)
+
 
 ;;; OTHER MODES ------------------------------------------
 ;; these are language modes that don't need their own file

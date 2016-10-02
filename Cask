@@ -14,6 +14,7 @@
 (depends-on "clj-refactor")
 (depends-on "clojure-mode")
 (depends-on "cmake-ide")
+(depends-on "cmake-mode")
 (depends-on "coffee-mode")
 (depends-on "color-theme-sanityinc-tomorrow")
 (depends-on "company")
