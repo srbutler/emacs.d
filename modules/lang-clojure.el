@@ -1,5 +1,4 @@
-;;; package --- Summary:
-;; lang-clojure.el
+;;; lang-clojure.el --- Summary:
 ;;
 ;;; Commentary:
 ;;

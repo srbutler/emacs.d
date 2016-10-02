@@ -4,6 +4,8 @@
 ;;
 ;;; Code:
 
+;; auto-indent on Enter
+(global-set-key (kbd "RET") 'newline-and-indent)
 
 ;; try and have a normal way to delete things
 (global-set-key (kbd "<delete>") 'delete-region)

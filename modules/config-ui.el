@@ -208,6 +208,13 @@
 (savehist-mode +1)
 
 
+;; have speedbar in side frame
+(use-package sr-speedbar
+  :ensure t
+  :config
+  (setq speedbar-use-images nil))
+
+
 ;; meaningful names for buffers with the same name
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward
