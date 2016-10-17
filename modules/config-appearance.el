@@ -29,7 +29,7 @@
 (defvar current-theme-name 'default)
 
 (use-package solarized-theme
-  ;; :disabled nil
+  :disabled nil
   :ensure t
   :init
   (progn
@@ -70,6 +70,11 @@
 ;;   :init (load-theme 'leuven t)
 ;;   :config (setq current-theme-name 'leuven))
 
+(use-package darkokai-theme
+  :ensure t
+  :init (load-theme 'darkokai t)
+  :config (setq current-theme-name 'darkokai))
+
 
 ;; make the mode-line nice and simple
 ;; needs to be loaded after the theme
@@ -94,6 +99,8 @@
 ;; set default font--first one found is selected
 (cond
  ((eq window-system nil) nil)
+ ((font-existsp "InconsolataGo")
+  (set-face-attribute 'default nil :height 141 :font "InconsolataGo"))
  ((font-existsp "Hasklig")
   (set-face-attribute 'default nil :height 141 :font "Hasklig"))
  ((font-existsp "PragmataPro")

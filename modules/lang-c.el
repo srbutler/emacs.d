@@ -12,10 +12,11 @@
   (setq c-default-style "java"
         c-basic-offset 4
         tab-width 4
-        tab-always-indent 'complete
-        ;;indent-tabs-mode nil
-        ))
+        tab-always-indent 'complete))
 (add-hook 'c-mode-common-hook #'srb-c-mode-common-hooks)
+
+(font-lock-add-keywords 'cc-mode
+                          '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
 
 
 (use-package irony
@@ -45,8 +46,8 @@
   ;;   '(add-to-list 'company-backends 'company-irony))
   :config
   (setq company-idle-delay 0)
-  (define-key c-mode-map [(tab)] 'company-complete)
-  (define-key c++-mode-map [(tab)] 'company-complete)
+  ;; (define-key c-mode-map [(tab)] 'company-complete)
+  ;; (define-key c++-mode-map [(tab)] 'company-complete)
   )
 
 
