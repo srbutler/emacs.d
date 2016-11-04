@@ -53,6 +53,7 @@
 (depends-on "ghc")
 (depends-on "git-commit")
 (depends-on "git-gutter")
+(depends-on "go-mode")
 (depends-on "haskell-mode")
 (depends-on "helm")
 (depends-on "helm-ag")

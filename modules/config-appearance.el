@@ -29,7 +29,7 @@
 (defvar current-theme-name 'default)
 
 (use-package solarized-theme
-  :disabled nil
+  :disabled t
   :ensure t
   :init
   (progn
@@ -100,7 +100,7 @@
 (cond
  ((eq window-system nil) nil)
  ((font-existsp "InconsolataGo")
-  (set-face-attribute 'default nil :height 141 :font "InconsolataGo"))
+  (set-face-attribute 'default nil :height 151 :font "InconsolataGo"))
  ((font-existsp "Hasklig")
   (set-face-attribute 'default nil :height 141 :font "Hasklig"))
  ((font-existsp "PragmataPro")
