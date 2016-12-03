@@ -49,8 +49,7 @@
            slime-auto-start 'always)
 
      (define-key slime-mode-map (kbd "TAB") 'slime-indent-and-complete-symbol)
-     (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector)))  
-  )
+     (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector))))
 
 
 ;; EMACS LISP
@@ -109,8 +108,7 @@
 
   ;; hooks for geiser-REPL
   (add-hook 'geiser-repl-mode-hook 'smartparens-mode)
-  (add-hook 'geiser-repl-mode-hook 'rainbow-delimiters-mode)
-  )
+  (add-hook 'geiser-repl-mode-hook 'rainbow-delimiters-mode))
 
 (provide 'lang-lisp)
 ;;; lang-lisp.el ends here

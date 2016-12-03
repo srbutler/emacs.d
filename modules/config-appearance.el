@@ -100,7 +100,7 @@
 (cond
  ((eq window-system nil) nil)
  ((font-existsp "InconsolataGo")
-  (set-face-attribute 'default nil :height 151 :font "InconsolataGo"))
+  (set-face-attribute 'default nil :height 161 :font "InconsolataGo"))
  ((font-existsp "Hasklig")
   (set-face-attribute 'default nil :height 141 :font "Hasklig"))
  ((font-existsp "PragmataPro")

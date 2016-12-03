@@ -18,6 +18,10 @@
 (font-lock-add-keywords 'cc-mode
                           '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
 
+;; load Google's C/C++ style file
+(load
+ (expand-file-name "google-c-style.el"
+                        (expand-file-name "google_c_style" vendor-dir)))
 
 (use-package irony
   :ensure t
@@ -57,6 +61,11 @@
   (eval-after-load 'company
   '(add-to-list
     'company-backends '(company-irony-c-headers company-irony))))
+
+
+(use-package irony-eldoc
+  :ensure t
+  :init (add-hook 'irony-mode-hook 'irony-eldoc))
 
 
 (use-package cmake-ide

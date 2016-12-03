@@ -71,6 +71,7 @@
 
 ;; have flycheck info appear in a popup
 (use-package flycheck-pos-tip
+  :disabled t
   :ensure t
   :config
   (with-eval-after-load 'flycheck
@@ -128,7 +129,7 @@
   :ensure t
   :diminish projectile-mode
   :config
-  (projectile-global-mode t)
+  (projectile-mode t)
   (setq projectile-cache-file (expand-file-name  "projectile.cache" savefile-dir)))
 
 
@@ -177,7 +178,7 @@
     "Open a new brace or bracket expression, with relevant newlines and indent. "
     (graphene--sp-pair-on-newline id action context)
     (indent-according-to-mode))
-
+  
   (sp-pair "{" nil :post-handlers
            '(:add ((lambda (id action context)
                      (graphene--sp-pair-on-newline-and-indent id action context)) "RET")))
@@ -185,11 +186,10 @@
   (sp-pair "[" nil :post-handlers
            '(:add ((lambda (id action context)
                      (graphene--sp-pair-on-newline-and-indent id action context)) "RET")))
-
+  
   (sp-local-pair '(markdown-mode gfm-mode) "*" "*"
                  :unless '(sp-in-string-p)
-                 :actions '(insert wrap))
-  )
+                 :actions '(insert wrap)))
 
 
 ;; define a bunch of wrapping operations in text modes
@@ -257,10 +257,10 @@
   :ensure t
   :mode ("\\.json\\'" . json-mode))
 
+
 (use-package nxml-mode
   :mode (("\\.xml\\'" . nxml-mode)
          ("\\.pom$" . nxml-mode))
-
   :config
   (setq nxml-child-indent 4
         nxml-attribute-indent 5
@@ -279,17 +279,13 @@
 
 
 ;; edit zsh/prezto files in sh-mode
-(use-package sh-mode
-  :config
-  ;; have the mode launch for any prezto files
-  (defvar pretzo-files '("zlogin" "zlogin" "zlogout" "zpretzorc" "zprofile" "zshenv" "zshrc"))
-  (mapc (lambda (file)
-          (add-to-list 'auto-mode-alist `(,(format "\\%s\\'" file) . sh-mode)))
-        pretzo-files)
+(defvar pretzo-files '("zlogin" "zlogin" "zlogout" "zpretzorc"
+                       "zprofile" "zshenv" "zshrc"))
+(mapc
+ (lambda (file)
+   (add-to-list 'auto-mode-alist `(,(format "\\%s\\'" file) . sh-mode)))
+ pretzo-files)
 
-  ;; won't load zpreztorc on its own for some reason
-  (add-to-list 'auto-mode-alist "\\.zpreztorc\\'")
-  )
 
 ;; for thrax/opengrm grammars (.grm)
 (use-package thrax-mode

@@ -19,7 +19,7 @@
   (progn
     (setq company-tooltip-align-annotations t
           racer-cmd "/Users/srbutler/.cargo/bin/racer"
-          racer-rust-src-path "/Users/srbutler/rust/src")
+          racer-rust-src-path "/Users/srbutler/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src")
     (add-hook 'rust-mode-hook  #'racer-mode)
     (add-hook 'racer-mode-hook #'eldoc-mode)
     (add-hook 'racer-mode-hook #'company-mode))
