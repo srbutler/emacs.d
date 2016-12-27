@@ -9,12 +9,6 @@
 (setq user-full-name "Steven Butler"
       user-mail-address "srbutler@gmail.com")
 
-;; open my work org file
-(defun open-kasisto-org ()
-  "Open the Kasisto org file."
-  (interactive)
-  (find-file "~/Dropbox/Kasisto/kasisto.org"))
-
 ;; more useful frame title, that show either a file or a buffer name
 ;; (if the buffer isn't visiting a file)
 (setq frame-title-format

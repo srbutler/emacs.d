@@ -74,6 +74,7 @@
 (load (expand-file-name "config-keybindings.el" modules-dir))
 (load (expand-file-name "config-programming.el" modules-dir))
 (load (expand-file-name "config-ui.el" modules-dir))
+(load (expand-file-name "custom-functions.el" modules-dir))
 
 ;; load the language modules
 (load (expand-file-name "lang-c.el" modules-dir))
