@@ -80,6 +80,7 @@
 (load (expand-file-name "lang-c.el" modules-dir))
 (load (expand-file-name "lang-clojure.el" modules-dir))
 (load (expand-file-name "lang-ess.el" modules-dir))
+(load (expand-file-name "lang-go.el" modules-dir))
 (load (expand-file-name "lang-haskell.el" modules-dir))
 (load (expand-file-name "lang-latex.el" modules-dir))
 (load (expand-file-name "lang-lisp.el" modules-dir))

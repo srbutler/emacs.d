@@ -8,12 +8,14 @@
 ;;
 ;;; Code:
 
-(defun srb-c-mode-common-hooks ()
-  (setq c-default-style "java"
-        c-basic-offset 4
-        tab-width 4
-        tab-always-indent 'complete))
-(add-hook 'c-mode-common-hook #'srb-c-mode-common-hooks)
+;; (defun srb-c-mode-common-hooks ()
+;;   (setq
+;;         c-default-style "java"
+;;         c-basic-offset 4
+;;         tab-width 4
+;;         tab-always-indent 'complete
+;;         ))
+;; (add-hook 'c-mode-common-hook #'srb-c-mode-common-hooks)
 
 (font-lock-add-keywords 'cc-mode
                           '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
@@ -21,7 +23,16 @@
 ;; load Google's C/C++ style file
 (load
  (expand-file-name "google-c-style.el"
-                        (expand-file-name "google_c_style" vendor-dir)))
+                   (expand-file-name "google_c_style" vendor-dir)))
+
+(add-hook 'c-common-mode-hook 'google-set-c-style)
+(add-hook 'c-common-mode-hook 'google-make-newline-indent)
+
+(use-package clang-format
+  :ensure t
+  :bind ("C-c C-f" . clang-format-region)
+  :config
+  (setq clang-format-style "google"))
 
 (use-package irony
   :ensure t
