@@ -8,17 +8,19 @@
 ;;
 ;;; Code:
 
-;; (defun srb-c-mode-common-hooks ()
-;;   (setq
-;;         c-default-style "java"
-;;         c-basic-offset 4
-;;         tab-width 4
-;;         tab-always-indent 'complete
-;;         ))
-;; (add-hook 'c-mode-common-hook #'srb-c-mode-common-hooks)
+(defun srb-c-mode-common-hooks ()
+ (local-set-key (kbd "C-c C-f") 'clang-format-buffer)
 
-(font-lock-add-keywords 'cc-mode
-                          '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
+  ;; (setq
+  ;;       c-default-style "java"
+  ;;       c-basic-offset 4
+  ;;       tab-width 4
+  ;;       tab-always-indent 'complete
+  ;;       ))
+(add-hook 'c-mode-common-hook #'srb-c-mode-common-hooks)
+
+(font-lock-add-keywords
+ 'cc-mode '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
 
 ;; load Google's C/C++ style file
 (load
@@ -30,9 +32,9 @@
 
 (use-package clang-format
   :ensure t
-  :bind ("C-c C-f" . clang-format-region)
-  :config
-  (setq clang-format-style "google"))
+  ;; :bind ("C-c C-f" . clang-format-region)
+  :config (setq clang-format-style "llvm"))
+(bind-key "C-c C-f" 'clang-format-buffer)
 
 (use-package irony
   :ensure t
@@ -49,7 +51,6 @@
 
   (add-hook 'irony-mode-hook 'my-irony-mode-hook)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-
 
 (use-package company-irony
   :ensure t

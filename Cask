@@ -42,6 +42,7 @@
 (depends-on "exec-path-from-shell")
 (depends-on "f")
 (depends-on "find-file-in-project")
+(depends-on "flatland-theme")
 (depends-on "flycheck")
 (depends-on "flycheck-cask")
 (depends-on "flycheck-clojure")
