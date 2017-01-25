@@ -16,7 +16,8 @@
   ;;       c-basic-offset 4
   ;;       tab-width 4
   ;;       tab-always-indent 'complete
-  ;;       ))
+ ;;       ))
+ )
 (add-hook 'c-mode-common-hook #'srb-c-mode-common-hooks)
 
 (font-lock-add-keywords
