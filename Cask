@@ -63,6 +63,7 @@
 (depends-on "helm-ag")
 (depends-on "helm-core")
 (depends-on "helm-descbinds")
+(depends-on "helm-gtags")
 (depends-on "helm-projectile")
 (depends-on "highlight-indentation")
 (depends-on "hydra")

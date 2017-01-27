@@ -76,7 +76,7 @@
  truncate-lines                  t
  visible-bell                    t
  x-stretch-cursor                t           ;; stretch cursor for tab characters.
- )
+c )
 
 
 ;; setup helm for as many things as possible
@@ -145,6 +145,26 @@
 
   ;; enable Helm version of Projectile with replacment commands
   (helm-projectile-on))
+
+;; use GNU global 
+(use-package helm-gtags
+  :ensure t
+  :init
+  (custom-set-variables
+   '(helm-gtags-prefix-key "C-c C-t")
+   '(helm-gtags-suggested-key-mapping t)
+   '(helm-gtags-path-style 'relative)
+   '(helm-gtags-ignore-case t)
+   '(helm-gtags-auto-update t)
+   '(helm-gtags--label-option "pygments"))
+
+  (add-hook 'prog-mode-hook 'helm-gtags-mode)
+  :config
+  (with-eval-after-load 'helm-gtags
+    (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+    (define-key helm-gtags-mode-map (kbd "C-c C-t c") 'helm-gtags-create-tags)
+    (define-key helm-gtags-mode-map (kbd "C-c C-t u") 'helm-gtags-update-tags)
+    (define-key helm-gtags-mode-map (kbd "C-c C-t s") 'helm-gtags-select)))
 
 
 ;; set up some of crux's convenience functions
