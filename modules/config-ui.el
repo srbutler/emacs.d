@@ -66,6 +66,7 @@
  kill-do-not-save-duplicates     t
  linum-format                    " %4d "
  major-mode                      'text-mode
+ mode-require-final-newline      t
  next-line-add-newlines          t           ;; adds newline for C-n at end of buffer
  require-final-newline           t
  ring-bell-function              'ignore
