@@ -12,12 +12,18 @@
          ("C-c ." . go-test-current-test)
          ("C-c b" . go-run)
          ("C-h f" . godoc-at-point)
-         ("C-c C-f" . gofmt))
+         ("C-c f" . gofmt))
   :config
   (add-hook 'go-mode-hook 'company-mode)
   (add-hook 'go-mode-hook 'go-eldoc-setup)
 
-  (setq gofmt-command "goimports"))
+  ;; try to use goimports for formatting
+  (let ((goimports (executable-find "goimports")))
+         (when goimports
+           (setq gofmt-command goimports)))
+  (add-hook 'before-save-hook 'gofmt-before-save nil t)
+  
+  )
 
 (use-package company-go
   :ensure t
@@ -25,8 +31,19 @@
   (with-eval-after-load "company"
     (add-to-list 'company-backends 'company-go)))
 
+
+;; (use-package flycheck-gometalinter
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (flycheck-gometalinter-setup)))
+
 (use-package go-eldoc
   :ensure t)
+
+(use-package go-projectile
+  :ensure t
+  )
 
 (provide 'lang-go)
 ;;; lang-go.el ends here

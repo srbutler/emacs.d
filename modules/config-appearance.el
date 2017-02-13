@@ -59,18 +59,26 @@
   (set-face-attribute 'font-lock-constant-face nil :bold nil)
   (set-face-attribute 'font-lock-builtin-face nil :bold t))
 
-;; (use-package material-theme
-;;   ;;:disabled nil
-;;   :ensure t
-;;   :init (load-theme 'material-light t)
-;;   :config (setq current-theme-name 'material-theme))
+(use-package zenburn-theme
+  ;; :disabled t
+  :ensure t
+  :init (load-theme 'zenburn t)
+  :config (setq current-theme-name 'zenburn))
 
-;; (use-package leuven-theme
-;;   :ensure t
-;;   :init (load-theme 'leuven t)
-;;   :config (setq current-theme-name 'leuven))
+(use-package material-theme
+  :disabled t
+  :ensure t
+  :init (load-theme 'material-light t)
+  :config (setq current-theme-name 'material-theme))
+
+(use-package leuven-theme
+  :disabled t
+  :ensure t
+  :init (load-theme 'leuven t)
+  :config (setq current-theme-name 'leuven))
 
 (use-package darkokai-theme
+  :disabled t
   :ensure t
   :init (load-theme 'darkokai t)
   :config (setq current-theme-name 'darkokai))
@@ -99,6 +107,8 @@
 ;; set default font--first one found is selected
 (cond
  ((eq window-system nil) nil)
+ ((font-existsp "Source Code Pro")
+  (set-face-attribute 'default nil :height 141 :font "Source Code Pro"))
  ((font-existsp "InconsolataGo")
   (set-face-attribute 'default nil :height 161 :font "InconsolataGo"))
  ((font-existsp "Hasklig")
@@ -111,8 +121,6 @@
   (set-face-attribute 'default nil :height 131 :font "Monaco"))
  ((font-existsp "Menlo")
   (set-face-attribute 'default nil :height 131 :font "Menlo"))
- ((font-existsp "Source Code Pro")
-  (set-face-attribute 'default nil :height 131 :font "Source Code Pro"))
  ((font-existsp "Consolas")
   (set-face-attribute 'default nil :height 131 :font "Consolas"))
  )

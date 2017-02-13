@@ -78,14 +78,13 @@
   ;; enable LaTeX math-mode entry via CDLaTeX
   (use-package cdlatex-mode
     :init (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-    :diminish (org-cdlatex-mode . "ocdl")
-    )
+    :diminish (org-cdlatex-mode . "ocdl"))
 
   ;; downloaded from github, allows linguistics examples via linguex
   ;; or gb4e
   (use-package ox-linguistics
-    :load-path "~/.emacs.d/vendor/ox-linguistics/lisp")
-  )
+    :load-path "~/.emacs.d/vendor/ox-linguistics/lisp"))
+
 
 ;; set global keys for org-mode access
 (global-set-key "\C-cl" 'org-store-link)
@@ -115,8 +114,7 @@
                ("\\subsection{%s}" . "\\subsection*{%s}")
                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-             )
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
 ;; general notes/homework/etc.
 (add-to-list 'org-latex-classes
@@ -126,8 +124,7 @@
                ("\\subsection{%s}" . "\\subsection*{%s}")
                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-             )
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
 ;; for org-mode thesis export
 (add-to-list 'org-latex-classes
@@ -137,8 +134,7 @@
                ("\\subsection{%s}" . "\\subsection{%s}")
                ("\\subsubsection{%s}" . "\\subsubsection{%s}")
                ("\\paragraph{%s}" . "\\paragraph{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph{%s}"))
-             )
+               ("\\subparagraph{%s}" . "\\subparagraph{%s}")))
 
 ;; from kjhealy
 (add-to-list 'org-latex-classes
@@ -162,7 +158,8 @@
 ;; LaTeX compilation command. For orgmode docs we just always use
 ;; xelatex for convenience. You can change it to pdflatex if you like,
 ;; just remember to make the adjustments to the packages-alist below.
-(setq org-latex-pdf-process '("latexmk -pdflatex='xelatex -synctex=1 --shell-escape' -pdf %f"))
+(setq org-latex-pdf-process
+      '("latexmk -pdflatex='xelatex -synctex=1 --shell-escape' -pdf %f"))
 
 ;; Default packages included in the tex file. As before,
 ;; org-preamble-xelatex is part of latex-custom-kjh. There's
@@ -177,56 +174,51 @@
         ))
 
 ;; ebib types for biblatex (from kjhealy)
- (org-add-link-type "ebib" 'ebib)
-   (org-add-link-type
-     "cite" 'ebib
-     (lambda (path desc format)
-       (cond
-        ((eq format 'latex)
-         (if (or (not desc) (equal 0 (search "cite:" desc)))
-               (format "\\cite{%s}" path)
-               (format "\\cite[%s]{%s}" desc path)
-               )))))
+(org-add-link-type "ebib" 'ebib)
+(org-add-link-type
+ "cite" 'ebib
+ (lambda (path desc format)
+   (cond
+    ((eq format 'latex)
+     (if (or (not desc) (equal 0 (search "cite:" desc)))
+         (format "\\cite{%s}" path)
+       (format "\\cite[%s]{%s}" desc path))))))
 
-   (org-add-link-type
-     "parencite" 'ebib
-     (lambda (path desc format)
-       (cond
-        ((eq format 'latex)
-         (if (or (not desc) (equal 0 (search "parencite:" desc)))
-               (format "\\parencite{%s}" path)
-               (format "\\parencite[%s]{%s}" desc path)
-  )))))
+(org-add-link-type
+ "parencite" 'ebib
+ (lambda (path desc format)
+   (cond
+    ((eq format 'latex)
+     (if (or (not desc) (equal 0 (search "parencite:" desc)))
+         (format "\\parencite{%s}" path)
+       (format "\\parencite[%s]{%s}" desc path))))))
 
-  (org-add-link-type
-     "textcite" 'ebib
-     (lambda (path desc format)
-       (cond
-        ((eq format 'latex)
-         (if (or (not desc) (equal 0 (search "textcite:" desc)))
-               (format "\\textcite{%s}" path)
-               (format "\\textcite[%s]{%s}" desc path)
-  )))))
+(org-add-link-type
+ "textcite" 'ebib
+ (lambda (path desc format)
+   (cond
+    ((eq format 'latex)
+     (if (or (not desc) (equal 0 (search "textcite:" desc)))
+         (format "\\textcite{%s}" path)
+       (format "\\textcite[%s]{%s}" desc path))))))
 
-  (org-add-link-type
-     "autocite" 'ebib
-     (lambda (path desc format)
-       (cond
-        ((eq format 'latex)
-         (if (or (not desc) (equal 0 (search "autocite:" desc)))
-               (format "\\autocite{%s}" path)
-           (format "\\autocite[%s]{%s}" desc path)
-  )))))
+(org-add-link-type
+ "autocite" 'ebib
+ (lambda (path desc format)
+   (cond
+    ((eq format 'latex)
+     (if (or (not desc) (equal 0 (search "autocite:" desc)))
+         (format "\\autocite{%s}" path)
+       (format "\\autocite[%s]{%s}" desc path))))))
 
-  (org-add-link-type
-   "footcite" 'ebib
-   (lambda (path desc format)
-     (cond
-      ((eq format 'latex)
-       (if (or (not desc) (equal 0 (search "footcite:" desc)))
-           (format "\\footcite{%s}" path)
-         (format "\\footcite[%s]{%s}" desc path)
-         )))))
+(org-add-link-type
+ "footcite" 'ebib
+ (lambda (path desc format)
+   (cond
+    ((eq format 'latex)
+     (if (or (not desc) (equal 0 (search "footcite:" desc)))
+         (format "\\footcite{%s}" path)
+       (format "\\footcite[%s]{%s}" desc path))))))
 
 (org-add-link-type
  "fullcite" 'ebib
@@ -235,38 +227,35 @@
     ((eq format 'latex)
      (if (or (not desc) (equal 0 (search "fullcite:" desc)))
          (format "\\fullcite{%s}" path)
-         (format "\\fullcite[%s]{%s}" desc path)
-         )))))
+       (format "\\fullcite[%s]{%s}" desc path))))))
 
-  (org-add-link-type
-   "citetitle" 'ebib
-   (lambda (path desc format)
-     (cond
-      ((eq format 'latex)
-       (if (or (not desc) (equal 0 (search "citetitle:" desc)))
-           (format "\\citetitle{%s}" path)
-         (format "\\citetitle[%s]{%s}" desc path)
-         )))))
+(org-add-link-type
+ "citetitle" 'ebib
+ (lambda (path desc format)
+   (cond
+    ((eq format 'latex)
+     (if (or (not desc) (equal 0 (search "citetitle:" desc)))
+         (format "\\citetitle{%s}" path)
+       (format "\\citetitle[%s]{%s}" desc path))))))
 
-  (org-add-link-type
-   "citetitles" 'ebib
-   (lambda (path desc format)
-     (cond
-      ((eq format 'latex)
-       (if (or (not desc) (equal 0 (search "citetitles:" desc)))
-           (format "\\citetitles{%s}" path)
-         (format "\\citetitles[%s]{%s}" desc path)
-         )))))
+(org-add-link-type
+ "citetitles" 'ebib
+ (lambda (path desc format)
+   (cond
+    ((eq format 'latex)
+     (if (or (not desc) (equal 0 (search "citetitles:" desc)))
+         (format "\\citetitles{%s}" path)
+       (format "\\citetitles[%s]{%s}" desc path)
+       )))))
 
-  (org-add-link-type
-     "headlessfullcite" 'ebib
-     (lambda (path desc format)
-       (cond
-        ((eq format 'latex)
-         (if (or (not desc) (equal 0 (search "headlessfullcite:" desc)))
-               (format "\\headlessfullcite{%s}" path)
-               (format "\\headlessfullcite[%s]{%s}" desc path)
-               )))))
+(org-add-link-type
+ "headlessfullcite" 'ebib
+ (lambda (path desc format)
+   (cond
+    ((eq format 'latex)
+     (if (or (not desc) (equal 0 (search "headlessfullcite:" desc)))
+         (format "\\headlessfullcite{%s}" path)
+       (format "\\headlessfullcite[%s]{%s}" desc path))))))
 
 ;; time manipulation macro for org-tables
 (defun org-time-string-to-seconds (s)

@@ -39,7 +39,13 @@
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
   :diminish (eldoc-mode . "eldoc")
-  :init (add-hook 'prog-mode-hook 'eldoc-mode))
+  :init (add-hook 'prog-mode-hook 'eldoc-mode)
+  :config
+  ;; give current argument distinctive highlighting
+  (set-face-attribute 'eldoc-highlight-function-argument nil
+                      :underline t
+                      :foreground (face-foreground font-lock-constant-face)
+                      :weight 'bold))
 
 
 ;; syntax-checking
@@ -229,8 +235,10 @@
   :init
   (add-hook 'prog-mode-hook 'yas-minor-mode)
   (add-hook 'text-mode-hook 'yas-minor-mode)
-  :config (yas-load-directory "~/.emacs.d/snippets")
-  )
+  :bind (("C-c C-e" . yas-expand))
+  :config ;(yas-load-directory "~/.emacs.d/snippets")
+  (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets/yasnippet-snippets")
+  (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets/"))
 
 
 ;;; FUNCTIONS --------------------------------------------
@@ -325,7 +333,6 @@ PACKAGE is installed only if not already present.  The file is opened in MODE."
     ("\\.elixir\\'" elixir-mode elixir-mode)
     ("\\.erl\\'" erlang erlang-mode)
     ("\\.feature\\'" feature-mode feature-mode)
-    ("\\.go\\'" go-mode go-mode)
     ("\\.groovy\\'" groovy-mode groovy-mode)
     ("\\.haml\\'" haml-mode haml-mode)
     ("\\.kt\\'" kotlin-mode kotlin-mode)

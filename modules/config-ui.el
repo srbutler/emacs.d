@@ -150,6 +150,7 @@ c )
 ;; use GNU global 
 (use-package helm-gtags
   :ensure t
+  :diminish (helm-gtags-mode . "gtags")
   :init
   (custom-set-variables
    '(helm-gtags-prefix-key "C-c C-t")
