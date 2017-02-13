@@ -1,9 +1,14 @@
 
 savefile/
 auto-save-list/
+irony/
 projectile-bookmarks.*
 recentf
 
+## GNU Global/Gtags indexes
+GPATH
+GRTAGS
+GTAGS
 
 ### https://raw.github.com/github/gitignore/1d4117fefd8d58e88cdfd92ad6187e7c57ddae3e/Elisp.gitignore
 
