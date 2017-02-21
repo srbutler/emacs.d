@@ -38,7 +38,7 @@
 
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
-  :diminish (eldoc-mode . "eldoc")
+  :diminish eldoc-mode
   :init (add-hook 'prog-mode-hook 'eldoc-mode)
   :config
   ;; give current argument distinctive highlighting
@@ -143,7 +143,7 @@
 (use-package rainbow-mode
   :ensure t
   :defer t
-  :diminish (rainbow-mode . "rbow")
+  :diminish rainbow-mode
   :config
   (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
   (add-hook 'css-mode-hook 'rainbow-mode))
