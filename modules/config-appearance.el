@@ -60,10 +60,15 @@
   (set-face-attribute 'font-lock-builtin-face nil :bold t))
 
 (use-package zenburn-theme
-  ;; :disabled t
   :ensure t
   :init (load-theme 'zenburn t)
-  :config (setq current-theme-name 'zenburn))
+  :config
+  (setq current-theme-name 'zenburn)
+
+  ;; hide the fringe
+  (set-face-attribute 'fringe nil
+                      :foreground (face-foreground 'default)
+                      :background (face-background 'default)))
 
 (use-package material-theme
   :disabled t
@@ -120,7 +125,7 @@
  ((font-existsp "Monaco")
   (set-face-attribute 'default nil :height 131 :font "Monaco"))
  ((font-existsp "Menlo")
-  (set-face-attribute 'default nil :height 131 :font "Menlo"))
+  (set-face-attribute 'default nil :height 141 :font "Menlo"))
  ((font-existsp "Consolas")
   (set-face-attribute 'default nil :height 131 :font "Consolas"))
  )

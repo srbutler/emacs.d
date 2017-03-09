@@ -16,44 +16,52 @@
   (setq python-indent-offset 4)
 
   ;; set custom keywords for python-mode
-  (font-lock-add-keywords 'python-mode
-                          '(
-                            ("[ \t]*\\<\\(from\\)\\>" 1 'font-lock-preprocessor-face)
-                            ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
-                            ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
-                            ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
-                            ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
-                            ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
-                            ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face)
-                            )))
+  (font-lock-add-keywords
+   'python-mode
+   '(
+     ;; ("[ \t]*\\<\\(from\\)\\>" 1 'font-lock-preprocessor-face)
+     ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
+     ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
+     ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
+     ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
+     ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
+     ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face)))
+
+  ;; add smarparens to inferior-python mode
+  (add-hook 'inferior-python-mode-hook 'smartparens-mode)
+  )
 
 (use-package elpy
   :ensure t
   :commands elpy-enable
   :init (with-eval-after-load 'python (elpy-enable))
+  :bind (:map elpy-mode-map
+              ("C-x C-e" . python-shell-send-defun)
+              ("C-c C-r e" . elpy-multiedit-python-symbol-at-point))
   :config
   ;; set refactoring backend ("rope" or "jedi")
-  (setq elpy-rpc-python-command "python3"
-        elpy-rpc-backend "jedi")
+  (setq elpy-rpc-backend "jedi")
 
-  (setq python-shell-interpreter "ipython3"
+  ;; set RPC backend and interpreter using pyenv values
+  (setq elpy-rpc-python-command "~/.pyenv/shims/python3"
+        python-shell-interpreter "~/.pyenv/shims/ipython3"
         python-shell-interpreter-args "--simple-prompt --pprint")
 
   ;; helps to prevent issues with ipython/jupyter shells
   ;; https://github.com/jorgenschaefer/elpy/issues/908
   (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
   (setenv "JUPYTER_CONSOLE_TEST" "1")
-
   
   ;; use ipython3 instead of standard interpreter
-  (when (executable-find "ipython3")
-    (elpy-use-ipython "ipython3"))
+  (when (executable-find "/Users/srbutler/.pyenv/shims/ipython3")
+    (elpy-use-ipython "/Users/srbutler/.pyenv/shims/ipython3"))
 
   ;; set up elpy modules
   (setq elpy-modules '(elpy-module-sane-defaults
                        elpy-module-company
                        elpy-module-eldoc
                        elpy-module-yasnippet
+                       elpy-module-django
                        ;; elpy-module-highlight-indentation
                        ;; elpy-module-pyvenv
                        )))
@@ -71,15 +79,8 @@
           (pyenv-mode-set (with-temp-buffer
                             (insert-file-contents target-file)
                             (current-word))))))
-
     (add-hook 'projectile-switch-project-hook 'my-pyenv-mode-set)))
 
-;; enable autopep8 formatting on save
-;; currently disabled because it's kind of annoying
-(use-package py-autopep8
-  :ensure t
-  :disabled t
-  :init (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
 
 ;; cython-mode configuration
 (use-package cython-mode
@@ -89,15 +90,16 @@
          ("\\.pxd\\'"  . cython-mode)
          ("\\.pxi\\'"  . cython-mode))
   :config
-  (font-lock-add-keywords 'cython-mode
-                          '(
-                            ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
-                            ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
-                            ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
-                            ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
-                            ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
-                            ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face)
-                            )))
+  (font-lock-add-keywords
+   'cython-mode
+   '(
+     ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
+     ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
+     ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
+     ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
+     ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
+     ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face)
+     )))
 
 (provide 'lang-python)
 ;;; lang-python.el ends here
