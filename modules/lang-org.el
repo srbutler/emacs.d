@@ -70,7 +70,6 @@
 
   ;; Fancy bullet rendering.
   (use-package org-bullets
-    :disabled t
     :ensure t
     :config
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))

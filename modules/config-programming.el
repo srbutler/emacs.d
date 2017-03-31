@@ -38,7 +38,7 @@
 
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
-  :diminish eldoc-mode
+  :diminish (eldoc-mode . "eldoc")
   :init (add-hook 'prog-mode-hook 'eldoc-mode)
   :config
   ;; give current argument distinctive highlighting
@@ -260,6 +260,14 @@
   :ensure t
   :mode (("\\.csv\\'" . csv-mode)
          ("\\.tsv\\'" . csv-mode)))
+
+
+(use-package gnuplot-mode
+  :ensure t
+  :mode (("\\.gpi\\'" . gnuplot-mode)
+         ("\\.plt\\'" . gnuplot-mode)
+         ("\\.gp\\'" . gnuplot-mode)))
+
 
 (use-package json-mode
   :ensure t
