@@ -94,7 +94,7 @@
   ;; quick helm calls
   ;; (key-chord-define-global "bn" 'helm-buffers-list)
   ;; (key-chord-define-global "df" 'helm-find-files)
-  (key-chord-define-global "xx" 'helm-M-x)
+  ;; (key-chord-define-global "xx" 'helm-M-x)
 
   ;; quick avy calls
   (key-chord-define-global "jj" 'avy-goto-word-1)

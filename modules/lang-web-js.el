@@ -13,7 +13,9 @@
          ("\\.erb\\'" . web-mode)
          ("\\.mustache\\'" . web-mode)
          ("\\.djhtml\\'" . web-mode)
-         ("\\.html?\\'" . web-mode))
+         ("\\.html?\\'" . web-mode)
+         ;; ("\\.jsx?\\'" . web-mode)
+         )
 
   :config
   (setq web-mode-markup-indent-offset 2
@@ -22,7 +24,10 @@
         web-mode-indent-style 2
         web-mode-style-padding 1
         web-mode-script-padding 1
-        web-mode-block-padding 0))
+        web-mode-block-padding 0)
+
+  ;; allows linting jsx files
+  (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 ;; emmet mode for efficient xml/html entry
 (use-package emmet-mode
@@ -61,7 +66,9 @@
   (setq js-basic-indent 2
         mode-name "JS2")
   
-  (setq-default js2-basic-offset 2
+  (setq-default js2-mode-show-parse-errors nil
+                js2-mode-show-strict-warnings nil
+                js2-basic-offset 2
                 js2-auto-indent-p t
                 js2-cleanup-whitespace t
                 js2-enter-indents-newline t
@@ -74,7 +81,27 @@
 
   ;; (setq-local electric-layout-rules '((?\; . after)))    ;; prelude
   ;; (js2-imenu-extras-mode +1)    ;; prelude
+
+  ;; flycheck setup (prefer eslint)
+  (setq flycheck-disabled-checkers
+                (append flycheck-disabled-checkers
+                        '(javascript-jshint)))
+  
   (add-hook 'js2-mode-hook 'subword-mode))
+
+
+;; formatting/beatufication for HTML/CSS/JS
+(use-package web-beautify
+  :ensure t
+  :config
+  (eval-after-load 'js2-mode
+    '(define-key js2-mode-map (kbd "C-c C-f") 'web-beautify-js))
+  (eval-after-load 'json-mode
+    '(define-key json-mode-map (kbd "C-c C-f") 'web-beautify-js))
+  (eval-after-load 'sgml-mode
+    '(define-key html-mode-map (kbd "C-c C-f") 'web-beautify-html))
+  (eval-after-load 'css-mode
+    '(define-key css-mode-map (kbd "C-c C-f") 'web-beautify-css)))
 
 
 ;; set up javascript refactoring, all prefixed to =C-c .=

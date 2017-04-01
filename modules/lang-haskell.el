@@ -19,7 +19,9 @@
         haskell-compile-cabal-build-command "stack build"
         haskell-font-lock-symbols nil
         ;; haskell-interactive-mode-scroll-to-bottom t
-        ;; haskell-process-auto-import-loaded-modules t
+        ;; haskell-interactive-popup-errors nil
+        haskell-process-suggest-remove-import-lines t
+        haskell-process-auto-import-loaded-modules t
         ;; haskell-process-load-or-reload-prompt t
         ;; haskell-process-log t
         ;; haskell-process-suggest-remove-import-lines  t
@@ -53,12 +55,11 @@
   :init
   (setq flycheck-check-syntax-automatically
         '(save idle-change new-line mode-enabled))
-  
-  (add-hook 'haskell-mode-hook 'haskell-mode-flycheck-stack)
+
   (defun haskell-mode-flycheck-stack ()
     (flycheck-select-checker 'stack)
     (flycheck-mode))
-  )
+  (add-hook 'haskell-mode-hook 'haskell-mode-flycheck-stack))
 
 (provide 'lang-haskell)
 ;;; lang-haskell.el ends here
