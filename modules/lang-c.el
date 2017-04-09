@@ -33,12 +33,14 @@
 
 (use-package clang-format
   :ensure t
+  :defer t
   ;; :bind ("C-c C-f" . clang-format-region)
   :config (setq clang-format-style "llvm"))
 (bind-key "C-c C-f" 'clang-format-buffer)
 
 (use-package irony
   :ensure t
+  :defer t
   :init
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
@@ -55,6 +57,7 @@
 
 (use-package company-irony
   :ensure t
+  :defer t
   :init
   (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
   (setq company-backends
@@ -70,6 +73,7 @@
 
 (use-package company-irony-c-headers
   :ensure t
+  :defer t
   :config
   (eval-after-load 'company
   '(add-to-list
@@ -78,17 +82,20 @@
 
 (use-package irony-eldoc
   :ensure t
+  :defer t
   :init (add-hook 'irony-mode-hook 'irony-eldoc))
 
 
 (use-package cmake-ide
   :ensure t
+  :defer t
   :init (add-hook 'c-mode-common-hook 'cmake-ide-setup))
 
 
 (use-package rtags
   :disabled t
   :ensure t
+  :defer t
   :init
   (eval-after-load 'company
   '(add-to-list

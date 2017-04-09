@@ -51,33 +51,32 @@
 
 
 ;; set some basic defaults
-(setq-default
- abbrev-file-name                "~/.emacs.d/savefile/abbrev_defs"
- auto-save-default               t
- blink-matching-paren            t
- delete-active-region            t
- delete-by-moving-to-trash       t
- disabled-command-function       nil         ;; don't prompt for some disabled functions
- enable-local-variables          :all
- ffap-machine-p-known            'reject     ;; stop attempts at pinging websites on autocomplete
- indent-tabs-mode                nil
- indicate-empty-lines            nil
- inhibit-startup-message         t
- kill-do-not-save-duplicates     t
- linum-format                    " %4d "
- major-mode                      'text-mode
- mode-require-final-newline      t
- next-line-add-newlines          t           ;; adds newline for C-n at end of buffer
- require-final-newline           t
- ring-bell-function              'ignore
- scroll-preserve-screen-position t
- show-trailing-whitespace        nil
- tab-always-indent               'complete   ;; smart tab behavior - indent or complete
- tab-width                       4
- truncate-lines                  t
- visible-bell                    t
- x-stretch-cursor                t           ;; stretch cursor for tab characters.
-c )
+(setq-default abbrev-file-name                "~/.emacs.d/savefile/abbrev_defs"
+              auto-save-default               t
+              blink-matching-paren            t
+              delete-active-region            t
+              delete-by-moving-to-trash       t
+              disabled-command-function       nil         ;; don't prompt for some disabled functions
+              enable-local-variables          :all
+              ffap-machine-p-known            'reject     ;; stop attempts at pinging websites on autocomplete
+              indent-tabs-mode                nil
+              indicate-empty-lines            nil
+              inhibit-startup-message         t
+              kill-do-not-save-duplicates     t
+              linum-format                    " %4d "
+              major-mode                      'text-mode
+              mode-require-final-newline      t
+              next-line-add-newlines          t           ;; adds newline for C-n at end of buffer
+              require-final-newline           t
+              ring-bell-function              'ignore
+              scroll-preserve-screen-position t
+              show-trailing-whitespace        nil
+              tab-always-indent               'complete   ;; smart tab behavior - indent or complete
+              tab-width                       4
+              truncate-lines                  t
+              visible-bell                    t
+              x-stretch-cursor                t           ;; stretch cursor for tab characters.
+)
 
 
 ;; setup helm for as many things as possible
@@ -229,6 +228,7 @@ c )
 ;; have speedbar in side frame
 (use-package sr-speedbar
   :ensure t
+  :defer t
   :config
   (setq sr-speedbar-right-side nil
         speedbar-show-unknown-files t

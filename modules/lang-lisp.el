@@ -18,6 +18,7 @@
 ;; common-lisp REPL
 (use-package slime
   :ensure t
+  :defer t
   :commands (slime slime-mode)
   :init
   (progn
@@ -91,6 +92,7 @@
 ;; REPL and basic scheme hooks
 (use-package geiser
   :ensure t
+  :defer t
   :config
   ;; run geiser whenever a scheme file is opened
   (add-hook 'scheme-mode-hook 'geiser-mode)

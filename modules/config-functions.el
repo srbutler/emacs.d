@@ -1,4 +1,4 @@
-;;; custom-functions.el -- Summary
+;;; config-functions.el -- Summary
 ;;
 ;;; Commentary:
 ;;
@@ -31,5 +31,5 @@ programming."
           1 font-lock-warning-face t))))
 (add-hook 'prog-mode-hook 'font-lock-comment-annotations)
 
-(provide 'custom-fuctions)
-;;; custom-functions.el ends here
+(provide 'config-fuctions)
+;;; config-functions.el ends here

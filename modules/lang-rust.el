@@ -8,13 +8,11 @@
   :ensure t
   :mode ("\\.rs\\'" . rust-mode)
   :config
-  (local-set-key (kbd "C-c <tab>") #'rust-format-buffer)
-
-  ;; (setq mode-name "Rust ")
-  )
+  (local-set-key (kbd "C-c <tab>") #'rust-format-buffer))
 
 (use-package racer
   :ensure t
+  :defer t
   :config
   (progn
     (setq company-tooltip-align-annotations t
@@ -29,16 +27,19 @@
 
 (use-package company-racer
   :ensure t
+  :defer t
   :init
   (with-eval-after-load "company"
     (add-to-list 'company-backends 'company-racer)))
 
 (use-package flycheck-rust
   :ensure t
+  :defer t
   :init (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package cargo
   :ensure t
+  :defer t
   :diminish (cargo-minor-mode . "cargo")
   :init (add-hook 'rust-mode-hook 'cargo-minor-mode))
 

@@ -27,6 +27,7 @@
 
 (use-package company-go
   :ensure t
+  :defer t
   :init
   (with-eval-after-load "company"
     (add-to-list 'company-backends 'company-go)))
@@ -34,16 +35,18 @@
 
 ;; (use-package flycheck-gometalinter
 ;;   :ensure t
+;;   :defer t
 ;;   :config
 ;;   (progn
 ;;     (flycheck-gometalinter-setup)))
 
 (use-package go-eldoc
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package go-projectile
   :ensure t
-  )
+  :defer t)
 
 (provide 'lang-go)
 ;;; lang-go.el ends here

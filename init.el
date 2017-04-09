@@ -69,26 +69,22 @@
         ;; ("marmalade"    . "http://marmalade-repo.org/packages/")
         ))
 
+
+;; make adding new module files easy
+(defun load-file-list (format-string files)
+  "Load a list of FILES in the modules dir using FORMAT-STRING."
+  (dolist (f files)
+    (load (expand-file-name (format format-string f) modules-dir))))
+
 ;; load the settings files
-(load (expand-file-name "config-appearance.el" modules-dir))
-(load (expand-file-name "config-keybindings.el" modules-dir))
-(load (expand-file-name "config-programming.el" modules-dir))
-(load (expand-file-name "config-ui.el" modules-dir))
-(load (expand-file-name "custom-functions.el" modules-dir))
+(load-file-list "config-%s.el"
+                '("appearance" "functions" "keybindings"
+                  "programming" "ui"))
 
 ;; load the language modules
-(load (expand-file-name "lang-c.el" modules-dir))
-(load (expand-file-name "lang-clojure.el" modules-dir))
-(load (expand-file-name "lang-ess.el" modules-dir))
-(load (expand-file-name "lang-go.el" modules-dir))
-(load (expand-file-name "lang-haskell.el" modules-dir))
-(load (expand-file-name "lang-latex.el" modules-dir))
-(load (expand-file-name "lang-lisp.el" modules-dir))
-(load (expand-file-name "lang-markdown.el" modules-dir))
-(load (expand-file-name "lang-org.el" modules-dir))
-(load (expand-file-name "lang-python.el" modules-dir))
-(load (expand-file-name "lang-rust.el" modules-dir))
-(load (expand-file-name "lang-web-js.el" modules-dir))
+(load-file-list "lang-%s.el"
+                '("c" "clojure" "ess" "go" "haskell" "latex" "lisp"
+                  "markdown" "ocaml" "org" "python" "rust" "web-js"))
 
 ;;; init.el ends here
 

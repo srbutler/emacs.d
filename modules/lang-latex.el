@@ -47,6 +47,7 @@
 
 ;; integrate reftex
 (use-package reftex
+  :defer t
   :commands turn-on-reftex
   :diminish (reftex-mode . "ref")
   :config

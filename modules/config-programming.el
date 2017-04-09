@@ -23,6 +23,7 @@
 ;; set up dash integration
 (use-package dash-at-point
   :ensure t
+  :defer t
   :init (global-set-key (kbd "C-c d") 'dash-at-point-with-docset)
   :config
   (add-to-list 'dash-at-point-mode-alist '(python-mode . "python3"))
@@ -39,6 +40,7 @@
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
   :diminish (eldoc-mode . "eldoc")
+  :defer t
   :init (add-hook 'prog-mode-hook 'eldoc-mode)
   :config
   ;; give current argument distinctive highlighting
@@ -87,6 +89,7 @@
 ;; have git indications in gutter
 (use-package git-gutter
   :ensure t
+  :defer t
   :init (global-git-gutter-mode t)
   :diminish git-gutter-mode
   :config
@@ -103,12 +106,14 @@
 ;; set up magit for git
 (use-package magit
   :ensure t
+  :defer t
   :bind ("C-x g" . magit-status))
 
 
 ;; pandoc
 (use-package pandoc-mode
   :ensure t
+  :defer t
   :diminish (pandoc-mode . "pandoc")
   :init
   (add-hook 'markdown-mode-hook 'pandoc-mode)
@@ -119,6 +124,7 @@
 ;; hardcore parentheses management
 (use-package paredit
   :ensure t
+  :defer t
   :diminish (paredit-mode . "par")
   :defer t)
 
@@ -126,6 +132,7 @@
 ;; minor-mode and utility for regex conversion (perl <--> elisp)
 (use-package pcre2el
   :ensure t
+  :defer t
   :diminish (pcre-mode . "pcre")
   :init (pcre-mode +1))
 
@@ -133,6 +140,7 @@
 ;; project management and fast-switching
 (use-package projectile
   :ensure t
+  :defer t
   :diminish projectile-mode
   :config
   (projectile-mode t)
@@ -157,6 +165,7 @@
 ;; get smartparens in programming modes
 (use-package smartparens
   :ensure t
+  :defer t
   :diminish smartparens-mode
   :init
   (progn
@@ -201,6 +210,7 @@
 ;; define a bunch of wrapping operations in text modes
 (use-package wrap-region
   :ensure t
+  :defer t
   :diminish wrap-region-mode
   :init (add-hook 'text-mode-hook 'wrap-region-mode)
   :config
@@ -232,6 +242,7 @@
 ;; enable YASnippet globally
 (use-package yasnippet
   :ensure t
+  :defer t
   :init
   (add-hook 'prog-mode-hook 'yas-minor-mode)
   (add-hook 'text-mode-hook 'yas-minor-mode)

@@ -32,6 +32,7 @@ If SUBMODE is not provided, use `LANG-mode' by default."
 ;; mmm-mode highlights code in markdown code blocks
 (use-package mmm-mode
   :ensure t
+  :defer t
   :init
   ;; set up mmm-modes automatically
   (setq mmm-global-mode 'maybe)

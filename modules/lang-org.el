@@ -71,12 +71,14 @@
   ;; Fancy bullet rendering.
   (use-package org-bullets
     :ensure t
+    :defer t
     :config
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
   ;; enable LaTeX math-mode entry via CDLaTeX
   (use-package cdlatex-mode
     :init (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+    :defer t
     :diminish (org-cdlatex-mode . "ocdl"))
 
   ;; downloaded from github, allows linguistics examples via linguex

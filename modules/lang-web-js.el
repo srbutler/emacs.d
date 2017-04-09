@@ -93,6 +93,7 @@
 ;; formatting/beatufication for HTML/CSS/JS
 (use-package web-beautify
   :ensure t
+  :defer t
   :config
   (eval-after-load 'js2-mode
     '(define-key js2-mode-map (kbd "C-c C-f") 'web-beautify-js))
