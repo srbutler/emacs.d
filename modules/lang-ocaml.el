@@ -20,6 +20,7 @@
 ;; completion engine
 (use-package merlin
   :ensure t
+  :defer t
   :init
   (add-hook 'tuareg-mode-hook 'merlin-mode)
   (with-eval-after-load 'company
