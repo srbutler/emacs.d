@@ -68,13 +68,6 @@
   ;; ensure R blocks are called correctly
   (add-to-list 'org-src-lang-modes '("r" . ess-mode))
 
-  ;; Fancy bullet rendering.
-  (use-package org-bullets
-    :ensure t
-    :defer t
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
   ;; enable LaTeX math-mode entry via CDLaTeX
   (use-package cdlatex-mode
     :init (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
@@ -86,6 +79,11 @@
   (use-package ox-linguistics
     :load-path "~/.emacs.d/vendor/ox-linguistics/lisp"))
 
+;; Fancy bullet rendering.
+(use-package org-bullets
+  :ensure t
+  :defer t
+  :init  (add-hook 'org-mode-hook 'org-bullets-mode))
 
 ;; set global keys for org-mode access
 (global-set-key "\C-cl" 'org-store-link)
