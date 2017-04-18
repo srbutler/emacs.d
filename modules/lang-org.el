@@ -50,6 +50,13 @@
         org-replace-disputed-keys t
         org-log-done t)
 
+  ;; set the TODO keyword scopes
+  (setq org-todo-keywords
+        '((sequence "TODO" "DELAYED" "STARTED" "|" "DONE" "CANCELLED")))
+
+  (setq org-todo-keyword-faces
+           '(("STARTED" . org-priority)))
+
   ;; make windmove work in org-mode
   (add-hook 'org-shiftup-final-hook 'windmove-up)
   (add-hook 'org-shiftleft-final-hook 'windmove-left)
