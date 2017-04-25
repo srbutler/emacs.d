@@ -93,6 +93,7 @@
 (depends-on "merlin")
 (depends-on "mmm-mode")
 (depends-on "multiple-cursors")
+(depends-on "noflet")
 (depends-on "ocp-indent")
 (depends-on "org-bullets")
 (depends-on "org-plus-contrib")

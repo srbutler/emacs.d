@@ -29,6 +29,11 @@
   :ensure org-plus-contrib
   :config
 
+  ;; add a custom sequence of TODO states
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "|"
+                    "DONE(d)" "CANCELLED(c)")))
+
   ;; enable yasnippet configuration
   (add-hook 'org-mode-hook
             (lambda ()

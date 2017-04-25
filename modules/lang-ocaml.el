@@ -14,7 +14,10 @@
   ;; Make OCaml-generated files invisible to filename completion
   (dolist
       (ext '(".cmo" ".cmx" ".cma" ".cmxa" ".cmi" ".cmxs" ".cmt" ".cmti" ".annot"))
-    (add-to-list 'completion-ignored-extensions ext)))
+    (add-to-list 'completion-ignored-extensions ext))
+  :config 
+  ;; disable backtick pairing
+  (sp-pair "`" nil :actions :rem))
 
 
 ;; completion engine
@@ -56,5 +59,13 @@
   :defer t
   :init (add-hook 'tuareg-mode-hook 'ocp-indent-caml-mode-setup))
 
+
+;; taken from spacemacs (package not in [M]ELPA)
+(use-package merlin-eldoc
+  :defer t
+  :load-path "~/.emacs.d/vendor/merlin-eldoc/merlin-eldoc.el"
+  :init (add-hook 'merlin-mode-hook #'merlin-eldoc/setup))
+
 (provide 'lang-ocaml)
 ;;; lang-ocaml.el ends here
+

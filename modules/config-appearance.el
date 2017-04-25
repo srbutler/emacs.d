@@ -112,14 +112,14 @@
 ;; set default font--first one found is selected
 (cond
  ((eq window-system nil) nil)
+ ((font-existsp "Hasklig")
+  (set-face-attribute 'default nil :height 141 :font "Hasklig"))
  ((font-existsp "Fira Code")
   (set-face-attribute 'default nil :height 141 :font "Fira Code"))
  ((font-existsp "Source Code Pro")
   (set-face-attribute 'default nil :height 141 :font "Source Code Pro"))
  ((font-existsp "InconsolataGo")
   (set-face-attribute 'default nil :height 161 :font "InconsolataGo"))
- ((font-existsp "Hasklig")
-  (set-face-attribute 'default nil :height 141 :font "Hasklig"))
  ((font-existsp "PragmataPro")
   (set-face-attribute 'default nil :height 151 :font "PragmataPro"))
  ((font-existsp "Monaco")
@@ -171,6 +171,7 @@
   (dolist (char-regexp alist)
     (set-char-table-range composition-function-table (car char-regexp)
                           `([,(cdr char-regexp) 0 font-shape-gstring]))))
+;; (mac-auto-operator-composition-mode)
 
 (provide 'config-appearance)
 ;;; config-appearance.el ends here

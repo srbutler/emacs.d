@@ -5,9 +5,6 @@
 ;;; Code:
 
 
-
-
-
 (use-package haskell-mode
   :defer t
   :mode (("\\.hs\\'" . haskell-mode)
@@ -16,7 +13,9 @@
   (add-hook 'haskell-mode-hook 'haskell-doc-mode)
   (add-hook 'haskell-mode-hook 'haskell-decl-scan-mode)
   (add-hook 'haskell-mode-hook 'subword-mode)
-  (setq haskell-process-suggest-add-package nil
+  (setq haskell-process-type 'stack-ghci
+        ;; haskell-process-args-stack-ghci '("--ghc-options=-ferror-spans" "--with-ghc=intero")
+        haskell-process-suggest-add-package nil
         haskell-process-suggest-remove-import-lines t
         haskell-process-auto-import-loaded-modules t
         haskell-ask-also-kill-buffers nil
@@ -41,7 +40,7 @@
       (backward-char)))
 
   (defun haskell-do-info (&optional cPos cEnd)
-    "Bring up REPL and do :info on symbol at poinnt.
+    "Bring up REPL and do :info on symbol at point.
 If interactive and region active or CPOS and CEND are non-nil, use that region."
     (interactive "r")
     (let ((symbol (if (and (and cPos cEnd)
