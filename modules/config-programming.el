@@ -56,6 +56,9 @@
   :init (add-hook 'prog-mode-hook 'flycheck-mode)
   :diminish (flycheck-mode . "flyc")
   :config
+  
+  (setq flycheck-check-syntax-automatically '(mode-enabled save new-line))
+  
   ;; change flycheck's error display to only margin tick
   (eval-after-load 'flycheck
     '(progn

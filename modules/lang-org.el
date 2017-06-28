@@ -94,7 +94,7 @@
 ;; Fancy bullet rendering.
 (use-package org-bullets
   :ensure t
-  :defer t
+  ;; :defer t
   :init  (add-hook 'org-mode-hook 'org-bullets-mode))
 
 ;; set global keys for org-mode access
