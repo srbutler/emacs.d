@@ -76,6 +76,12 @@
   (dolist (f files)
     (load (expand-file-name (format format-string f) modules-dir))))
 
+
+;; load use-package extensions
+(use-package use-package-ensure-system-package
+  :ensure t)
+
+
 ;; load the settings files
 (load-file-list "config-%s.el"
                 '("appearance" "functions" "keybindings"
