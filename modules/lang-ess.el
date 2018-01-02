@@ -6,6 +6,7 @@
 
 (use-package ess-site
   :ensure ess
+  :commands R
   :mode ("\\.R$" . R-mode)
   :config
 

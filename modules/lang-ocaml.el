@@ -47,7 +47,9 @@
 (use-package utop
   :ensure t
   :defer t
-  :init (add-hook 'tuareg-mode-hook 'utop-minor-mode)
+  :init
+  (add-hook 'tuareg-mode-hook 'utop-minor-mode)
+  (add-hook 'reason-mode-hook 'utop-minor-mode)
   :config
   (when (executable-find "opam")
       (setq utop-command "opam config exec -- utop -emacs")))
@@ -65,6 +67,13 @@
   :defer t
   :load-path "~/.emacs.d/vendor/merlin-eldoc/merlin-eldoc.el"
   :init (add-hook 'merlin-mode-hook #'merlin-eldoc/setup))
+
+
+;; for using Reason's syntax instead of OCaml's
+(use-package reason-mode
+  :ensure t
+  :mode ("\\.rei?$"  . reason-mode))
+
 
 (provide 'lang-ocaml)
 ;;; lang-ocaml.el ends here

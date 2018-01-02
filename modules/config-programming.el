@@ -34,14 +34,18 @@
   (add-to-list 'dash-at-point-mode-alist '(LaTeX-mode . "latex"))
   (add-to-list 'dash-at-point-mode-alist '(js2-mode . "javascript"))
   (add-to-list 'dash-at-point-mode-alist '(haskell-mode . "haskell"))
-  )
+  (add-to-list 'dash-at-point-mode-alist '(tuareg-mode . "ocaml")))
+
+
+;; https://www.masteringemacs.org/article/working-multiple-files-dired
+(require 'find-dired)
+(setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld"))
 
 
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
   :diminish (eldoc-mode . "eldoc")
-  :defer t
-  :init (add-hook 'prog-mode-hook 'eldoc-mode)
+  :hook prog-mode
   :config
   ;; give current argument distinctive highlighting
   (set-face-attribute 'eldoc-highlight-function-argument nil
@@ -113,14 +117,35 @@
   :bind ("C-x g" . magit-status))
 
 
+;; edit with multiple cursors
+(use-package multiple-cursors
+  :ensure t
+  :bind
+   (("C-c m t" . mc/mark-all-like-this)
+    ("C-c m m" . mc/mark-all-like-this-dwim)
+    ("C-c m l" . mc/edit-lines)
+    ("C-c m e" . mc/edit-ends-of-lines)
+    ("C-c m a" . mc/edit-beginnings-of-lines)
+    ("C-c m n" . mc/mark-next-like-this)
+    ("C-c m p" . mc/mark-previous-like-this)
+    ("C-c m s" . mc/mark-sgml-tag-pair)
+    ("C-c m d" . mc/mark-all-like-this-in-defun)))
+;; (use-package phi-search
+;;   :ensure t)
+;; (use-package phi-search-mc
+;;   :ensure t
+;;   :config (phi-search-mc/setup-keys))
+;; (use-package mc-extras
+;;   :ensure t
+;;   :config (define-key mc/keymap (kbd "C-. =") 'mc/compare-chars))
+
+
 ;; pandoc
 (use-package pandoc-mode
   :ensure t
   :defer t
   :diminish (pandoc-mode . "pandoc")
-  :init
-  (add-hook 'markdown-mode-hook 'pandoc-mode)
-  (add-hook 'org-mode-hook 'pandoc-mode)
+  :hook (markdown-mode org-mode)
   :config (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
 
 
@@ -128,8 +153,7 @@
 (use-package paredit
   :ensure t
   :defer t
-  :diminish (paredit-mode . "par")
-  :defer t)
+  :diminish (paredit-mode . "par"))
 
 
 ;; minor-mode and utility for regex conversion (perl <--> elisp)
@@ -153,29 +177,25 @@
 ;; displays colors for color hex values
 (use-package rainbow-mode
   :ensure t
-  :defer t
-  :diminish rainbow-mode
-  :config
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
-  (add-hook 'css-mode-hook 'rainbow-mode))
+  :hook (emacs-lisp-mode css-mode)
+  :diminish rainbow-mode)
 
 
 ;; makes parentheses colorful
 (use-package rainbow-delimiters-mode
-  :config (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode))
+  :hook lisp-mode)
 
 
 ;; get smartparens in programming modes
 (use-package smartparens
   :ensure t
-  :defer t
+  ;; :hook (prog-mode . spartparens-mode)
   :diminish smartparens-mode
   :init
   (progn
     (require 'smartparens-config)
     (sp-use-paredit-bindings))
 
-  ;; turn on smartparens for all programming modes
   (add-hook 'prog-mode-hook 'smartparens-mode)
   
   :config
@@ -213,9 +233,8 @@
 ;; define a bunch of wrapping operations in text modes
 (use-package wrap-region
   :ensure t
-  :defer t
+  :hook text-mode
   :diminish wrap-region-mode
-  :init (add-hook 'text-mode-hook 'wrap-region-mode)
   :config
   (wrap-region-add-wrappers
    '(("(" ")")
@@ -245,12 +264,11 @@
 ;; enable YASnippet globally
 (use-package yasnippet
   :ensure t
-  :defer t
-  :init
-  (add-hook 'prog-mode-hook 'yas-minor-mode)
-  (add-hook 'text-mode-hook 'yas-minor-mode)
+  :init (yas-global-mode)
+  ;; (add-hook 'prog-mode-hook 'yas-minor-mode)
+  ;; (add-hook 'text-mode-hook 'yas-minor-mode)
   :bind (("C-c C-e" . yas-expand))
-  :config ;(yas-load-directory "~/.emacs.d/snippets")
+  :config
   (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets/yasnippet-snippets")
   (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets/"))
 

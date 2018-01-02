@@ -27,6 +27,9 @@
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :ensure org-plus-contrib
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb))
   :config
 
   ;; add a custom sequence of TODO states
@@ -60,7 +63,7 @@
         '((sequence "TODO" "DELAYED" "STARTED" "|" "DONE" "CANCELLED")))
 
   (setq org-todo-keyword-faces
-           '(("STARTED" . org-priority)))
+        '(("STARTED" . org-priority)))
 
   ;; make windmove work in org-mode
   (add-hook 'org-shiftup-final-hook 'windmove-up)
@@ -89,7 +92,176 @@
   ;; downloaded from github, allows linguistics examples via linguex
   ;; or gb4e
   (use-package ox-linguistics
-    :load-path "~/.emacs.d/vendor/ox-linguistics/lisp"))
+    :load-path "~/.emacs.d/vendor/ox-linguistics/lisp")
+
+
+  ;; org-export settings
+  (require 'ox-latex)
+  (unless (boundp 'org-latex-classes)
+    (setq org-latex-classes nil))
+
+  ;; bare form, for incorporating in to other documents
+  (add-to-list 'org-latex-classes
+               '("bare"
+                 ""
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+  ;; general notes/homework/etc.
+  (add-to-list 'org-latex-classes
+               '("general"
+                 "\\documentclass[11pt,letterpaper,notitlepage]{article}\n\\%usepackage{general-org-xelatex}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+  ;; for org-mode thesis export
+  (add-to-list 'org-latex-classes
+               '("thesis"
+                 "\\documentclass[12pt,letterpaper,oneside,notitlepage]{article}\n\\usepackage{thesis-org-xelatex}"
+                 ("\\section{%s}" . "\\section{%s}")
+                 ("\\subsection{%s}" . "\\subsection{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph{%s}")))
+
+  ;; from kjhealy
+  (add-to-list 'org-latex-classes
+               '("memarticle"
+                 "\\documentclass[11pt,oneside,article]{memoir}\n\\usepackage{org-preamble-xelatex}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+  ;; from kjhealy
+  (add-to-list 'org-latex-classes
+               '("membook"
+                 "\\documentclass[11pt,oneside]{memoir}\n\\usepackage{org-preamble-xelatex}"
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+
+
+  ;; mobile-org setup
+  ;; Set to the location of your Org files on your local system
+  (setq org-directory "~/Dropbox/Org")
+  ;; Set to the name of the file where new notes will be stored
+  ;; (setq org-mobile-inbox-for-pull "~/org/flagged.org")
+  ;; Set to <your Dropbox root directory>/MobileOrg.
+  (setq org-mobile-directory "~/Dropbox/Org")
+
+
+  ;; LaTeX compilation command. For orgmode docs we just always use
+  ;; xelatex for convenience. You can change it to pdflatex if you like,
+  ;; just remember to make the adjustments to the packages-alist below.
+  (setq org-latex-pdf-process
+        '("latexmk -pdflatex='xelatex -synctex=1 --shell-escape' -pdf %f"))
+
+  ;; Default packages included in the tex file. As before,
+  ;; org-preamble-xelatex is part of latex-custom-kjh. There's
+  ;; org-preamble-pdflatex as well, if you wish to use that instead.
+  (setq org-latex-default-packages-alist nil)
+  (setq org-latex-packages-alist
+        '(
+          ;; ("" "org-preamble-xelatex" t)    ;; disabled for flexibility
+          ;; ("" "graphicx" t)
+          ;; ("" "linguex" t)
+          ;; ("" "float" )
+          ))
+
+  ;; ebib types for biblatex (from kjhealy)
+  (org-add-link-type "ebib" 'ebib)
+  (org-link-set-parameters
+   "cite" 'ebib
+   (lambda (path desc format)
+     (cond
+      ((eq format 'latex)
+       (if (or (not desc) (equal 0 (search "cite:" desc)))
+           (format "\\cite{%s}" path)
+         (format "\\cite[%s]{%s}" desc path))))))
+
+  (org-link-set-parameters
+   "parencite" 'ebib
+   (lambda (path desc format)
+     (cond
+      ((eq format 'latex)
+       (if (or (not desc) (equal 0 (search "parencite:" desc)))
+           (format "\\parencite{%s}" path)
+         (format "\\parencite[%s]{%s}" desc path))))))
+
+  (org-link-set-parameters
+   "textcite" 'ebib
+   (lambda (path desc format)
+     (cond
+      ((eq format 'latex)
+       (if (or (not desc) (equal 0 (search "textcite:" desc)))
+           (format "\\textcite{%s}" path)
+         (format "\\textcite[%s]{%s}" desc path))))))
+
+  (org-link-set-parameters
+   "autocite" 'ebib
+   (lambda (path desc format)
+     (cond
+      ((eq format 'latex)
+       (if (or (not desc) (equal 0 (search "autocite:" desc)))
+           (format "\\autocite{%s}" path)
+         (format "\\autocite[%s]{%s}" desc path))))))
+
+  (org-link-set-parameters
+   "footcite" 'ebib
+   (lambda (path desc format)
+     (cond
+      ((eq format 'latex)
+       (if (or (not desc) (equal 0 (search "footcite:" desc)))
+           (format "\\footcite{%s}" path)
+         (format "\\footcite[%s]{%s}" desc path))))))
+
+  (org-link-set-parameters
+   "fullcite" 'ebib
+   (lambda (path desc format)
+     (cond
+      ((eq format 'latex)
+       (if (or (not desc) (equal 0 (search "fullcite:" desc)))
+           (format "\\fullcite{%s}" path)
+         (format "\\fullcite[%s]{%s}" desc path))))))
+
+  (org-link-set-parameters
+   "citetitle" 'ebib
+   (lambda (path desc format)
+     (cond
+      ((eq format 'latex)
+       (if (or (not desc) (equal 0 (search "citetitle:" desc)))
+           (format "\\citetitle{%s}" path)
+         (format "\\citetitle[%s]{%s}" desc path))))))
+
+  (org-link-set-parameters
+   "citetitles" 'ebib
+   (lambda (path desc format)
+     (cond
+      ((eq format 'latex)
+       (if (or (not desc) (equal 0 (search "citetitles:" desc)))
+           (format "\\citetitles{%s}" path)
+         (format "\\citetitles[%s]{%s}" desc path)
+         )))))
+
+  (org-link-set-parameters
+   "headlessfullcite" 'ebib
+   (lambda (path desc format)
+     (cond
+      ((eq format 'latex)
+       (if (or (not desc) (equal 0 (search "headlessfullcite:" desc)))
+           (format "\\headlessfullcite{%s}" path)
+         (format "\\headlessfullcite[%s]{%s}" desc path))))))
+  )
+
 
 ;; Fancy bullet rendering.
 (use-package org-bullets
@@ -97,180 +269,10 @@
   ;; :defer t
   :init  (add-hook 'org-mode-hook 'org-bullets-mode))
 
-;; set global keys for org-mode access
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cb" 'org-iswitchb)
-
-
-;; mobile-org setup
-;; Set to the location of your Org files on your local system
-(setq org-directory "~/Dropbox/Org")
-;; Set to the name of the file where new notes will be stored
-;; (setq org-mobile-inbox-for-pull "~/org/flagged.org")
-;; Set to <your Dropbox root directory>/MobileOrg.
-(setq org-mobile-directory "~/Dropbox/Org")
-
-
-;; org-export settings
-(require 'ox-latex)
-(unless (boundp 'org-latex-classes)
-  (setq org-latex-classes nil))
-
-;; bare form, for incorporating in to other documents
-(add-to-list 'org-latex-classes
-             '("bare"
-               ""
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-;; general notes/homework/etc.
-(add-to-list 'org-latex-classes
-             '("general"
-               "\\documentclass[11pt,letterpaper,notitlepage]{article}\n\\%usepackage{general-org-xelatex}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-;; for org-mode thesis export
-(add-to-list 'org-latex-classes
-             '("thesis"
-               "\\documentclass[12pt,letterpaper,oneside,notitlepage]{article}\n\\usepackage{thesis-org-xelatex}"
-               ("\\section{%s}" . "\\section{%s}")
-               ("\\subsection{%s}" . "\\subsection{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection{%s}")
-               ("\\paragraph{%s}" . "\\paragraph{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph{%s}")))
-
-;; from kjhealy
-(add-to-list 'org-latex-classes
-             '("memarticle"
-               "\\documentclass[11pt,oneside,article]{memoir}\n\\usepackage{org-preamble-xelatex}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-;; from kjhealy
-(add-to-list 'org-latex-classes
-             '("membook"
-               "\\documentclass[11pt,oneside]{memoir}\n\\usepackage{org-preamble-xelatex}"
-               ("\\chapter{%s}" . "\\chapter*{%s}")
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
-
-;; LaTeX compilation command. For orgmode docs we just always use
-;; xelatex for convenience. You can change it to pdflatex if you like,
-;; just remember to make the adjustments to the packages-alist below.
-(setq org-latex-pdf-process
-      '("latexmk -pdflatex='xelatex -synctex=1 --shell-escape' -pdf %f"))
-
-;; Default packages included in the tex file. As before,
-;; org-preamble-xelatex is part of latex-custom-kjh. There's
-;; org-preamble-pdflatex as well, if you wish to use that instead.
-(setq org-latex-default-packages-alist nil)
-(setq org-latex-packages-alist
-      '(
-        ;; ("" "org-preamble-xelatex" t)    ;; disabled for flexibility
-        ;; ("" "graphicx" t)
-        ;; ("" "linguex" t)
-        ;; ("" "float" )
-        ))
-
-;; ebib types for biblatex (from kjhealy)
-(org-add-link-type "ebib" 'ebib)
-(org-add-link-type
- "cite" 'ebib
- (lambda (path desc format)
-   (cond
-    ((eq format 'latex)
-     (if (or (not desc) (equal 0 (search "cite:" desc)))
-         (format "\\cite{%s}" path)
-       (format "\\cite[%s]{%s}" desc path))))))
-
-(org-add-link-type
- "parencite" 'ebib
- (lambda (path desc format)
-   (cond
-    ((eq format 'latex)
-     (if (or (not desc) (equal 0 (search "parencite:" desc)))
-         (format "\\parencite{%s}" path)
-       (format "\\parencite[%s]{%s}" desc path))))))
-
-(org-add-link-type
- "textcite" 'ebib
- (lambda (path desc format)
-   (cond
-    ((eq format 'latex)
-     (if (or (not desc) (equal 0 (search "textcite:" desc)))
-         (format "\\textcite{%s}" path)
-       (format "\\textcite[%s]{%s}" desc path))))))
-
-(org-add-link-type
- "autocite" 'ebib
- (lambda (path desc format)
-   (cond
-    ((eq format 'latex)
-     (if (or (not desc) (equal 0 (search "autocite:" desc)))
-         (format "\\autocite{%s}" path)
-       (format "\\autocite[%s]{%s}" desc path))))))
-
-(org-add-link-type
- "footcite" 'ebib
- (lambda (path desc format)
-   (cond
-    ((eq format 'latex)
-     (if (or (not desc) (equal 0 (search "footcite:" desc)))
-         (format "\\footcite{%s}" path)
-       (format "\\footcite[%s]{%s}" desc path))))))
-
-(org-add-link-type
- "fullcite" 'ebib
- (lambda (path desc format)
-   (cond
-    ((eq format 'latex)
-     (if (or (not desc) (equal 0 (search "fullcite:" desc)))
-         (format "\\fullcite{%s}" path)
-       (format "\\fullcite[%s]{%s}" desc path))))))
-
-(org-add-link-type
- "citetitle" 'ebib
- (lambda (path desc format)
-   (cond
-    ((eq format 'latex)
-     (if (or (not desc) (equal 0 (search "citetitle:" desc)))
-         (format "\\citetitle{%s}" path)
-       (format "\\citetitle[%s]{%s}" desc path))))))
-
-(org-add-link-type
- "citetitles" 'ebib
- (lambda (path desc format)
-   (cond
-    ((eq format 'latex)
-     (if (or (not desc) (equal 0 (search "citetitles:" desc)))
-         (format "\\citetitles{%s}" path)
-       (format "\\citetitles[%s]{%s}" desc path)
-       )))))
-
-(org-add-link-type
- "headlessfullcite" 'ebib
- (lambda (path desc format)
-   (cond
-    ((eq format 'latex)
-     (if (or (not desc) (equal 0 (search "headlessfullcite:" desc)))
-         (format "\\headlessfullcite{%s}" path)
-       (format "\\headlessfullcite[%s]{%s}" desc path))))))
 
 ;; time manipulation macro for org-tables
 (defun org-time-string-to-seconds (s)
-  "Convert a string HH:MM:SS to a number of seconds."
+  "Convert a string S in format HH:MM:SS to a number of seconds."
   (cond
    ((and (stringp s)
          (string-match "\\([0-9]+\\):\\([0-9]+\\):\\([0-9]+\\)" s))
@@ -287,7 +289,7 @@
    (t s)))
 
 (defun org-time-seconds-to-string (secs)
-  "Convert a number of seconds to a time string."
+  "Convert a number of seconds (SECS) to a time string."
   (cond ((>= secs 3600) (format-seconds "%h:%.2m:%.2s" secs))
         ((>= secs 60) (format-seconds "%m:%.2s" secs))
         (t (format-seconds "%s" secs))))

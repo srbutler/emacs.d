@@ -29,6 +29,7 @@
   ;; allows linting jsx files
   (flycheck-add-mode 'javascript-eslint 'web-mode))
 
+
 ;; emmet mode for efficient xml/html entry
 (use-package emmet-mode
   :ensure t
@@ -40,10 +41,12 @@
   (add-hook 'css-mode-hook  'emmet-mode)
   (add-hook 'html-mode-hook 'emmet-mode)
   (add-hook 'web-mode-hook  'emmet-mode)
+  (add-hook 'nxml-mode-hook 'emmet-mode)
 
   :config
   (setq emmet-indentation                2
         emmet-move-cursor-between-quotes t))
+
 
 ;; set up skewer browser REPL
 (use-package skewer-mode
@@ -59,14 +62,16 @@
   :mode (("\\.jsx?$"  . js2-mode)
          ("\\.es6\\'" . js2-mode)
          ("\\.ejs\\'" . js2-mode)
-         ("\\.pac\\'" . js2-mode))
-
-  ;; :commands js2-mode
+         ("\\.pac\\'" . js2-mode)
+         ("\\.jsx?\\'" . js2-jsx-mode))
+   :init (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
   :config
-  (setq js-basic-indent 2
-        mode-name "JS2")
+  (js2-imenu-extras-setup)
   
-  (setq-default js2-mode-show-parse-errors nil
+  (setq mode-name "JS2")
+  
+  (setq-default js-basic-indent 2
+                js2-mode-show-parse-errors nil
                 js2-mode-show-strict-warnings nil
                 js2-basic-offset 2
                 js2-auto-indent-p t
@@ -77,15 +82,12 @@
                                          "sinon" "assert" "refute" "setTimeout"
                                          "clearTimeout" "setInterval""clearInterval"
                                          "location" "__dirname" "console" "JSON"
-                                         "jQuery" "$"))
-
-  ;; (setq-local electric-layout-rules '((?\; . after)))    ;; prelude
-  ;; (js2-imenu-extras-mode +1)    ;; prelude
-
+                                         "jQuery" "$")) 
+  
   ;; flycheck setup (prefer eslint)
   (setq flycheck-disabled-checkers
-                (append flycheck-disabled-checkers
-                        '(javascript-jshint)))
+        (append flycheck-disabled-checkers
+                '(javascript-jshint)))
   
   (add-hook 'js2-mode-hook 'subword-mode))
 

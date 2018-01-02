@@ -52,17 +52,20 @@
 
 
 ;; the opposite of fill-parapgraph
-(defun unfill-paragraph ()
-  "Take a multi-line paragraph and make it into a single line of text."
-  (interactive)
+;; from http://pages.sachachua.com/.emacs.d/Sacha.html
+(defun sachachua/unfill-paragraph (&optional region)
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive (progn
+                 (barf-if-buffer-read-only)
+                 (list t)))
   (let ((fill-column (point-max)))
-    (fill-paragraph nil)))
+    (fill-paragraph nil region)))
+(bind-key "M-Q" 'sachachua/unfill-paragraph)
 
- (define-key global-map "\M-Q" 'unfill-paragraph)
 
 ;; defines the standard backtab behavior of most editors
 (defun un-indent-by-removing-4-spaces ()
-  "remove 4 spaces from beginning of of line"
+  "Remove 4 spaces from beginning of of line."
   (interactive)
   (save-excursion
     (save-match-data
@@ -73,6 +76,35 @@
       (when (looking-at "^    ")
         (replace-match "")))))
 (global-set-key (kbd "<backtab>") 'un-indent-by-removing-4-spaces)
+
+
+;; taken from http://pages.sachachua.com/.emacs.d/Sacha.html
+(defun sachachua/smarter-move-beginning-of-line (arg)
+  "Move point back to indentation of beginning of line.
+
+Move point to the first non-whitespace character on this line.
+If point is already there, move to the beginning of the line.
+Effectively toggle between the first non-whitespace character and
+the beginning of the line.
+
+If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+point reaches the beginning or end of the buffer, stop there."
+  (interactive "^p")
+  (setq arg (or arg 1))
+
+  ;; Move lines first
+  (when (/= arg 1)
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
+
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+
+;; remap C-a to `smarter-move-beginning-of-line'
+(global-set-key [remap move-beginning-of-line]
+                'sachachua/smarter-move-beginning-of-line)
 
 
 ;; linked to key-chords below
@@ -99,8 +131,7 @@
   ;; quick avy calls
   (key-chord-define-global "jj" 'avy-goto-word-1)
   (key-chord-define-global "jl" 'avy-goto-line)
-  (key-chord-define-global "jk" 'avy-goto-char)
-  )
+  (key-chord-define-global "jk" 'avy-goto-char))
 
 ;; cause I forget things
 (use-package which-key

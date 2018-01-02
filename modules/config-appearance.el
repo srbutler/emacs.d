@@ -60,6 +60,7 @@
   (set-face-attribute 'font-lock-builtin-face nil :bold t))
 
 (use-package zenburn-theme
+  :disabled t
   :ensure t
   :init (load-theme 'zenburn t)
   :config
@@ -71,7 +72,7 @@
                       :background (face-background 'default)))
 
 (use-package material-theme
-  :disabled t
+  ;; :disabled f
   :ensure t
   :init (load-theme 'material-light t)
   :config (setq current-theme-name 'material-theme))
@@ -112,6 +113,8 @@
 ;; set default font--first one found is selected
 (cond
  ((eq window-system nil) nil)
+ ((font-existsp "PragmataPro")
+  (set-face-attribute 'default nil :height 151 :font "PragmataPro"))
  ((font-existsp "Hasklig")
   (set-face-attribute 'default nil :height 141 :font "Hasklig"))
  ((font-existsp "Fira Code")
@@ -120,15 +123,12 @@
   (set-face-attribute 'default nil :height 141 :font "Source Code Pro"))
  ((font-existsp "InconsolataGo")
   (set-face-attribute 'default nil :height 161 :font "InconsolataGo"))
- ((font-existsp "PragmataPro")
-  (set-face-attribute 'default nil :height 151 :font "PragmataPro"))
  ((font-existsp "Monaco")
   (set-face-attribute 'default nil :height 131 :font "Monaco"))
  ((font-existsp "Menlo")
   (set-face-attribute 'default nil :height 141 :font "Menlo"))
  ((font-existsp "Consolas")
-  (set-face-attribute 'default nil :height 131 :font "Consolas"))
- )
+  (set-face-attribute 'default nil :height 131 :font "Consolas")))
 
 ;; Line-spacing tweak: Set this to a different number depending on
 ;; taste and the font selected. The value can be a integer or decimal
@@ -137,7 +137,7 @@
 ;; default line height. if nil: add no extra spacing.
 
 ;; (setq-default line-spacing 0.06) ;; tuned for Pragmata Pro
-(setq-default line-spacing 2)
+(setq-default line-spacing 0.06)
 
 
 ;; Enable emoji, and stop the UI from freezing when trying to display them.

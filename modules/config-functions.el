@@ -12,13 +12,13 @@
 
 ;; open kasr1 in a dired buffer (in office/VPN)
 (defun connect-kasr1-inside ()
-    (interactive)
+  (interactive)
   (dired "/kasr1.kitsys.net:/home/srbutler/"))
 
 ;; open kasr1 from out of office
 (defun connect-kasr1-outside ()
-    (interactive)
-    (dired "/office.kitsys.net:/home/srbutler/"))
+  (interactive)
+  (dired "/office.kitsys.net:/home/srbutler/"))
 
 ;; add highlighting for general annotations
 ;; taken from emacs-prelude
