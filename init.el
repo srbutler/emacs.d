@@ -84,7 +84,7 @@
 
 ;; load the settings files
 (load-file-list "config-%s.el"
-                '("appearance" "functions" "keybindings"
+                '("appearance" "functions" "git" "keybindings"
                   "programming" "ui"))
 
 ;; load the language modules
