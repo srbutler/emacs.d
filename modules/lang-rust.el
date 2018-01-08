@@ -7,23 +7,20 @@
 (use-package rust-mode
   :ensure t
   :mode ("\\.rs\\'" . rust-mode)
-  :config
-  (local-set-key (kbd "C-c <tab>") #'rust-format-buffer))
+  :bind (:map rust-mode-map ("C-c C-f" . rust-format-buffer)))
 
 (use-package racer
   :ensure t
   :defer t
+  :bind (:map rust-mode-map ("M-." . racer-find-definition))
   :config
   (progn
     (setq company-tooltip-align-annotations t
-          racer-cmd "/Users/srbutler/.cargo/bin/racer"
-          racer-rust-src-path "/Users/srbutler/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src")
-    (add-hook 'rust-mode-hook  #'racer-mode)
-    (add-hook 'racer-mode-hook #'eldoc-mode)
-    (add-hook 'racer-mode-hook #'company-mode))
-  
-  ;; Key binding to jump to method definition
-  (local-set-key (kbd "M-.") #'racer-find-definition))
+          racer-cmd "~/.cargo/bin/racer"
+          racer-rust-src-path "~/.multirust/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src")
+    (add-hook 'rust-mode-hook  'racer-mode)
+    (add-hook 'racer-mode-hook 'eldoc-mode)
+    (add-hook 'racer-mode-hook 'company-mode)))
 
 (use-package company-racer
   :ensure t
@@ -35,7 +32,7 @@
 (use-package flycheck-rust
   :ensure t
   :defer t
-  :init (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  :init (add-hook 'flycheck-mode-hook 'flycheck-rust-setup))
 
 (use-package cargo
   :ensure t

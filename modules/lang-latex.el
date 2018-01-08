@@ -12,38 +12,31 @@
   :mode ("\\.tex\\'" . latex-mode)
   :commands (latex-mode LaTeX-mode plain-tex-mode)
   :config
-  (progn
-    (add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
-    (add-hook 'LaTeX-mode-hook #'flyspell-mode)
-    (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
-    (add-hook 'LaTeX-mode-hook #'turn-on-auto-fill)
+  (add-hook 'LaTeX-mode-hook 'LaTeX-preview-setup)
+  (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
 
-    (setq TeX-auto-save t
-	  TeX-parse-self t
-	  TeX-save-query nil
-	  TeX-PDF-mode t
-          TeX-command-default "xelatexmk"
-          TeX-open-quote "“"
-          TeX-close-quote "”"
-          default-justification 'left
-          )
-    (setq-default TeX-master nil)
+  (setq TeX-auto-save t
+        TeX-parse-self t
+        TeX-save-query nil
+        TeX-PDF-mode t
+        TeX-command-default "xelatexmk"
+        TeX-open-quote "“"
+        TeX-close-quote "”"
+        default-justification 'left)
 
-    ;; set up Biber
-    (eval-after-load "tex"
-      '(add-to-list 'TeX-command-list
-                    '("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber") t))
+  (setq-default TeX-master nil)
 
-    ;; set up xelatex
-    (eval-after-load "tex"
-      '(add-to-list 'TeX-command-list
-                    '("xelatexmk" "latexmk -synctex=1 -shell-escape -xelatex %s"
-                      TeX-run-TeX nil t :help "Process file with xelatexmk")))
-    )
-
-  ;; pandoc setup
-  (add-hook 'TeX-mode-hook 'pandoc-mode)
-  (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+  ;; set up Biber
+  (eval-after-load "tex"
+    '(add-to-list 'TeX-command-list
+                  '("Biber" "biber %s" TeX-run-Biber nil t :help "Run Biber") t))
+  ;; set up xelatex
+  (eval-after-load "tex"
+    '(add-to-list 'TeX-command-list
+                  '("xelatexmk" "latexmk -synctex=1 -shell-escape -xelatex %s"
+                    TeX-run-TeX nil t :help "Process file with xelatexmk"))))
 
 ;; integrate reftex
 (use-package reftex
@@ -51,18 +44,16 @@
   :commands turn-on-reftex
   :diminish (reftex-mode . "ref")
   :config
-  (progn
-    (setq reftex-plug-into-AUCTeX t
+   (setq reftex-plug-into-AUCTeX t
           reftex-enable-partial-scans t
           reftex-save-parse-info t
           reftex-use-multiple-selection-buffers t
           reftex-cite-prompt-optional-args nil
-          reftex-cite-cleanup-optional-args t))
+          reftex-cite-cleanup-optional-args t)
 
   ;; biblatex commands, not for use with natbib
   (setq reftex-cite-format
-        '(
-          (?\C-m . "\\cite[]{%l}")
+        '((?\C-m . "\\cite[]{%l}")
           (?t    . "\\textcite{%l}")
           (?a    . "\\autocite[]{%l}")
           (?p    . "\\parencite{%l}")
@@ -71,12 +62,10 @@
           (?P    . "[@%l]")
           (?T    . "@%l [p. ]")
           (?x    . "[]{%l}")
-          (?X    . "{%l}")
-          ))
+          (?X    . "{%l}")))
 
   (setq font-latex-match-reference-keywords
-        '(
-          ("cite" "[{")
+        '(("cite" "[{")
           ("cites" "[{}]")
           ("footcite" "[{")
           ("footcites" "[{")
@@ -85,8 +74,7 @@
           ("fullcite" "[{")
           ("citetitle" "[{")
           ("citetitles" "[{")
-          ("headlessfullcite" "[{")
-          ))
+          ("headlessfullcite" "[{")))
 
   ;; Default bibliography
   ;; (setq reftex-default-bibliography
@@ -95,7 +83,7 @@
       (setq reftex-default-bibliography
             '("/Users/srbutler/Documents/library.bib/library.bib"))
     (setq reftex-default-bibliography
-        '("/Users/srbutler/Documents/Bibliography/library.bib")))
+          '("/Users/srbutler/Documents/Bibliography/library.bib")))
   )
 
 (use-package bibtex
@@ -133,7 +121,7 @@
               "\\\\[TeX-recenter-output-buffer]")))
    (t
     (message (concat "Biber finished successfully. "
-                         "Run LaTeX again to get citations right."))))
+                     "Run LaTeX again to get citations right."))))
   (setq TeX-command-next TeX-command-default))
 
 ;; Auto-fill for LaTeX
@@ -142,7 +130,7 @@
   (turn-on-auto-fill)
   (set-fill-column 80)
   ;; (setq default-justification 'left))
-(add-hook 'LaTeX-mode-hook #'srbutler/latex-auto-fill))
+  (add-hook 'LaTeX-mode-hook #'srbutler/latex-auto-fill))
 
 (provide 'lang-latex)
 ;;; lang-latex.el ends here

@@ -121,7 +121,7 @@
   :ensure t
   :defer t
   :diminish (pandoc-mode . "pandoc")
-  :hook (markdown-mode org-mode)
+  :hook (markdown-mode org-mode TeX-mode)
   :config (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
 
 

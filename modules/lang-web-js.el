@@ -64,7 +64,7 @@
          ("\\.ejs\\'" . js2-mode)
          ("\\.pac\\'" . js2-mode)
          ("\\.jsx?\\'" . js2-jsx-mode))
-   :init (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
+  :init (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
   :config
   (js2-imenu-extras-setup)
   
@@ -96,15 +96,10 @@
 (use-package web-beautify
   :ensure t
   :defer t
-  :config
-  (eval-after-load 'js2-mode
-    '(define-key js2-mode-map (kbd "C-c C-f") 'web-beautify-js))
-  (eval-after-load 'json-mode
-    '(define-key json-mode-map (kbd "C-c C-f") 'web-beautify-js))
-  (eval-after-load 'sgml-mode
-    '(define-key html-mode-map (kbd "C-c C-f") 'web-beautify-html))
-  (eval-after-load 'css-mode
-    '(define-key css-mode-map (kbd "C-c C-f") 'web-beautify-css)))
+  :bind (:map js2-mode-map  ("C-c C-f" . web-beautify-js)
+         :map json-mode-map ("C-c C-f" . web-beautify-js)
+         :map html-mode-map ("C-c C-f" . web-beautify-html)
+         :map css-mode-map  ("C-c C-f" . web-beautify-html)))
 
 
 ;; set up javascript refactoring, all prefixed to =C-c .=

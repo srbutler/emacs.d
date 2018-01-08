@@ -15,6 +15,9 @@
   :config
   (setq python-indent-offset 4)
 
+  ;; add smarparens to inferior-python mode
+  (add-hook 'inferior-python-mode-hook 'smartparens-mode)
+
   ;; set custom keywords for python-mode
   (font-lock-add-keywords
    'python-mode
@@ -25,11 +28,7 @@
      ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
      ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
-     ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face)))
-
-  ;; add smarparens to inferior-python mode
-  (add-hook 'inferior-python-mode-hook 'smartparens-mode)
-  )
+     ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face))))
 
 (use-package elpy
   :ensure t

@@ -10,21 +10,11 @@
          ("\\.cljc$" . clojure-mode))
   :ensure t
   :init
-  
-  (defconst clojure--prettify-symbols-alist
-    '(("fn"   . ?λ)
-      ("__"   . ?⁈)))
-
   (add-hook 'clojure-mode-hook 'global-prettify-symbols-mode)
   (add-hook 'clojure-mode-hook 'paredit-mode)
   (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'clojure-mode-hook 'subword-mode)
+  (add-hook 'clojure-mode-hook 'subword-mode))
 
-  ;; (eval-after-load 'clojure-mode
-  ;;   '(use-package clojure-mode-extra-font-locking
-  ;;      :ensure t
-  ;;      :init (require 'clojure-mode-extra-font-locking)))
-  )
 
 ;; defines a function for better REPL interaction
 (defun cider-send-and-evaluate-sexp ()
@@ -46,6 +36,9 @@
   :defer t
   :ensure t
   :commands (cider cider-connect cider-jack-in)
+  :bind (:map clojure-mode-map
+              ("C-c C-v" . cider-send-and-evaluate-sexp)
+              ("C-x C-e" . cider-eval-last-sexp))
   :init
   (setq cider-auto-select-error-buffer t
         cider-repl-pop-to-buffer-on-connect nil
@@ -54,8 +47,6 @@
         cider-repl-history-size 1000
         cider-show-error-buffer t
         nrepl-hide-special-buffers t
-        ;; Stop error buffer from popping up while working in
-        ;; buffers other than the REPL:
         nrepl-popup-stacktraces nil)
 
   (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
@@ -63,13 +54,7 @@
   (add-hook 'cider-repl-mode-hook 'paredit-mode)
   (add-hook 'cider-repl-mode-hook 'superword-mode)
   (add-hook 'cider-repl-mode-hook 'company-mode)
-  (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
-
-  :bind ("C-c C-v" . cider-send-and-evaluate-sexp)
-
-  ;; (bind-key "C-x C-e" 'cider-eval-last-sexp clojure-mode-map)
-  ;; (bind-key "C-c C-v" 'cider-send-and-evaluate-sexp)
-  )
+  (add-hook 'cider-test-report-mode 'jcf-soft-wrap))
 
 
 ;; linter setup with flycheck
@@ -82,16 +67,14 @@
     :config
     (flycheck-clojure-setup)))
 
+
 ;; refactoring with clj-refactor
 ;; refactoring help with C-c . h h
 (use-package clj-refactor
   :defer t
   :ensure t
-  :init
-  (add-hook 'clojure-mode-hook 'clj-refactor-mode)
-  :config
-  ;; Configure the Clojure Refactoring prefix:
-  (cljr-add-keybindings-with-prefix "C-c .")
+  :init (add-hook 'clojure-mode-hook 'clj-refactor-mode)
+  :config (cljr-add-keybindings-with-prefix "C-c .")
   :diminish clj-refactor-mode)
 
 ;;; lang-clojure.el ends here

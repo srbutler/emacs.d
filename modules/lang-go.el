@@ -22,9 +22,8 @@
   (let ((goimports (executable-find "goimports")))
          (when goimports
            (setq gofmt-command goimports)))
-  (add-hook 'before-save-hook 'gofmt-before-save nil t)
-  
-  )
+  (add-hook 'before-save-hook 'gofmt-before-save nil t))
+
 
 (use-package company-go
   :ensure t
@@ -34,20 +33,15 @@
     (add-to-list 'company-backends 'company-go)))
 
 
-;; (use-package flycheck-gometalinter
-;;   :ensure t
-;;   :defer t
-;;   :config
-;;   (progn
-;;     (flycheck-gometalinter-setup)))
-
 (use-package go-eldoc
   :ensure t
   :defer t)
 
+
 (use-package go-projectile
   :ensure t
   :defer t)
+
 
 (provide 'lang-go)
 ;;; lang-go.el ends here

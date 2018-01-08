@@ -19,38 +19,35 @@
 (use-package slime
   :ensure t
   :defer t
+  :bind (:map slime-mode-map ("C-c C-s" . slime-selector))
   :commands (slime slime-mode)
-  :init
-  (progn
-    (setq slime-contribs '(slime-fancy
-                           slime-indentation
-                           slime-sbcl-exts
-                           slime-scratch))
+  :config  
+  (setq tab-always-indent 'complete)
+  (setq slime-contribs '(slime-fancy
+                         slime-indentation
+                         slime-sbcl-exts
+                         slime-scratch))
 
-    (defun slime/disable-smartparens ()
-      (smartparens-strict-mode -1)
-      (turn-off-smartparens-mode))
-    (add-hook 'slime-repl-mode-hook #'slime/disable-smartparens))
+  (defun slime/disable-smartparens ()
+    (smartparens-strict-mode -1)
+    (turn-off-smartparens-mode))
+  (add-hook 'slime-repl-mode-hook #'slime/disable-smartparens)
 
   (setq slime-lisp-implementations
-      '((ccl ("ccl"))
-        (clisp ("clisp" "-q"))
-        (cmucl ("cmucl" "-quiet"))
-        (sbcl ("sbcl" "--noinform") :coding-system utf-8-unix)))
+        '((ccl ("ccl"))
+          (clisp ("clisp" "-q"))
+          (cmucl ("cmucl" "-quiet"))
+          (sbcl ("sbcl" "--noinform") :coding-system utf-8-unix)))
   (setq slime-default-lisp 'sbcl)
 
-  :config
   (eval-after-load "slime"
-  '(progn
-     (setq slime-completion-at-point-functions 'slime-fuzzy-complete-symbol
-           slime-complete-symbol*-fancy t
-           slime-fuzzy-completion-in-place t
-           slime-enable-evaluate-in-emacs t
-           slime-autodoc-use-multiline-p t
-           slime-auto-start 'always)
-
-     (define-key slime-mode-map (kbd "TAB") 'slime-indent-and-complete-symbol)
-     (define-key slime-mode-map (kbd "C-c C-s") 'slime-selector))))
+    '(progn
+       (setq slime-completion-at-point-functions 'slime-fuzzy-complete-symbol
+             slime-complete-symbol*-fancy t
+             slime-fuzzy-completion-in-place t
+             slime-enable-evaluate-in-emacs t
+             slime-autodoc-use-multiline-p t
+             slime-auto-start 'always))))
 
 
 ;; EMACS LISP
@@ -58,14 +55,14 @@
 (defun recompile-elc-on-save ()
   "Recompile your elc when saving an elisp file."
   (add-hook 'after-save-hook
-            (lambda ()
-              (when (and
-                     (or (string-prefix-p modules-dir (file-truename buffer-file-name))
-                         (string-prefix-p dotfiles-dir (file-truename buffer-file-name)))
-                     (file-exists-p (byte-compile-dest-file buffer-file-name)))
-                (emacs-lisp-byte-compile)))
-            nil
-            t))
+   (lambda ()
+     (when (and
+            (or (string-prefix-p modules-dir (file-truename buffer-file-name))
+                (string-prefix-p dotfiles-dir (file-truename buffer-file-name)))
+            (file-exists-p (byte-compile-dest-file buffer-file-name)))
+       (emacs-lisp-byte-compile)))
+   nil
+   t))
 
 (defun srb-emacs-lisp-mode-defaults ()
   "Sensible defaults for `emacs-lisp-mode'."
@@ -93,9 +90,8 @@
 (use-package geiser
   :ensure t
   :defer t
+  :init (add-hook 'scheme-mode-hook 'geiser-mode)
   :config
-  ;; run geiser whenever a scheme file is opened
-  (add-hook 'scheme-mode-hook 'geiser-mode)
 
   ;; regular lisp defaults
   (add-hook 'geiser-mode-hook 'smartparens-strict-mode)
