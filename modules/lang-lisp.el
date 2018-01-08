@@ -37,7 +37,7 @@
         (clisp ("clisp" "-q"))
         (cmucl ("cmucl" "-quiet"))
         (sbcl ("sbcl" "--noinform") :coding-system utf-8-unix)))
-  (setq slime-default-lisp 'ccl)
+  (setq slime-default-lisp 'sbcl)
 
   :config
   (eval-after-load "slime"

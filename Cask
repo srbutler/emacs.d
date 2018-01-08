@@ -75,6 +75,7 @@
 (depends-on "helm-gtags")
 (depends-on "helm-projectile")
 (depends-on "highlight-indentation")
+(depends-on "hindent")
 (depends-on "hydra")
 (depends-on "idle-highlight-mode")
 (depends-on "inflections")

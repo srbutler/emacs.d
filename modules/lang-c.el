@@ -8,18 +8,7 @@
 ;;
 ;;; Code:
 
-(defun srb-c-mode-common-hooks ()
- (local-set-key (kbd "C-c C-f") 'clang-format-buffer)
-
-  ;; (setq
-  ;;       c-default-style "java"
-  ;;       c-basic-offset 4
-  ;;       tab-width 4
-  ;;       tab-always-indent 'complete
- ;;       ))
- )
-(add-hook 'c-mode-common-hook #'srb-c-mode-common-hooks)
-
+;; highlight numbers correctly
 (font-lock-add-keywords
  'cc-mode '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
 
@@ -31,16 +20,18 @@
 (add-hook 'c-common-mode-hook 'google-set-c-style)
 (add-hook 'c-common-mode-hook 'google-make-newline-indent)
 
+
 (use-package clang-format
   :ensure t
-  :defer t
-  ;; :bind ("C-c C-f" . clang-format-region)
+  :demand
+  :bind (:map c-mode-base-map ("C-c C-f" . clang-format-buffer))
   :config (setq clang-format-style "llvm"))
-(bind-key "C-c C-f" 'clang-format-buffer)
+
 
 (use-package irony
   :ensure t
   :defer t
+  :diminish "irony"
   :init
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
@@ -54,6 +45,7 @@
 
   (add-hook 'irony-mode-hook 'my-irony-mode-hook)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+
 
 (use-package company-irony
   :ensure t
@@ -91,29 +83,6 @@
   :defer t
   :init (add-hook 'c-mode-common-hook 'cmake-ide-setup))
 
-
-(use-package rtags
-  :disabled t
-  :ensure t
-  :defer t
-  :init
-  (eval-after-load 'company
-  '(add-to-list
-    'company-backends 'company-rtags))
-
-  (defun my-flycheck-rtags-setup ()
-    (flycheck-select-checker 'rtags)
-    (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-    (setq-local flycheck-check-syntax-automatically nil))
-  ;; c-mode-common-hook is also called by c++-mode
-  (add-hook 'c-mode-common-hook #'my-flycheck-rtags-setup)
-
-  :config
-  (setq rtags-autostart-diagnostics t
-        rtags-completions-enabled t
-        rtags-use-helm t)
-
-  (rtags-enable-standard-keybindings))
 
 (provide 'lang-c)
 ;;; lang-c.el ends here

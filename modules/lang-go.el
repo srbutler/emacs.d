@@ -7,7 +7,8 @@
 
 (use-package go-mode
   :ensure t
-  :bind (("C-c a" . go-test-current-project)
+  :bind (:map go-mode-map
+         ("C-c a" . go-test-current-project)
          ("C-c m" . go-test-current-file)
          ("C-c ." . go-test-current-test)
          ("C-c b" . go-run)
