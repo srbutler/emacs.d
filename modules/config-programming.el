@@ -209,7 +209,7 @@
 ;; define a bunch of wrapping operations in text modes
 (use-package wrap-region
   :ensure t
-  :hook text-mode
+  :init (add-hook 'text-mode-hook 'wrap-region-mode)
   :diminish wrap-region-mode
   :config
   (wrap-region-add-wrappers
