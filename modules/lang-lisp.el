@@ -9,6 +9,7 @@
   :mode (("\\.cl\\'" . lisp-mode)
          ("\\.lisp\\'" . lisp-mode)
          ("\\.sbclrc\\'" . lisp-mode))
+  :bind (:map emacs-lisp-mode-map ("C-c C-z" . ielm))
   :config
   (add-hook 'lisp-mode-hook 'smartparens-strict-mode)
   (add-hook 'lisp-mode-hook 'paredit-mode)

@@ -240,13 +240,16 @@
 ;; enable YASnippet globally
 (use-package yasnippet
   :ensure t
-  :init (yas-global-mode)
+  :init
+  (yas-global-mode)
   ;; (add-hook 'prog-mode-hook 'yas-minor-mode)
   ;; (add-hook 'text-mode-hook 'yas-minor-mode)
   :bind (("C-c C-e" . yas-expand))
-  :config
-  (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets/yasnippet-snippets")
-  (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets/"))
+  :config (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets/"))
+
+;; a solid collection of snippets for many modes
+(use-package yasnippet-snippets
+  :ensure t)
 
 
 ;;; FUNCTIONS --------------------------------------------
@@ -274,7 +277,7 @@
   :ensure t
   :mode (("\\.gpi\\'" . gnuplot-mode)
          ("\\.plt\\'" . gnuplot-mode)
-         ("\\.gp\\'" . gnuplot-mode)))
+         ("\\.gp\\'"  . gnuplot-mode)))
 
 
 (use-package json-mode
@@ -284,7 +287,7 @@
 
 (use-package nxml-mode
   :mode (("\\.xml\\'" . nxml-mode)
-         ("\\.pom$" . nxml-mode))
+         ("\\.pom$"   . nxml-mode))
   :config
   (setq nxml-child-indent 4
         nxml-attribute-indent 5
@@ -355,7 +358,6 @@ PACKAGE is installed only if not already present.  The file is opened in MODE."
     ("\\.kv\\'" kivy-mode kivy-mode)
     ("\\.less\\'" less-css-mode less-css-mode)
     ("\\.lua\\'" lua-mode lua-mode)
-    ("\\.ml\\'" tuareg tuareg-mode)
     ("\\.pp\\'" puppet-mode puppet-mode)
     ("\\.php\\'" php-mode php-mode)
     ("\\.proto\\'" protobuf-mode protobuf-mode)

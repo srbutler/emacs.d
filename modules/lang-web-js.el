@@ -6,14 +6,14 @@
 
 (use-package web-mode
   :ensure t
-  :mode (("\\.phtml\\'" . web-mode)
+  :mode (("\\.html?\\'" . web-mode)
+         ("\\.phtml\\'" . web-mode)
          ("\\.tpl\\.php\\'" . web-mode)
          ("\\.[agj]sp\\'" . web-mode)
          ("\\.as[cp]x\\'" . web-mode)
          ("\\.erb\\'" . web-mode)
          ("\\.mustache\\'" . web-mode)
          ("\\.djhtml\\'" . web-mode)
-         ("\\.html?\\'" . web-mode)
          ;; ("\\.jsx?\\'" . web-mode)
          )
 
@@ -35,14 +35,12 @@
   :ensure t
   :diminish (emmet-mode . "emmet")
   :commands emmet-mode
-
   :init
   (add-hook 'sgml-mode-hook 'emmet-mode)
   (add-hook 'css-mode-hook  'emmet-mode)
   (add-hook 'html-mode-hook 'emmet-mode)
   (add-hook 'web-mode-hook  'emmet-mode)
   (add-hook 'nxml-mode-hook 'emmet-mode)
-
   :config
   (setq emmet-indentation                2
         emmet-move-cursor-between-quotes t))
@@ -64,7 +62,7 @@
          ("\\.ejs\\'" . js2-mode)
          ("\\.pac\\'" . js2-mode)
          ("\\.jsx?\\'" . js2-jsx-mode))
-  :init (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
+  :interpreter ("node" . js2-mode)
   :config
   (js2-imenu-extras-setup)
   
@@ -102,12 +100,12 @@
          :map css-mode-map  ("C-c C-f" . web-beautify-html)))
 
 
-;; set up javascript refactoring, all prefixed to =C-c .=
+;; set up javascript refactoring, all prefixed to =C-c r=
 (use-package js2-refactor
   :ensure t
-  :commands js2-refactor-mode js2r-add-keybindings-with-prefix
+  :diminish js2-refactor-mode
   :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
-  :config (js2r-add-keybindings-with-prefix "C-c ."))
+  :config (js2r-add-keybindings-with-prefix "C-c r"))
 
 
 ;; JS autocompletion via company
@@ -122,27 +120,17 @@
     (use-package company-tern
       :init (add-to-list 'company-backends 'company-tern))))
 
-
-;; for js2-comint, to call node.js as a REPL
-(use-package js-comint
+(use-package nodejs-repl
   :ensure t
-  :defer t
-  :init
-  (setq inferior-js-program-command "node")
-  (setq inferior-js-program-arguments '("--interactive"))
+  :bind (:map js2-mode-map
+         ("C-x C-e" . nodejs-repl-send-last-expression)
+         ("C-c C-j" . nodejs-repl-send-line)
+         ("C-c C-r" . nodejs-repl-send-region)
+         ("C-c C-l" . nodejs-repl-load-file)
+         ("C-c C-z" . nodejs-repl-switch-to-repl)))
 
-  (add-hook 'js2-mode-hook '(lambda ()
-                              (local-set-key "\C-x\C-e" 'js-send-last-sexp)
-                              (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
-                              (local-set-key "\C-cb" 'js-send-buffer)
-                              (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
-                              (local-set-key "\C-cl" 'js-load-file-and-go)
-                              ))
-
-  (setenv "NODE_NO_READLINE" "1")
-  (setq inferior-js-mode-hook
-        (lambda ()
-          (ansi-color-for-comint-mode-on))))
 
 (provide 'lang-web-js.el)
 ;;; lang-web.el ends here
+
+

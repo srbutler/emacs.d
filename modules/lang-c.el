@@ -24,8 +24,13 @@
 (use-package clang-format
   :ensure t
   :demand
-  :bind (:map c-mode-base-map ("C-c C-f" . clang-format-buffer))
-  :config (setq clang-format-style "llvm"))
+  :config
+  (setq clang-format-style "llvm")
+
+  ;; bind it as a hook instead, :bind is not working correctly
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (define-key c-mode-base-map "C-c C-f" 'clang-format-buffer))))
 
 
 (use-package irony

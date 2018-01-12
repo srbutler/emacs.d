@@ -17,12 +17,6 @@
   (define-key org-mode-map (kbd "C-c (") 'reftex-citation))
 
 
-;; make yasnippet work properly with org-mode
-(defun yas-org-very-safe-expand ()
-  (let ((yas-fallback-behavior 'return-nil))
-    (and (fboundp 'yas-expand) (yas-expand))))
-
-
 ;; set up org plus contribs for most swag
 (use-package org
   :mode ("\\.org\\'" . org-mode)
@@ -34,9 +28,14 @@
 
   ;; add a custom sequence of TODO states
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "|"
+        '((sequence "TODO(t)" "STARTED(s)" "DELAYED(y)" "|"
                     "DONE(d)" "CANCELLED(c)")))
+  (setq org-todo-keyword-faces '(("STARTED" . org-priority)))
 
+  ;; make yasnippet work properly with org-mode
+  (defun yas-org-very-safe-expand ()
+    (let ((yas-fallback-behavior 'return-nil))
+      (and (fboundp 'yas-expand) (yas-expand))))
   ;; enable yasnippet configuration
   (add-hook 'org-mode-hook
             (lambda ()
@@ -58,13 +57,6 @@
         org-replace-disputed-keys t
         org-log-done t)
 
-  ;; set the TODO keyword scopes
-  (setq org-todo-keywords
-        '((sequence "TODO" "DELAYED" "STARTED" "|" "DONE" "CANCELLED")))
-
-  (setq org-todo-keyword-faces
-        '(("STARTED" . org-priority)))
-
   ;; make windmove work in org-mode
   (add-hook 'org-shiftup-final-hook 'windmove-up)
   (add-hook 'org-shiftleft-final-hook 'windmove-left)
@@ -78,7 +70,8 @@
      (python     . t)
      (haskell    . t)
      (sh         . t)
-     ))
+     (ocaml      . t)
+     (r          . t)))
 
   ;; ensure R blocks are called correctly
   (add-to-list 'org-src-lang-modes '("r" . ess-mode))
@@ -89,11 +82,16 @@
     :defer t
     :diminish (org-cdlatex-mode . "ocdl"))
 
+  ;; Fancy bullet rendering.
+  (use-package org-bullets
+    :ensure t
+    :defer t
+    :init  (add-hook 'org-mode-hook 'org-bullets-mode))
+
   ;; downloaded from github, allows linguistics examples via linguex
   ;; or gb4e
   (use-package ox-linguistics
     :load-path "~/.emacs.d/vendor/ox-linguistics/lisp")
-
 
   ;; org-export settings
   (require 'ox-latex)
@@ -259,15 +257,7 @@
       ((eq format 'latex)
        (if (or (not desc) (equal 0 (search "headlessfullcite:" desc)))
            (format "\\headlessfullcite{%s}" path)
-         (format "\\headlessfullcite[%s]{%s}" desc path))))))
-  )
-
-
-;; Fancy bullet rendering.
-(use-package org-bullets
-  :ensure t
-  ;; :defer t
-  :init  (add-hook 'org-mode-hook 'org-bullets-mode))
+         (format "\\headlessfullcite[%s]{%s}" desc path)))))))
 
 
 ;; time manipulation macro for org-tables

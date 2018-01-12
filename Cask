@@ -100,6 +100,7 @@
 (depends-on "merlin")
 (depends-on "mmm-mode")
 (depends-on "multiple-cursors")
+(depends-on "nodejs-repl")
 (depends-on "noflet")
 (depends-on "ocp-indent")
 (depends-on "org-bullets")
@@ -148,4 +149,5 @@
 (depends-on "wrap-region")
 (depends-on "yaml-mode")
 (depends-on "yasnippet")
+(depends-on "yasnippet-snippets")
 (depends-on "zenburn-theme")

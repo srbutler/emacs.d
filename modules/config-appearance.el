@@ -72,7 +72,7 @@
                       :background (face-background 'default)))
 
 (use-package material-theme
-  ;; :disabled f
+  ;; :disabled t
   :ensure t
   :init (load-theme 'material-light t)
   :config (setq current-theme-name 'material-theme))
@@ -115,14 +115,14 @@
  ((eq window-system nil) nil)
  ((font-existsp "PragmataPro")
   (set-face-attribute 'default nil :height 151 :font "PragmataPro"))
+ ((font-existsp "InconsolataGo")
+  (set-face-attribute 'default nil :height 161 :font "InconsolataGo"))
  ((font-existsp "Hasklig")
   (set-face-attribute 'default nil :height 141 :font "Hasklig"))
  ((font-existsp "Fira Code")
   (set-face-attribute 'default nil :height 141 :font "Fira Code"))
  ((font-existsp "Source Code Pro")
   (set-face-attribute 'default nil :height 141 :font "Source Code Pro"))
- ((font-existsp "InconsolataGo")
-  (set-face-attribute 'default nil :height 161 :font "InconsolataGo"))
  ((font-existsp "Monaco")
   (set-face-attribute 'default nil :height 131 :font "Monaco"))
  ((font-existsp "Menlo")
