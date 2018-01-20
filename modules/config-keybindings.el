@@ -12,7 +12,7 @@
 
 ;; set up keyboard to have mac-universal keybindings
 ;; meta => alt/control
-;; hypter => command
+;; hyper => command
 (setq mac-option-modifier 'meta)
 (setq mac-command-modifier 'hyper)
 
@@ -29,8 +29,9 @@
 (global-set-key [(hyper v)] 'yank)                   ;; paste
 (global-set-key [(hyper x)] 'kill-region)            ;; cut
 (global-set-key [(hyper z)] 'undo)                   ;; undo
-;; (global-set-key [(hyper w)]
-;;                 (lambda () (interactive) (delete-window)))
+
+;; set an extra command to jump to other window, for convenience
+(bind-key "M-o" #'other-window global-map)
 
 ;; this function will switch the command and option bindings between
 ;; the standard layout and the more mac-centric layout (that will
@@ -42,7 +43,6 @@
       (progn
         (setq mac-option-modifier 'meta)
         (setq mac-command-modifier 'hyper))
-    
     (progn
       (setq mac-option-modifier nil)
       (setq mac-command-modifier 'meta))))
@@ -123,11 +123,6 @@ point reaches the beginning or end of the buffer, stop there."
   :ensure t
   :init (key-chord-mode +1)
   :config
-  ;; quick helm calls
-  ;; (key-chord-define-global "bn" 'helm-buffers-list)
-  ;; (key-chord-define-global "df" 'helm-find-files)
-  ;; (key-chord-define-global "xx" 'helm-M-x)
-
   ;; quick avy calls
   (key-chord-define-global "jj" 'avy-goto-word-1)
   (key-chord-define-global "jl" 'avy-goto-line)
