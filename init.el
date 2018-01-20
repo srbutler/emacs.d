@@ -65,7 +65,7 @@
         ("org"          . "http://orgmode.org/elpa/")
         ("gnu"          . "http://elpa.gnu.org/packages/")
         ("melpa"        . "http://melpa.milkbox.net/packages/")
-        ;; ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
+        ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
         ;; ("marmalade"    . "http://marmalade-repo.org/packages/")
         ))
 
@@ -90,7 +90,8 @@
 ;; load the language modules
 (load-file-list "lang-%s.el"
                 '("c" "clojure" "ess" "go" "haskell" "latex" "lisp"
-                  "markdown" "ocaml" "org" "python" "rust" "web-js"))
+                  "markdown" "ocaml" "org" "python" "rust" "scala"
+                  "web-js"))
 
 ;;; init.el ends here
 

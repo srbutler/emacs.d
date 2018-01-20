@@ -123,7 +123,8 @@
          ("C-h r" . helm-info-emacs)
          ("C-x C-f" . helm-find-files)
          ("C-x r j" . jump-to-register)
-         ("C-x C-r" . helm-recentf))
+         ("C-x C-r" . helm-recentf)
+         ("C-c h C-a" . helm-ag))
 
   :config (progn
             (define-key helm-ag-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
@@ -238,6 +239,11 @@
         speedbar-use-images nil)
   
   :bind ("C-c s" . sr-speedbar-toggle))
+
+
+(use-package undo-tree
+  :diminish undo-tree-mode
+  :config (global-undo-tree-mode))
 
 
 ;; meaningful names for buffers with the same name

@@ -37,6 +37,7 @@
 (depends-on "elixir-mode")
 (depends-on "elpy")
 (depends-on "emmet-mode")
+(depends-on "ensime")
 (depends-on "epl")
 (depends-on "erlang")
 (depends-on "ess")
