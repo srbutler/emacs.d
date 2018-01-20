@@ -171,13 +171,10 @@
 ;; set up some of crux's convenience functions
 (use-package crux
   :ensure t
-  :bind (
-         ;;("C-k" . crux-smart-kill-line)
-         ("C-c e" . crux-eval-and-replace)
-         ;; ("C-c o" . crux-open-with)
+  :bind (("C-c e"   . crux-eval-and-replace)
          ("C-x 4 t" . crux-transpose-windows)
-         ("C-c I" . crux-find-user-init-file)
-         ("C-c S" . crux-find-shell-init-file))
+         ("C-c I"   . crux-find-user-init-file)
+         ("C-c S"   . crux-find-shell-init-file))
   :config
   ;; kills to end of line first, then whole line
   (global-set-key [remap kill-line] #'crux-smart-kill-line))
