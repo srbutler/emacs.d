@@ -71,6 +71,7 @@
   :defer t
   :init (add-hook 'python-mode-hook 'pyenv-mode)
   :config
+  (define-key pyenv-mode-map (kbd "C-c C-s") nil)
   (progn
     (defun my-pyenv-mode-set ()
       (let ((target-file (expand-file-name ".python-version" (projectile-project-root))))
@@ -90,7 +91,7 @@
          ("\\.pxi\\'"  . cython-mode))
   :config
   (font-lock-add-keywords
-   'cython-mode
+   'cython-modep
    '(
      ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)

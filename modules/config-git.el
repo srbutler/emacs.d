@@ -15,11 +15,9 @@
 ;; have git indications in gutter
 (use-package git-gutter
   :ensure t
-  :defer t
   :init (global-git-gutter-mode t)
   :diminish git-gutter-mode
   :config
-  
   ;; change the indicator colors to something nicer
   (when (or (eq current-theme-name "solarized-dark")
             (eq current-theme-name "solarized-light"))

@@ -8,17 +8,35 @@
 ;;
 ;;; Code:
 
-;; highlight numbers correctly
-(font-lock-add-keywords
- 'cc-mode '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
 
-;; load Google's C/C++ style file
-(load
- (expand-file-name "google-c-style.el"
-                   (expand-file-name "google_c_style" vendor-dir)))
+(use-package cc-mode
+  :defer t
+  :config
+  (font-lock-add-keywords
+   'cc-mode '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
 
-(add-hook 'c-common-mode-hook 'google-set-c-style)
-(add-hook 'c-common-mode-hook 'google-make-newline-indent)
+  ;; via https://stackoverflow.com/questions/30949847/configuring-flycheck-to-work-with-c11
+  ;; this defaults the standard to c++11, should use dir local variables in most cases
+  (add-hook 'c++-mode-hook
+            (lambda () (progn
+                         (setq flycheck-gcc-language-standard "c++11")
+                         (setq flycheck-clang-language-standard "c++11")))))
+
+
+;; better highlighting for C++14 onward
+(use-package modern-cpp-font-lock
+  :ensure t
+  :defer t
+  :diminish modern-c++-font-lock-mode
+  :init (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode))
+
+
+(use-package google-c-style
+  :load-path "~/.emacs.d/vendor/google_c_style"
+  :defer t
+  :init
+  (add-hook 'c-common-mode-hook 'google-set-c-style)
+  (add-hook 'c-common-mode-hook 'google-make-newline-indent))
 
 
 (use-package clang-format
@@ -30,7 +48,7 @@
   ;; bind it as a hook instead, :bind is not working correctly
   (add-hook 'c-mode-common-hook
             (lambda ()
-              (define-key c-mode-base-map "C-c C-f" 'clang-format-buffer))))
+              (bind-key "C-c C-f" #'clang-format-buffer c-mode-base-map))))
 
 
 (use-package irony
@@ -61,11 +79,7 @@
         (delete 'company-semantic company-backends))
   ;; (eval-after-load 'company
   ;;   '(add-to-list 'company-backends 'company-irony))
-  :config
-  (setq company-idle-delay 0)
-  ;; (define-key c-mode-map [(tab)] 'company-complete)
-  ;; (define-key c++-mode-map [(tab)] 'company-complete)
-  )
+  :config (setq company-idle-delay 0))
 
 
 (use-package company-irony-c-headers

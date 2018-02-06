@@ -4,19 +4,29 @@
 ;;
 ;;; Code:
 
+
 (use-package markdown-mode
   :ensure t
-  :mode ("\\.\\(m\\(ark\\)?down\\|md\\)$" . markdown-mode)
-  :config
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init
+  (setq markdown-command "multimarkdown"
+        markdown-fontify-code-blocks-natively t)
+
   ;; some minor-mode hooks since it doesn't inherit from prog-mode
   (add-hook 'markdown-mode-hook 'wrap-region-mode)
   (add-hook 'markdown-mode-hook 'turn-off-auto-fill)
   (add-hook 'markdown-mode-hook 'yas-minor-mode)
-  (add-hook 'markdown-mode-hook 'reftex-mode)
+  (add-hook 'markdown-mode-hook 'reftex-mode))
 
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
-  )
+
+;; allows editing of code blocks using major mode in other window
+;; C-c C-c or C-c ' commits, C-c C-k aborts
+(use-package edit-indirect
+  :ensure t)
+
 
 ;; set up mmm-mode to automatically load major modes for code highlighting
 (defun my-mmm-markdown-auto-class (lang &optional submode)
@@ -38,7 +48,7 @@ If SUBMODE is not provided, use `LANG-mode' by default."
   (setq mmm-global-mode 'maybe)
   (mapc 'my-mmm-markdown-auto-class
         '("awk" "bibtex" "c" "clojure" "cpp" "css" "haskell" "html" "lisp"
-          "makefile" "markdown" "python" "ruby" "rust" "sql" "stata" "xml"))
+          "makefile" "markdown" "python" "ruby" "rust" "scala" "sql" "stata" "xml"))
   ;; Mode names that differ from the language name
   (my-mmm-markdown-auto-class "fortran" 'f90-mode)
   (my-mmm-markdown-auto-class "perl" 'cperl-mode)
@@ -46,6 +56,7 @@ If SUBMODE is not provided, use `LANG-mode' by default."
   (my-mmm-markdown-auto-class "r" 'ess)
   (my-mmm-markdown-auto-class "latex" 'LaTeX-mode)
   (my-mmm-markdown-auto-class "javascript" 'js2-mode)
+  (my-mmm-markdown-auto-class "ocaml" 'tuareg-mode)
 
   :config
   ;; parse code buffers when idle

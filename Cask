@@ -1,5 +1,6 @@
 (source "gnu" "http://elpa.gnu.org/packages/")
 (source "melpa" "http://melpa.milkbox.net/packages/")
+(source "melpa-stable" "http://melpa-stable.milkbox.net/packages/")
 (source org)
 
 (depends-on "async")
@@ -100,6 +101,7 @@
 (depends-on "material-theme")
 (depends-on "merlin")
 (depends-on "mmm-mode")
+(depends-on "modern-cpp-font-lock")
 (depends-on "multiple-cursors")
 (depends-on "nodejs-repl")
 (depends-on "noflet")
@@ -140,6 +142,7 @@
 (depends-on "swift-mode")
 (depends-on "tern")
 (depends-on "tuareg")
+(depends-on "undo-tree")
 (depends-on "use-package")
 (depends-on "use-package-ensure-system-package")
 (depends-on "utop")

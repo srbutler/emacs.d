@@ -4,51 +4,53 @@
 ;;
 ;;; Code:
 
+;; only run the following on Macs
+(when (eq window-system 'mac)
+
+  ;; define key-commands that are common in text-editor interfaces
+  ;; a customer version of CUA really
+  (global-set-key [(hyper a)] 'mark-whole-buffer)      ;; select all
+  (global-set-key [(hyper c)] 'kill-ring-save)         ;; copy
+  (global-set-key [(hyper f)] 'search-forward)         ;; find
+  (global-set-key [(hyper F)] 'search-forward-regexp)  ;; find with regexp
+  (global-set-key [(hyper l)] 'goto-line)              ;; goto a line
+  (global-set-key [(hyper o)] 'helm-find-files)        ;; open a file
+  (global-set-key [(hyper r)] 'replace-string)         ;; find-and-replace
+  (global-set-key [(hyper R)] 'replace-regexp)         ;; find-and-replace with regexp
+  (global-set-key [(hyper s)] 'save-buffer)            ;; save file
+  (global-set-key [(hyper v)] 'yank)                   ;; paste
+  (global-set-key [(hyper x)] 'kill-region)            ;; cut
+  (global-set-key [(hyper z)] 'undo)                   ;; undo
+
+  ;; set up keyboard to have mac-universal keybindings
+  ;; meta => alt/control
+  ;; hyper => command
+  (setq mac-option-modifier 'meta)
+  (setq mac-command-modifier 'hyper)
+
+  ;; this function will switch the command and option bindings between
+  ;; the standard layout and the more mac-centric layout (that will
+  ;; allow for certain special character inputs with alt key)
+  (defun mac-switch-meta nil
+    "Switch meta between Option and Command."
+    (interactive)
+    (if (eq mac-option-modifier nil)
+        (progn
+          (setq mac-option-modifier 'meta)
+          (setq mac-command-modifier 'hyper))
+      (progn
+        (setq mac-option-modifier nil)
+        (setq mac-command-modifier 'meta)))))
+
+
 ;; auto-indent on Enter
-(global-set-key (kbd "RET") 'newline-and-indent)
+(bind-key "RET" #'newline-and-indent global-map)
 
 ;; try and have a normal way to delete things
-(global-set-key (kbd "<delete>") 'delete-region)
-
-;; set up keyboard to have mac-universal keybindings
-;; meta => alt/control
-;; hyper => command
-(setq mac-option-modifier 'meta)
-(setq mac-command-modifier 'hyper)
-
-;; define key-commands that are common in text-editor interfaces
-(global-set-key [(hyper a)] 'mark-whole-buffer)      ;; select all
-(global-set-key [(hyper c)] 'kill-ring-save)         ;; copy
-(global-set-key [(hyper f)] 'search-forward)         ;; find
-(global-set-key [(hyper F)] 'search-forward-regexp)  ;; find with regexp
-(global-set-key [(hyper l)] 'goto-line)              ;; goto a line
-(global-set-key [(hyper o)] 'helm-find-files)        ;; open a file
-(global-set-key [(hyper r)] 'replace-string)         ;; find-and-replace
-(global-set-key [(hyper R)] 'replace-regexp)         ;; find-and-replace with regexp
-(global-set-key [(hyper s)] 'save-buffer)            ;; save file
-(global-set-key [(hyper v)] 'yank)                   ;; paste
-(global-set-key [(hyper x)] 'kill-region)            ;; cut
-(global-set-key [(hyper z)] 'undo)                   ;; undo
+(bind-key "<delete>" #'delete-region global-map)
 
 ;; set an extra command to jump to other window, for convenience
 (bind-key "M-o" #'other-window global-map)
-
-;; this function will switch the command and option bindings between
-;; the standard layout and the more mac-centric layout (that will
-;; allow for certain special character inputs with alt key)
-(defun mac-switch-meta nil
-  "Switch meta between Option and Command."
-  (interactive)
-  (if (eq mac-option-modifier nil)
-      (progn
-        (setq mac-option-modifier 'meta)
-        (setq mac-command-modifier 'hyper))
-    (progn
-      (setq mac-option-modifier nil)
-      (setq mac-command-modifier 'meta))))
-
-(if (null window-system)
-    (define-key key-translation-map (kbd "C-\\") (kbd "C-;")))
 
 
 ;; the opposite of fill-parapgraph
@@ -75,7 +77,7 @@
         (untabify (match-beginning 0) (match-end 0)))
       (when (looking-at "^    ")
         (replace-match "")))))
-(global-set-key (kbd "<backtab>") 'un-indent-by-removing-4-spaces)
+(bind-key "<backtab>" #'un-indent-by-removing-4-spaces global-map)
 
 
 ;; taken from http://pages.sachachua.com/.emacs.d/Sacha.html

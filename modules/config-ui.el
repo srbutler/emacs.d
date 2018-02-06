@@ -13,8 +13,8 @@
 ;; (if the buffer isn't visiting a file)
 (setq frame-title-format
       '("" invocation-name ": " (:eval (if (buffer-file-name)
-                                         (abbreviate-file-name (buffer-file-name))
-                                       "%b"))))
+                                           (abbreviate-file-name (buffer-file-name))
+                                         "%b"))))
 
 ;; shorten yes-or-no to y-or-n
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -27,9 +27,9 @@
 (column-number-mode t)
 (size-indication-mode t)
 
-
 ;; highlight the current line
-(global-hl-line-mode +1)
+(if window-system
+    (global-hl-line-mode +1))
 
 ;; delete on selection
 (add-hook 'prog-mode-hook 'delete-selection-mode)
@@ -70,52 +70,53 @@
               require-final-newline           t
               ring-bell-function              'ignore
               scroll-preserve-screen-position t
-              show-trailing-whitespace        nil
+              show-trailing-whitespace        t
               tab-always-indent               'complete   ;; smart tab behavior - indent or complete
               tab-width                       4
               truncate-lines                  t
               visible-bell                    t
               x-stretch-cursor                t           ;; stretch cursor for tab characters.
-)
+              )
 
 
 ;; setup helm for as many things as possible
 (use-package helm
   :ensure helm
   :diminish helm-mode
-  :init (progn
-          (require 'helm-config)
-          (require 'helm-ag)
+  :init
 
-          (setq helm-split-window-in-side-p           t
-                helm-buffers-fuzzy-matching           t
-                helm-M-x-fuzzy-match                  t
-                helm-recentf-fuzzy-match              t
-                helm-move-to-line-cycle-in-source     t
-                helm-ff-search-library-in-sexp        t
-                helm-ff-file-name-history-use-recentf t
-                helm-ff-skip-boring-files             t
-                helm-autoresize-max-height            40
-                helm-autoresize-min-height            40
-                )
-          
-          (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+  (require 'helm-config)
+  (require 'helm-ag)
 
-          ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
-          ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
-          ;; cannot change helm-command-prefix-key' oncehelm-config' is loaded.
-          (global-set-key (kbd "C-c h") 'helm-command-prefix)
-          (global-unset-key (kbd "C-x c"))
+  (setq helm-split-window-in-side-p           t
+        helm-buffers-fuzzy-matching           t
+        helm-M-x-fuzzy-match                  t
+        helm-recentf-fuzzy-match              t
+        helm-move-to-line-cycle-in-source     t
+        helm-ff-search-library-in-sexp        t
+        helm-ff-file-name-history-use-recentf t
+        helm-ff-skip-boring-files             t
+        helm-autoresize-max-height            40
+        helm-autoresize-min-height            40
+        )
 
-          (when (executable-find "curl")
-            (setq helm-net-prefer-curl t)))
-  
+  (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+
+  ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+  ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+  ;; cannot change helm-command-prefix-key' oncehelm-config' is loaded.
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (global-unset-key (kbd "C-x c"))
+
+  (when (executable-find "curl")
+    (setq helm-net-prefer-curl t))
+
   :bind (("C-x b" . helm-mini)
          ("C-h f" . helm-apropos)
          ("C-x C-b" . helm-buffers-list)
          ("M-x" . helm-M-x)
          ("M-y" . helm-show-kill-ring)
-         ("C-c h C-c w" . helm-wikipedia-suggest)
+         ("C-c h w" . helm-wikipedia-suggest)
          ("C-c h o" . helm-occur)
          ("C-c h x" . helm-register)
          ("C-h C-l" . helm-locate-library)
@@ -126,47 +127,44 @@
          ("C-x C-r" . helm-recentf)
          ("C-c h C-a" . helm-ag))
 
-  :config (progn
-            (define-key helm-ag-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
-            (define-key helm-ag-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
-            (define-key helm-ag-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
-            
-            (define-key 'help-command (kbd "C-f") 'helm-apropos)
-            (define-key 'help-command (kbd "r") 'helm-info-emacs)
-            (define-key 'help-command (kbd "C-l") 'helm-locate-library)
-           
-            (helm-mode)
-            ;; (setq helm-autoresize-max-height 40)
-            ;; (setq helm-autoresize-min-height helm-autoresize-max-height)
-            (helm-autoresize-mode nil))
-  
+  :config
+  (define-key helm-ag-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
+  (define-key helm-ag-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
+  (define-key helm-ag-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
+
+  (define-key 'help-command (kbd "C-f") 'helm-apropos)
+  (define-key 'help-command (kbd "r") 'helm-info-emacs)
+  (define-key 'help-command (kbd "C-l") 'helm-locate-library)
+
+  (helm-mode)
+  (helm-autoresize-mode nil)
+
   (substitute-key-definition 'find-tag 'helm-etags-select global-map)
   (setq projectile-completion-system 'helm)
   (helm-descbinds-mode)
 
   ;; enable Helm version of Projectile with replacment commands
-  (helm-projectile-on))
+  (helm-projectile-on)
 
-;; use GNU global 
-(use-package helm-gtags
-  :ensure t
-  :diminish (helm-gtags-mode . "gtags")
-  :init
-  (custom-set-variables
-   '(helm-gtags-prefix-key "C-c C-t")
-   '(helm-gtags-suggested-key-mapping t)
-   '(helm-gtags-path-style 'relative)
-   '(helm-gtags-ignore-case t)
-   '(helm-gtags-auto-update t)
-   '(helm-gtags--label-option "pygments"))
+  ;; use GNU global
+  (use-package helm-gtags
+    :ensure t
+    :diminish (helm-gtags-mode . "gtags")
+    :bind (:map helm-gtags-mode-map
+                ("M-." . helm-gtags-dwim)
+                ("C-c C-t c" . helm-gtags-create-tags)
+                ("C-c C-t u" . helm-gtags-update-tags)
+                ("C-c C-t s" . helm-gtags-select))
+    :init
+    (custom-set-variables
+     '(helm-gtags-prefix-key "C-c C-t")
+     '(helm-gtags-suggested-key-mapping t)
+     '(helm-gtags-path-style 'relative)
+     '(helm-gtags-ignore-case t)
+     '(helm-gtags-auto-update t)
+     '(helm-gtags--label-option "pygments"))
 
-  (add-hook 'prog-mode-hook 'helm-gtags-mode)
-  :config
-  (with-eval-after-load 'helm-gtags
-    (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
-    (define-key helm-gtags-mode-map (kbd "C-c C-t c") 'helm-gtags-create-tags)
-    (define-key helm-gtags-mode-map (kbd "C-c C-t u") 'helm-gtags-update-tags)
-    (define-key helm-gtags-mode-map (kbd "C-c C-t s") 'helm-gtags-select)))
+    (add-hook 'prog-mode-hook 'helm-gtags-mode)))
 
 
 ;; set up some of crux's convenience functions
@@ -188,14 +186,7 @@
 
 
 ;; diminish keeps the modeline tidy
-(require 'diminish)
-
-
-(use-package idle-highlight-mode
-  :disabled t
-  :ensure t
-  :init
-  (add-hook 'prog-mode-hook 'idle-highlight-mode))
+(use-package diminish)
 
 
 ;; save recent files
@@ -211,52 +202,54 @@
 
 
 ;; saveplace remembers your location in a file when saving files
-(require 'saveplace)
-(setq save-place-file (expand-file-name "saveplace" savefile-dir))
-;; activate it for all buffers
-(setq-default save-place t)
+(use-package saveplace
+  :init
+  (setq save-place-file (expand-file-name "saveplace" savefile-dir))
+  ;; activate it for all buffers
+  (setq-default save-place t))
 
 
 ;; savehist keeps track of some history
-(require 'savehist)
-(setq savehist-additional-variables
-      ;; search entries
-      '(search-ring regexp-search-ring)
-      ;; save every minute
-      savehist-autosave-interval 60
-      ;; keep the home clean
-      savehist-file (expand-file-name "savehist" savefile-dir))
-(savehist-mode +1)
+(use-package savehist
+  :init
+  (setq savehist-additional-variables '(search-ring regexp-search-ring)
+        ;; save every minute
+        savehist-autosave-interval 60
+        ;; keep the home clean
+        savehist-file (expand-file-name "savehist" savefile-dir))
+  (savehist-mode +1))
 
 
 ;; have speedbar in side frame
 (use-package sr-speedbar
   :ensure t
   :defer t
+  :bind ("C-c s" . sr-speedbar-toggle)
   :config
   (setq sr-speedbar-right-side nil
         speedbar-show-unknown-files t
-        speedbar-use-images nil)
-  
-  :bind ("C-c s" . sr-speedbar-toggle))
+        speedbar-use-images nil))
 
 
+;; visual undo history
 (use-package undo-tree
+  :ensure t
   :diminish undo-tree-mode
   :config (global-undo-tree-mode))
 
 
 ;; meaningful names for buffers with the same name
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward
-      uniquify-separator "/"
-      uniquify-after-kill-buffer-p t
-      uniquify-ignore-buffers-re "^\\*")
+(use-package uniquify
+  :init
+  (setq uniquify-buffer-name-style 'forward
+        uniquify-separator "/"
+        uniquify-after-kill-buffer-p t
+        uniquify-ignore-buffers-re "^\\*"))
 
 
 ;; use shift + arrow keys to switch between visible buffers
-(require 'windmove)
-(windmove-default-keybindings)
+(use-package windmove
+  :init (windmove-default-keybindings))
 
 
 (provide 'config-ui)

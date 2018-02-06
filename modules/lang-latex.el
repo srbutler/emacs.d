@@ -83,8 +83,8 @@
       (setq reftex-default-bibliography
             '("/Users/srbutler/Documents/library.bib/library.bib"))
     (setq reftex-default-bibliography
-          '("/Users/srbutler/Documents/Bibliography/library.bib")))
-  )
+          '("/Users/srbutler/Documents/Bibliography/library.bib"))))
+
 
 (use-package bibtex
   :mode ("\\.bib" . bibtex-mode)

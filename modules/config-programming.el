@@ -12,7 +12,7 @@
   (setq company-idle-delay            0.5
         company-tooltip-limit         10
         company-minimum-prefix-length 2
-        
+
         ;; invert the navigation direction if the the completion popup-isearch-match
         ;; is displayed on top (happens near the bottom of windows)
         company-tooltip-flip-when-above t)
@@ -27,13 +27,11 @@
   :init (global-set-key (kbd "C-c d") 'dash-at-point-with-docset)
   :config
   (add-to-list 'dash-at-point-mode-alist '(python-mode . "python3"))
-  (add-to-list 'dash-at-point-mode-alist '(clojure-mode . "clojure"))
   (add-to-list 'dash-at-point-mode-alist '(sh-mode . "bash"))
   (add-to-list 'dash-at-point-mode-alist '(emacs-lisp-mode . "elisp"))
   (add-to-list 'dash-at-point-mode-alist '(ess-mode . "r"))
   (add-to-list 'dash-at-point-mode-alist '(LaTeX-mode . "latex"))
   (add-to-list 'dash-at-point-mode-alist '(js2-mode . "javascript"))
-  (add-to-list 'dash-at-point-mode-alist '(haskell-mode . "haskell"))
   (add-to-list 'dash-at-point-mode-alist '(tuareg-mode . "ocaml")))
 
 
@@ -60,9 +58,8 @@
   :init (add-hook 'prog-mode-hook 'flycheck-mode)
   :diminish (flycheck-mode . "flyc")
   :config
-  
   (setq flycheck-check-syntax-automatically '(mode-enabled save new-line))
-  
+
   ;; change flycheck's error display to only margin tick
   (eval-after-load 'flycheck
     '(progn
@@ -106,14 +103,6 @@
     ("C-c m p" . mc/mark-previous-like-this)
     ("C-c m s" . mc/mark-sgml-tag-pair)
     ("C-c m d" . mc/mark-all-like-this-in-defun)))
-;; (use-package phi-search
-;;   :ensure t)
-;; (use-package phi-search-mc
-;;   :ensure t
-;;   :config (phi-search-mc/setup-keys))
-;; (use-package mc-extras
-;;   :ensure t
-;;   :config (define-key mc/keymap (kbd "C-. =") 'mc/compare-chars))
 
 
 ;; pandoc
@@ -165,20 +154,18 @@
 ;; get smartparens in programming modes
 (use-package smartparens
   :ensure t
-  ;; :hook (prog-mode . spartparens-mode)
-  :diminish smartparens-mode
+  :diminish (smartparens-mode . "sp")
   :init
-  (progn
-    (require 'smartparens-config)
-    (sp-use-paredit-bindings))
+  (use-package smartparens-config)
+  (sp-use-paredit-bindings)
+  (smartparens-global-mode 1)
+  (show-smartparens-global-mode 1)
+  ;; (add-hook 'prog-mode-hook 'smartparens-mode)
 
-  (add-hook 'prog-mode-hook 'smartparens-mode)
-  
   :config
   (setq sp-base-key-bindings          'paredit
         sp-autoskip-closing-pair      'always
         sp-hybrid-kill-entire-symbol  nil)
-  (show-smartparens-global-mode +1)
 
   ;; smartparens defaults taken from graphene, to make bracket handling
   ;; a little better
@@ -192,15 +179,15 @@
     "Open a new brace or bracket expression, with relevant newlines and indent. "
     (graphene--sp-pair-on-newline id action context)
     (indent-according-to-mode))
-  
+
   (sp-pair "{" nil :post-handlers
            '(:add ((lambda (id action context)
                      (graphene--sp-pair-on-newline-and-indent id action context)) "RET")))
-  
+
   (sp-pair "[" nil :post-handlers
            '(:add ((lambda (id action context)
                      (graphene--sp-pair-on-newline-and-indent id action context)) "RET")))
-  
+
   (sp-local-pair '(markdown-mode gfm-mode) "*" "*"
                  :unless '(sp-in-string-p)
                  :actions '(insert wrap)))
@@ -242,26 +229,13 @@
   :ensure t
   :init
   (yas-global-mode)
-  ;; (add-hook 'prog-mode-hook 'yas-minor-mode)
-  ;; (add-hook 'text-mode-hook 'yas-minor-mode)
   :bind (("C-c C-e" . yas-expand))
   :config (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets/"))
+
 
 ;; a solid collection of snippets for many modes
 (use-package yasnippet-snippets
   :ensure t)
-
-
-;;; FUNCTIONS --------------------------------------------
-
-;; taken from graphene; inserts ; at end of line
-(defun insert-semicolon-at-end-of-line ()
-  "Add a closing semicolon from anywhere in the line."
-  (interactive)
-  (save-excursion
-    (end-of-line)
-    (insert ";")))
-(global-set-key (kbd "C-;") 'insert-semicolon-at-end-of-line)
 
 
 ;;; OTHER MODES ------------------------------------------
@@ -294,7 +268,7 @@
         nxml-auto-insert-xml-declaration-flag nil
         nxml-bind-meta-tab-to-complete-flag t
         nxml-slash-auto-complete-flag t)
-  
+
   (add-hook 'nxml-mode-hook 'smartparens-mode)
   (add-hook 'nxml-mode-hook 'emmet-mode))
 
@@ -363,7 +337,6 @@ PACKAGE is installed only if not already present.  The file is opened in MODE."
     ("\\.proto\\'" protobuf-mode protobuf-mode)
     ("PKGBUILD\\'" pkgbuild-mode pkgbuild-mode)
     ("\\.sass\\'" sass-mode sass-mode)
-    ("\\.scala\\'" scala-mode scala-mode)
     ("\\.slim\\'" slim-mode slim-mode)
     ("\\.styl\\'" stylus-mode stylus-mode)
     ("\\.swift\\'" swift-mode swift-mode)
