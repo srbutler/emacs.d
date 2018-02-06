@@ -15,17 +15,20 @@
   (dolist
       (ext '(".cmo" ".cmx" ".cma" ".cmxa" ".cmi" ".cmxs" ".cmt" ".cmti" ".annot"))
     (add-to-list 'completion-ignored-extensions ext))
-  :config 
+  :config
   ;; disable backtick pairing
-  (sp-pair "`" nil :actions :rem))
+  (sp-local-pair 'tuareg-mode "'" nil :actions nil)
+  (sp-local-pair 'tuareg-mode "`" nil :actions nil))
 
 
 ;; completion engine
 (use-package merlin
   :ensure t
   :defer t
+  :bind ("C-c C-t" . merlin-type-enclosing)
   :init
   (add-hook 'tuareg-mode-hook 'merlin-mode)
+  (setq merlin-completion-with-doc t)
   (with-eval-after-load 'company
     (add-to-list 'company-backends 'merlin-company-backend)))
 
