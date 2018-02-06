@@ -21,9 +21,9 @@
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :ensure org-plus-contrib
-  :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)
-         ("C-c b" . org-iswitchb))
+  :bind (("C-c o l" . org-store-link)
+         ("C-c o a" . org-agenda)
+         ("C-c o b" . org-iswitchb))
   :config
 
   ;; add a custom sequence of TODO states
@@ -86,7 +86,7 @@
   (use-package org-bullets
     :ensure t
     :defer t
-    :init  (add-hook 'org-mode-hook 'org-bullets-mode))
+    :init (add-hook 'org-mode-hook 'org-bullets-mode))
 
   ;; downloaded from github, allows linguistics examples via linguex
   ;; or gb4e

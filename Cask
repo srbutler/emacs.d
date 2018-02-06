@@ -34,6 +34,7 @@
 (depends-on "dash")
 (depends-on "dash-at-point")
 (depends-on "diminish")
+(depends-on "edit-indirect")
 (depends-on "edn")
 (depends-on "elixir-mode")
 (depends-on "elpy")
