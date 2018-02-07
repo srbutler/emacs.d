@@ -15,8 +15,12 @@
   (dolist
       (ext '(".cmo" ".cmx" ".cma" ".cmxa" ".cmi" ".cmxs" ".cmt" ".cmti" ".annot"))
     (add-to-list 'completion-ignored-extensions ext))
+
+  ;; open Jbuild s-exp files in lisp-mode
+  (add-to-list 'auto-mode-alist '("jbuild\\'" . lisp-mode))
+
   :config
-  ;; disable backtick pairing
+  ;; disable backtick/single-quote pairing
   (sp-local-pair 'tuareg-mode "'" nil :actions nil)
   (sp-local-pair 'tuareg-mode "`" nil :actions nil))
 
@@ -28,7 +32,10 @@
   :bind ("C-c C-t" . merlin-type-enclosing)
   :init
   (add-hook 'tuareg-mode-hook 'merlin-mode)
+  (add-hook 'reason-mode-hook 'merlin-mode)
+
   (setq merlin-completion-with-doc t)
+
   (with-eval-after-load 'company
     (add-to-list 'company-backends 'merlin-company-backend)))
 
@@ -55,7 +62,7 @@
   (add-hook 'reason-mode-hook 'utop-minor-mode)
   :config
   (when (executable-find "opam")
-      (setq utop-command "opam config exec -- utop -emacs")))
+    (setq utop-command "opam config exec -- utop -emacs")))
 
 
 ;; indenting/formatting
@@ -75,9 +82,19 @@
 ;; for using Reason's syntax instead of OCaml's
 (use-package reason-mode
   :ensure t
-  :mode ("\\.rei?$"  . reason-mode))
+  :mode ("\\.rei?$" . reason-mode)
+  :config
+  ;; change the utop command to rtop
+  (with-eval-after-load 'utop
+    (when (executable-find "opam")
+     (setq utop-command "opam config exec -- rtop -emacs"))))
+
+
+;; for making #doc calls in utop
+(use-package ocp-index
+  :defer t
+  :load-path "/Users/srbutler/.opam/4.05.0/share/emacs/site-lisp")
 
 
 (provide 'lang-ocaml)
 ;;; lang-ocaml.el ends here
-

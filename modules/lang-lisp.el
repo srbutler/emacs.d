@@ -22,7 +22,7 @@
   :defer t
   :bind (:map slime-mode-map ("C-c C-s" . slime-selector))
   :commands (slime slime-mode)
-  :config  
+  :config
   (setq tab-always-indent 'complete)
   (setq slime-contribs '(slime-fancy
                          slime-indentation
@@ -101,7 +101,7 @@
 
   ;; turn off eldoc for geiser
   (add-hook 'geiser-mode-hook (lambda () (eldoc-mode nil)))
-  
+
   ;; default to racket
   (setq geiser-default-implementation 'racket)
 

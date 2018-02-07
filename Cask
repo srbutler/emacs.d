@@ -130,6 +130,7 @@
 (depends-on "rust-mode")
 (depends-on "rustfmt")
 (depends-on "s")
+(depends-on "scala-mode")
 (depends-on "seq")
 (depends-on "shut-up")
 (depends-on "simple-httpd")

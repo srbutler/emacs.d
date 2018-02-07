@@ -125,13 +125,13 @@
          ("C-x C-f" . helm-find-files)
          ("C-x r j" . jump-to-register)
          ("C-x C-r" . helm-recentf)
-         ("C-c h C-a" . helm-ag))
+         ("C-c h C-a" . helm-ag)
+         :map helm-ag-mode-map
+         ("<return>" . help-grep-mode-jump-other-window)
+         ("n" . helm-grep-mode-jump-other-window-forward)
+         ("p" . helm-grep-mode-jump-other-window-backward))
 
   :config
-  (define-key helm-ag-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
-  (define-key helm-ag-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
-  (define-key helm-ag-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
-
   (define-key 'help-command (kbd "C-f") 'helm-apropos)
   (define-key 'help-command (kbd "r") 'helm-info-emacs)
   (define-key 'help-command (kbd "C-l") 'helm-locate-library)
