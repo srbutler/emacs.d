@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: linguex
+# key: linguex
+# --
+#+ATTR_LINGUISTICS: :package linguex
