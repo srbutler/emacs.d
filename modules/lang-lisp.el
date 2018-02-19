@@ -16,6 +16,7 @@
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'lisp-mode-hook 'eldoc-mode))
 
+
 ;; common-lisp REPL
 (use-package slime
   :ensure t
@@ -52,40 +53,37 @@
 
 
 ;; EMACS LISP
-;; keep .elc files updated automatically
-(defun recompile-elc-on-save ()
-  "Recompile your elc when saving an elisp file."
+(use-package emacs-lisp-mode
+  :mode (("\\.el\\'" . emacs-lisp-mode)
+         ("Cask\\'" . emacs-lisp-mode))
+  :bind (:map emacs-lisp-mode-map ("C-c C-z" . ielm))
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
+  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
+  (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+
+  ;; keep .elc files updated automatically
   (add-hook 'after-save-hook
-   (lambda ()
-     (when (and
-            (or (string-prefix-p modules-dir (file-truename buffer-file-name))
-                (string-prefix-p dotfiles-dir (file-truename buffer-file-name)))
-            (file-exists-p (byte-compile-dest-file buffer-file-name)))
-       (emacs-lisp-byte-compile)))
-   nil
-   t))
+            (lambda ()
+              (when (and
+                     (or (string-prefix-p modules-dir (file-truename buffer-file-name))
+                         (string-prefix-p dotfiles-dir (file-truename buffer-file-name)))
+                     (file-exists-p (byte-compile-dest-file buffer-file-name)))
+                (emacs-lisp-byte-compile)))
+            nil
+            t)
 
-(defun srb-emacs-lisp-mode-defaults ()
-  "Sensible defaults for `emacs-lisp-mode'."
-  (eldoc-mode +1)
-  (paredit-mode +1)
-  (rainbow-mode +1)
-  (rainbow-delimiters-mode +1)
-  (smartparens-strict-mode +1)
-  (recompile-elc-on-save)
   (setq mode-name "Elisp"))
-
-(setq srb-emacs-lisp-mode-hook 'srb-emacs-lisp-mode-defaults)
-(add-hook 'emacs-lisp-mode-hook (lambda ()
-                                  (run-hooks 'srb-emacs-lisp-mode-hook)))
-
-;; use emacs lisp mode to edit cask files
-(add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
 
 
 ;; SCHEME/RACKET
-;; make racket files open as scheme
-(add-to-list 'auto-mode-alist '("\\.rkt\\'" . scheme-mode))
+(use-package scheme
+  :defer t
+  :mode (("\\.scm\\'" . scheme-mode)
+         ("\\.rkt\\'" . scheme-mode)))
+
 
 ;; REPL and basic scheme hooks
 (use-package geiser
@@ -98,9 +96,6 @@
   (add-hook 'geiser-mode-hook 'smartparens-strict-mode)
   (add-hook 'geiser-mode-hook 'paredit-mode)
   (add-hook 'geiser-mode-hook 'rainbow-delimiters-mode)
-
-  ;; turn off eldoc for geiser
-  (add-hook 'geiser-mode-hook (lambda () (eldoc-mode nil)))
 
   ;; default to racket
   (setq geiser-default-implementation 'racket)

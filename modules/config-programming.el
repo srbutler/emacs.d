@@ -36,8 +36,8 @@
 
 
 ;; https://www.masteringemacs.org/article/working-multiple-files-dired
-(require 'find-dired)
-(setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld"))
+(use-package find-file
+  :init (setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld")))
 
 
 ;; display certain documentation in the minibuffer
