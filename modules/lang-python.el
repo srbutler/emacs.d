@@ -42,18 +42,23 @@
   (setq elpy-rpc-backend "jedi")
 
   ;; set RPC backend and interpreter using pyenv values
-  (setq elpy-rpc-python-command "~/.pyenv/shims/python3"
-        python-shell-interpreter "~/.pyenv/shims/ipython3"
-        python-shell-interpreter-args "--simple-prompt --pprint")
+  (setq elpy-rpc-python-command "~/.pyenv/shims/python3")
 
-  ;; helps to prevent issues with ipython/jupyter shells
-  ;; https://github.com/jorgenschaefer/elpy/issues/908
-  (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
-  (setenv "JUPYTER_CONSOLE_TEST" "1")
-  
-  ;; use ipython3 instead of standard interpreter
-  (when (executable-find "/Users/srbutler/.pyenv/shims/ipython3")
-    (elpy-use-ipython "/Users/srbutler/.pyenv/shims/ipython3"))
+  ;; use ipython3 instead of standard interpreter if found
+  (if (executable-find "ipython")
+      (progn
+        ;; helps to prevent issues with ipython/jupyter shells
+        ;; https://github.com/jorgenschaefer/elpy/issues/908
+        (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
+        (setenv "JUPYTER_CONSOLE_TEST" "1")
+
+        ;; set as ipython
+        (setq python-shell-interpreter "ipython"
+              python-shell-interpreter-args "-i --simple-prompt"))
+
+    ;; just use the standard interpreter otherwise
+    (setq python-shell-interpreter "python"
+          python-shell-interpreter-args "-i"))
 
   ;; set up elpy modules
   (setq elpy-modules '(elpy-module-sane-defaults
