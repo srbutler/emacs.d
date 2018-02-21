@@ -30,7 +30,7 @@
 
 ;; only load themes when opened in a window system
 (when window-system
-  
+
   (use-package solarized-theme
     :disabled t
     :ensure t
@@ -51,7 +51,7 @@
 
       ;; finally load the theme
       (load-theme 'solarized-dark t))
-    
+
     :config
     ;; just a variable for calling later face changes
     (setq current-theme-name 'solarized-dark)
@@ -117,7 +117,8 @@
 (cond
  ((eq window-system nil) nil)
  ((font-existsp "PragmataPro")
-  (set-face-attribute 'default nil :height 151 :font "PragmataPro"))
+  (set-face-attribute 'default nil :height 151 :font "PragmataPro")
+  (setq-default line-spacing 0.06))
  ((font-existsp "InconsolataGo")
   (set-face-attribute 'default nil :height 161 :font "InconsolataGo"))
  ((font-existsp "Hasklig")
@@ -140,7 +141,7 @@
 ;; default line height. if nil: add no extra spacing.
 
 ;; (setq-default line-spacing 0.06) ;; tuned for Pragmata Pro
-(setq-default line-spacing 0.06)
+;; (setq-default line-spacing 0.06)
 
 
 ;; Enable emoji, and stop the UI from freezing when trying to display them.
