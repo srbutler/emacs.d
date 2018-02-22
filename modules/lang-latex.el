@@ -81,12 +81,12 @@
 
   ;; Default bibliography
   ;; (setq reftex-default-bibliography
-  ;;       '("/Users/srbutler/Documents/Bibliography/library.bib"))
+  ;;       '("~/Documents/Bibliography/library.bib"))
   (if (string= (system-name) "KasistontLaptop.kitsys.net")
       (setq reftex-default-bibliography
-            '("/Users/srbutler/Documents/library.bib/library.bib"))
+            '("~/Documents/library.bib/library.bib"))
     (setq reftex-default-bibliography
-          '("/Users/srbutler/Documents/Bibliography/library.bib"))))
+          '("~/Documents/Bibliography/library.bib"))))
 
 
 (use-package bibtex

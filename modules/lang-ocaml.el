@@ -93,7 +93,7 @@
 ;; for making #doc calls in utop
 (use-package ocp-index
   :defer t
-  :load-path "/Users/srbutler/.opam/4.05.0/share/emacs/site-lisp")
+  :load-path "~/.opam/4.05.0/share/emacs/site-lisp")
 
 
 (provide 'lang-ocaml)
