@@ -1,4 +1,4 @@
-;;; lang-lagex.el --- Summary:
+;;; lang-latex.el --- Summary:
 ;;
 ;;; Commentary:
 ;;  Taken from: https://github.com/Schnouki/dotfiles/, with
@@ -16,6 +16,7 @@
   (add-hook 'LaTeX-mode-hook 'flyspell-mode)
   (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
   (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
+  (add-hook 'LaTeX-mode-hook 'rainbow-delimiters-mode)
 
   (setq TeX-auto-save t
         TeX-parse-self t
@@ -27,6 +28,8 @@
         default-justification 'left)
 
   (setq-default TeX-master nil)
+
+  (set-fill-column 80)
 
   ;; set up Biber
   (eval-after-load "tex"
@@ -124,13 +127,6 @@
                      "Run LaTeX again to get citations right."))))
   (setq TeX-command-next TeX-command-default))
 
-;; Auto-fill for LaTeX
-(defun srbutler/latex-auto-fill ()
-  "Turn on auto-fill for LaTeX mode."
-  (turn-on-auto-fill)
-  (set-fill-column 80)
-  ;; (setq default-justification 'left))
-  (add-hook 'LaTeX-mode-hook #'srbutler/latex-auto-fill))
 
 (provide 'lang-latex)
 ;;; lang-latex.el ends here
