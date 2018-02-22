@@ -10,14 +10,19 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(require 'use-package)
+
 ;; cask/pallet setup
 (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
 (cask-initialize)
-(require 'pallet)
-(pallet-mode t)
 
-;; go to debug on error
-;; (setq debug-on-error t)
+;; add pallet to manage packages
+(use-package pallet
+  :ensure t
+  :config (pallet-mode t))
 
 ;; Always load newest byte code
 (setq load-prefer-newer +1)
