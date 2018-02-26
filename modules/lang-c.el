@@ -32,7 +32,7 @@
 
 
 (use-package google-c-style
-  :load-path "~/.emacs.d/vendor/google_c_style"
+  :ensure
   :defer t
   :init
   (add-hook 'c-common-mode-hook 'google-set-c-style)

@@ -70,6 +70,7 @@
 (depends-on "go-eldoc")
 (depends-on "go-mode")
 (depends-on "go-projectile")
+(depends-on "google-c-style")
 (depends-on "haskell-mode")
 (depends-on "helm")
 (depends-on "helm-ag")
