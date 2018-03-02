@@ -1,0 +1,3 @@
+[submodule "vendor/ox-linguistics"]
+	path = vendor/ox-linguistics
+	url = https://github.com/wyleyr/ox-linguistics

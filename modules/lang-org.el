@@ -24,6 +24,14 @@
   :bind (("C-c o l" . org-store-link)
          ("C-c o a" . org-agenda)
          ("C-c o b" . org-iswitchb))
+  :custom
+  (org-confirm-babel-evaluate nil)
+  (org-export-backends '(ascii beamer html latex md))
+  (org-export-with-smart-quotes t)
+  (org-log-done t)
+  (org-replace-disputed-keys t)
+  (org-src-fontify-natively t)
+  (org-src-tab-acts-natively t)
   :config
 
   ;; add a custom sequence of TODO states
@@ -50,12 +58,12 @@
   (add-hook 'org-mode-hook 'turn-on-reftex)
 
   ;; code block highlighting
-  (setq org-src-fontify-natively t
-        org-src-tab-acts-natively t
-        org-export-with-smart-quotes t
-        org-confirm-babel-evaluate nil
-        org-replace-disputed-keys t
-        org-log-done t)
+  ;; (setq org-src-fontify-natively t
+  ;;       org-src-tab-acts-natively t
+  ;;       org-export-with-smart-quotes t
+  ;;       org-confirm-babel-evaluate nil
+  ;;       org-replace-disputed-keys t
+  ;;       org-log-done t)
 
   ;; make windmove work in org-mode
   (add-hook 'org-shiftup-final-hook 'windmove-up)
@@ -71,7 +79,8 @@
      (haskell    . t)
      (sh         . t)
      (ocaml      . t)
-     (r          . t)))
+     ;; (r          . t)
+     ))
 
   ;; ensure R blocks are called correctly
   (add-to-list 'org-src-lang-modes '("r" . ess-mode))
