@@ -11,23 +11,18 @@
 
 (use-package racer
   :ensure t
-  :defer t
-  :bind (:map rust-mode-map ("M-." . racer-find-definition))
+  :after rust-mode
+  :bind (:map rust-mode-map
+              ("M-." . racer-find-definition)
+              ("TAB" . company-indent-or-complete-common))
+  :init (add-hook 'rust-mode-hook 'racer-mode)
+  :custom
+  (company-tooltip-align-annotations t)
+  (racer-cmd "~/.cargo/bin/racer")
+  (racer-rust-src-path "~/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src")
   :config
-  (progn
-    (setq company-tooltip-align-annotations t
-          racer-cmd "~/.cargo/bin/racer"
-          racer-rust-src-path "~/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src")
-    (add-hook 'rust-mode-hook  'racer-mode)
-    (add-hook 'racer-mode-hook 'eldoc-mode)
-    (add-hook 'racer-mode-hook 'company-mode)))
-
-(use-package company-racer
-  :ensure t
-  :defer t
-  :init
-  (with-eval-after-load "company"
-    (add-to-list 'company-backends 'company-racer)))
+  (add-hook 'racer-mode-hook 'eldoc-mode)
+  (add-hook 'racer-mode-hook 'company-mode))
 
 (use-package flycheck-rust
   :ensure t
