@@ -70,6 +70,7 @@
               require-final-newline           t
               ring-bell-function              'ignore
               scroll-preserve-screen-position t
+              sentence-end-double-space       nil
               show-trailing-whitespace        t
               tab-always-indent               'complete   ;; smart tab behavior - indent or complete
               tab-width                       4
@@ -102,9 +103,10 @@
 
   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 
-  ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
-  ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
-  ;; cannot change helm-command-prefix-key' oncehelm-config' is loaded.
+  ;; The default "C-x c" is quite close to "C-x C-c", which quits
+  ;; Emacs. Changed to "C-c h". Note: We must set "C-c h" globally,
+  ;; because we cannot change helm-command-prefix-key'
+  ;; oncehelm-config' is loaded.
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
   (global-unset-key (kbd "C-x c"))
 
@@ -235,8 +237,14 @@
 (use-package undo-tree
   :ensure t
   :diminish undo-tree-mode
+  :custom (undo-tree-auto-save-history t)
   :config (global-undo-tree-mode))
 
+;; unfill commands
+(use-package unfill
+  :ensure t
+  :commands (unfill-region unfill-paragraph unfill-toggle)
+  :bind ("M-Q" . unfill-paragraph))
 
 ;; meaningful names for buffers with the same name
 (use-package uniquify

@@ -53,18 +53,6 @@
 (bind-key "M-o" #'other-window global-map)
 
 
-;; the opposite of fill-parapgraph
-;; from http://pages.sachachua.com/.emacs.d/Sacha.html
-(defun sachachua/unfill-paragraph (&optional region)
-  "Takes a multi-line paragraph and makes it into a single line of text."
-  (interactive (progn
-                 (barf-if-buffer-read-only)
-                 (list t)))
-  (let ((fill-column (point-max)))
-    (fill-paragraph nil region)))
-(bind-key "M-Q" 'sachachua/unfill-paragraph)
-
-
 ;; defines the standard backtab behavior of most editors
 (defun un-indent-by-removing-4-spaces ()
   "Remove 4 spaces from beginning of of line."

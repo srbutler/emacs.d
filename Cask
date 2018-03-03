@@ -106,7 +106,6 @@
 (depends-on "material-theme")
 (depends-on "merlin")
 (depends-on "mmm-mode")
-(depends-on "modern-cpp-font-lock")
 (depends-on "multiple-cursors")
 (depends-on "nodejs-repl")
 (depends-on "noflet")

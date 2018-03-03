@@ -4,11 +4,26 @@
 ;;
 ;;; Code:
 
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
+;; Load package managment directories
+(require 'package)
+(setq package-archives
+      '(
+        ("org"          . "http://orgmode.org/elpa/")
+        ("gnu"          . "http://elpa.gnu.org/packages/")
+        ("melpa"        . "http://melpa.milkbox.net/packages/")
+        ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
+        ;; ("marmalade"    . "http://marmalade-repo.org/packages/")
+        ))
 (package-initialize)
+
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
+
+;; (customize-set-variable 'use-package-always-ensure t)
+
+;; (eval-when-compile
+;;   (require 'use-package))
 
 ;; cask/pallet setup
 (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
@@ -57,18 +72,6 @@
 
 ;; warn when opening files bigger than 100MB
 (setq large-file-warning-threshold 100000000)
-
-;; Load package managment directories
-(require 'package)
-(setq package-archives
-      '(
-        ("org"          . "http://orgmode.org/elpa/")
-        ("gnu"          . "http://elpa.gnu.org/packages/")
-        ("melpa"        . "http://melpa.milkbox.net/packages/")
-        ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
-        ;; ("marmalade"    . "http://marmalade-repo.org/packages/")
-        ))
-
 
 ;; make adding new module files easy
 (defun load-file-list (format-string files)
