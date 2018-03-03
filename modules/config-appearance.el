@@ -116,6 +116,12 @@
 ;; set default font--first one found is selected
 (cond
  ((eq window-system nil) nil)
+ ((font-existsp "IosevkaX")
+  (set-face-attribute 'default nil :height 151 :font "IosevkaX")
+  (setq-default line-spacing 0.06))
+ ((font-existsp "Iosevka")
+  (set-face-attribute 'default nil :height 151 :font "Iosevka")
+  (setq-default line-spacing 0.06))
  ((font-existsp "PragmataPro")
   (set-face-attribute 'default nil :height 151 :font "PragmataPro")
   (setq-default line-spacing 0.06))
