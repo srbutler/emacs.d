@@ -19,6 +19,12 @@
 
   :config (global-company-mode 1))
 
+;; rank completions based on usage
+(use-package company-statistics
+  :ensure t
+  :after company
+  :config (company-statistics-mode))
+
 
 ;; set up dash integration
 (use-package dash-at-point
@@ -42,7 +48,7 @@
 
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
-  :diminish (eldoc-mode . "eldoc")
+  :diminish
   :hook prog-mode
   :config
   ;; give current argument distinctive highlighting
@@ -88,6 +94,19 @@
   :config
   (with-eval-after-load 'flycheck
     (flycheck-pos-tip-mode)))
+
+
+;; make language server protocol services available
+;; should be deferred until a service that needs it calls
+(use-package lsp-mode
+  :ensure t
+  :defer t)
+
+
+;; let LSP work with imenu
+(use-package lsp-imenu
+  :after lsp-mode
+  :init (add-hook 'lsp-after-open-hook 'lsp-enable-imenu))
 
 
 ;; edit with multiple cursors
@@ -160,7 +179,6 @@
   (sp-use-paredit-bindings)
   (smartparens-global-mode 1)
   (show-smartparens-global-mode 1)
-  ;; (add-hook 'prog-mode-hook 'smartparens-mode)
 
   :config
   (setq sp-base-key-bindings          'paredit
@@ -280,7 +298,7 @@
 
 
 ;; edit zsh/prezto files in sh-mode
-(defvar pretzo-files '("zlogin" "zlogin" "zlogout" "zpretzorc"
+(defvar pretzo-files '("zlogin" "zlogout" "zpretzorc"
                        "zprofile" "zshenv" "zshrc"))
 (mapc
  (lambda (file)
