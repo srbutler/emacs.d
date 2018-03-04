@@ -9,7 +9,12 @@
 (use-package magit
   :ensure t
   :defer t
-  :bind ("C-x g" . magit-status))
+  :bind
+  (("C-c g l"   . magit-log-popup)
+   ("C-c g p s" . magit-push-popup)
+   ("C-c g p l" . magit-pull-and-fetch-popup)
+   ("C-c g r"   . magit-rebase-popup)
+   ("C-c g s"   . magit-status)))
 
 
 ;; have git indications in gutter
