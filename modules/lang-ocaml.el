@@ -29,7 +29,8 @@
 (use-package merlin
   :ensure t
   :defer t
-  :bind ("C-c C-t" . merlin-type-enclosing)
+  :bind (:map tuareg-mode-map
+         ("C-c C-t" . merlin-type-enclosing))
   :init
   (add-hook 'tuareg-mode-hook 'merlin-mode)
   (add-hook 'reason-mode-hook 'merlin-mode)
@@ -67,8 +68,10 @@
 
 ;; indenting/formatting
 (use-package ocp-indent
+  :after tuareg-mode
   :ensure t
   :defer t
+  :bind (:map tuareg-mode-map ("C-c C-f" . ocp-indent-buffer))
   :init (add-hook 'tuareg-mode-hook 'ocp-indent-caml-mode-setup))
 
 

@@ -14,7 +14,6 @@
   :config
   (add-hook 'LaTeX-mode-hook 'LaTeX-preview-setup)
   (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
   (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
   (add-hook 'LaTeX-mode-hook 'rainbow-delimiters-mode)
 
@@ -46,6 +45,10 @@
   :defer t
   :commands turn-on-reftex
   :diminish (reftex-mode . "ref")
+  :init
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  (add-hook 'markdown-mode-hook 'turn-on-reftex)
+  (add-hook 'org-mode-hook 'turn-on-reftex)
   :config
    (setq reftex-plug-into-AUCTeX t
           reftex-enable-partial-scans t

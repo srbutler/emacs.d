@@ -7,7 +7,10 @@
 (use-package rust-mode
   :ensure t
   :mode ("\\.rs\\'" . rust-mode)
-  :bind (:map rust-mode-map ("C-c C-f" . rust-format-buffer)))
+  :bind (:map rust-mode-map ("C-c C-f" . rust-format-buffer))
+  :config
+  ;; disable matching for single quotes
+  (sp-local-pair 'rust-mode "'" nil :actions nil))
 
 (use-package racer
   :ensure t

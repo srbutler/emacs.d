@@ -17,7 +17,14 @@
         ;; is displayed on top (happens near the bottom of windows)
         company-tooltip-flip-when-above t)
 
-  :config (global-company-mode 1))
+  :config (global-company-mode 1)
+
+  ;; remap select-next/prev to use normal up/down
+  (with-eval-after-load 'company
+    (define-key company-active-map (kbd "M-n") nil)
+    (define-key company-active-map (kbd "M-p") nil)
+    (define-key company-active-map (kbd "C-n") #'company-select-next)
+    (define-key company-active-map (kbd "C-p") #'company-select-previous)))
 
 ;; rank completions based on usage
 (use-package company-statistics
@@ -61,9 +68,10 @@
 ;; syntax-checking
 (use-package flycheck
   :ensure t
-  :init (add-hook 'prog-mode-hook 'flycheck-mode)
   :diminish (flycheck-mode . "flyc")
   :config
+  (global-flycheck-mode)
+
   (setq flycheck-check-syntax-automatically '(mode-enabled save new-line))
 
   ;; change flycheck's error display to only margin tick
@@ -106,7 +114,7 @@
 ;; let LSP work with imenu
 (use-package lsp-imenu
   :after lsp-mode
-  :init (add-hook 'lsp-after-open-hook 'lsp-enable-imenu))
+  :hook (lsp-after-open-hook . lsp-enable-imenu))
 
 
 ;; edit with multiple cursors
@@ -127,23 +135,26 @@
 ;; pandoc
 (use-package pandoc-mode
   :ensure t
-  :defer t
   :diminish (pandoc-mode . "pandoc")
   :hook (markdown-mode org-mode TeX-mode)
-  :config (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+  :config (pandoc-load-default-settings))
 
 
 ;; hardcore parentheses management
 (use-package paredit
   :ensure t
   :defer t
-  :diminish (paredit-mode . "par"))
+  :diminish (paredit-mode . "par")
+  :init
+  (add-hook 'lisp-mode-hook 'paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+  (add-hook 'scheme-mode-hook 'paredit-mode)
+  (add-hook 'clojure-mode-hook 'paredit-mode))
 
 
 ;; minor-mode and utility for regex conversion (perl <--> elisp)
 (use-package pcre2el
   :ensure t
-  :defer t
   :diminish (pcre-mode . "pcre")
   :init (pcre-mode +1))
 
@@ -151,7 +162,6 @@
 ;; project management and fast-switching
 (use-package projectile
   :ensure t
-  :defer t
   :diminish projectile-mode
   :config
   (projectile-mode t)
@@ -167,7 +177,7 @@
 
 ;; makes parentheses colorful
 (use-package rainbow-delimiters-mode
-  :hook lisp-mode)
+  :hook (lisp-mode emacs-lisp-mode clojure-mode scheme-mode LaTeX-mode))
 
 
 ;; get smartparens in programming modes
@@ -179,12 +189,11 @@
   (sp-use-paredit-bindings)
   (smartparens-global-mode 1)
   (show-smartparens-global-mode 1)
-
+  :custom
+  (sp-base-key-bindings 'paredit)
+  (sp-autoskip-closing-pair 'always)
+  (sp-hybrid-kill-entire-symbol nil)
   :config
-  (setq sp-base-key-bindings          'paredit
-        sp-autoskip-closing-pair      'always
-        sp-hybrid-kill-entire-symbol  nil)
-
   ;; smartparens defaults taken from graphene, to make bracket handling
   ;; a little better
   (defun graphene--sp-pair-on-newline (id action context)
@@ -214,7 +223,9 @@
 ;; define a bunch of wrapping operations in text modes
 (use-package wrap-region
   :ensure t
-  :init (add-hook 'text-mode-hook 'wrap-region-mode)
+  :hook ((org-mode . wrap-region-mode)
+         (markdown-mode . wrap-region-mode)
+         (text-mode . wrap-region-mode))
   :diminish wrap-region-mode
   :config
   (wrap-region-add-wrappers

@@ -183,5 +183,7 @@
                           `([,(cdr char-regexp) 0 font-shape-gstring]))))
 ;; (mac-auto-operator-composition-mode)
 
+
+
 (provide 'config-appearance)
 ;;; config-appearance.el ends here

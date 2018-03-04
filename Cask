@@ -18,7 +18,6 @@
 (depends-on "cmake-ide")
 (depends-on "cmake-mode")
 (depends-on "coffee-mode")
-(depends-on "color-theme-sanityinc-tomorrow")
 (depends-on "company")
 (depends-on "company-ghc")
 (depends-on "company-ghci")
