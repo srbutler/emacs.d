@@ -8,16 +8,17 @@
 (use-package company
   :ensure t
   :diminish (company-mode . "comp")
-  :init
-  (setq company-idle-delay            0.5
-        company-tooltip-limit         10
-        company-minimum-prefix-length 2
+  :custom
+  (company-idle-delay            0.5)
+  (company-tooltip-limit         10)
+  (company-minimum-prefix-length 2)
 
-        ;; invert the navigation direction if the the completion popup-isearch-match
-        ;; is displayed on top (happens near the bottom of windows)
-        company-tooltip-flip-when-above t)
-
-  :config (global-company-mode 1)
+  ;; invert the navigation direction if the the completion
+  ;; popup-isearch-match is displayed on top (happens near the bottom
+  ;; of windows)
+  (company-tooltip-flip-when-above t)
+  :config
+  (global-company-mode 1)
 
   ;; remap select-next/prev to use normal up/down
   (with-eval-after-load 'company
@@ -39,13 +40,12 @@
   :defer t
   :init (global-set-key (kbd "C-c d") 'dash-at-point-with-docset)
   :config
-  (add-to-list 'dash-at-point-mode-alist '(python-mode . "python3"))
-  (add-to-list 'dash-at-point-mode-alist '(sh-mode . "bash"))
-  (add-to-list 'dash-at-point-mode-alist '(emacs-lisp-mode . "elisp"))
-  (add-to-list 'dash-at-point-mode-alist '(ess-mode . "r"))
-  (add-to-list 'dash-at-point-mode-alist '(LaTeX-mode . "latex"))
-  (add-to-list 'dash-at-point-mode-alist '(js2-mode . "javascript"))
-  (add-to-list 'dash-at-point-mode-alist '(tuareg-mode . "ocaml")))
+  (dolist
+      (pair
+       '('(python-mode . "python3") '(sh-mode . "bash") '(emacs-lisp-mode . "elisp")
+         '(LaTeX-mode . "latex") '(js2-mode . "javascript") '(tuareg-mode . "ocaml")
+         '(ess-mode . "r")))
+    (add-to-list 'dash-at-point-mode-alist pair)))
 
 
 ;; https://www.masteringemacs.org/article/working-multiple-files-dired
@@ -237,19 +237,19 @@
      ("\"" "\"")
      ("‘" "’"   "q")
      ("“" "”"   "Q")
-     ("*" "*"   "b"   org-mode)                 ;; bolden
-     ("*" "*"   "*"   org-mode)                 ;; bolden
-     ("/" "/"   "i"   org-mode)                 ;; italics
-     ("/" "/"   "/"   org-mode)                 ;; italics
-     ("~" "~"   "c"   org-mode)                 ;; code
-     ("~" "~"   "~"   org-mode)                 ;; code
-     ("=" "="   "v"   org-mode)                 ;; verbatim
-     ("=" "="   "="   org-mode)                 ;; verbatim
-     ("_" "_"   "u"   org-mode)                 ;; underline
-     ("_" "_"   "u"   markdown-mode)            ;; underline
-     ("**" "**" "b"   markdown-mode)            ;; bolden
-     ("*" "*"   "i"   markdown-mode)            ;; italics
-     ("`" "`"   "c"   markdown-mode)            ;; code
+     ("*" "*"   "b"   org-mode)       ;; bolden
+     ("*" "*"   "*"   org-mode)       ;; bolden
+     ("/" "/"   "i"   org-mode)       ;; italics
+     ("/" "/"   "/"   org-mode)       ;; italics
+     ("~" "~"   "c"   org-mode)       ;; code
+     ("~" "~"   "~"   org-mode)       ;; code
+     ("=" "="   "v"   org-mode)       ;; verbatim
+     ("=" "="   "="   org-mode)       ;; verbatim
+     ("_" "_"   "u"   org-mode)       ;; underline
+     ("_" "_"   "u"   markdown-mode)  ;; underline
+     ("**" "**" "b"   markdown-mode)  ;; bolden
+     ("*" "*"   "i"   markdown-mode)  ;; italics
+     ("`" "`"   "c"   markdown-mode)  ;; code
      )))
 
 
@@ -291,13 +291,13 @@
 (use-package nxml-mode
   :mode (("\\.xml\\'" . nxml-mode)
          ("\\.pom$"   . nxml-mode))
+  :custom
+  (nxml-child-indent 4)
+  (nxml-attribute-indent 5)
+  (nxml-auto-insert-xml-declaration-flag nil)
+  (nxml-bind-meta-tab-to-complete-flag t)
+  (nxml-slash-auto-complete-flag t)
   :config
-  (setq nxml-child-indent 4
-        nxml-attribute-indent 5
-        nxml-auto-insert-xml-declaration-flag nil
-        nxml-bind-meta-tab-to-complete-flag t
-        nxml-slash-auto-complete-flag t)
-
   (add-hook 'nxml-mode-hook 'smartparens-mode)
   (add-hook 'nxml-mode-hook 'emmet-mode))
 

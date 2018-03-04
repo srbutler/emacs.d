@@ -35,7 +35,9 @@
 (add-hook 'prog-mode-hook 'delete-selection-mode)
 
 ;; revert buffers automatically when underlying files are changed externally
-(global-auto-revert-mode t)
+(use-package autorevert
+  :diminish (auto-revert-mode . "ar")
+  :config (global-auto-revert-mode t))
 
 ;; hippie expand is dabbrev expand on steroids
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
