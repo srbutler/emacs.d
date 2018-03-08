@@ -9,8 +9,8 @@
   :ensure t
   :diminish (company-mode . "comp")
   :custom
-  (company-idle-delay            0.5)
-  (company-tooltip-limit         10)
+  (company-idle-delay 0.5)
+  (company-tooltip-limit 10)
   (company-minimum-prefix-length 2)
 
   ;; invert the navigation direction if the the completion
@@ -111,10 +111,20 @@
   :defer t)
 
 
+;; link lsp output with company
+(use-package company-lsp
+  :after (lsp-mode company)
+  :custom
+  (company-lsp-enable-recompletion t)
+  (company-lsp-async t)
+  (company-lsp-enable-snippet t)
+  :init (add-to-list 'company-backends 'company-lsp))
+
+
 ;; let LSP work with imenu
 (use-package lsp-imenu
   :after lsp-mode
-  :hook (lsp-after-open-hook . lsp-enable-imenu))
+  :init (add-hook 'lsp-after-open-hook 'lsp-enable-imenu))
 
 
 ;; edit with multiple cursors

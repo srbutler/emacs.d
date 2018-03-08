@@ -19,7 +19,7 @@
               ("M-." . racer-find-definition)
               ("M-," . pop-tag-mark)
               ("TAB" . company-indent-or-complete-common))
-  :hook rust-mode
+  :init (add-hook 'rust-mode-hook 'racer-mode)
   :custom
   (company-tooltip-align-annotations t)
   (racer-cmd "~/.cargo/bin/racer")
@@ -36,7 +36,7 @@
   :ensure t
   :defer t
   :diminish (cargo-minor-mode . "cargo")
-  :hook (rust-mode . cargo-minor-mode))
+  :init (add-hook 'rust-mode-hook 'cargo-minor-mode))
 
 (provide 'lang-rust)
 ;;; lang-rust.el ends here

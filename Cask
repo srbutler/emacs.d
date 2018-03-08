@@ -96,6 +96,7 @@
 (depends-on "key-chord")
 (depends-on "kotlin-mode")
 (depends-on "leuven-theme")
+(depends-on "lsp-java")
 (depends-on "lsp-mode")
 (depends-on "macrostep")
 (depends-on "magit")
