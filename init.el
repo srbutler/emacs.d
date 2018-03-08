@@ -92,8 +92,9 @@
 
 ;; load the language modules
 (load-file-list "lang-%s.el"
-                '("c" "clojure" "ess" "go" "haskell" "latex" "lisp"
-                  "markdown" "ocaml" "org" "python" "rust" "scala"
-                  "web-js"))
+                '("c" "clojure" "ess" "go" "haskell" "java" "latex"
+                  "lisp" "markdown" "ocaml" "org" "python" "rust"
+                  "scala" "web-js"))
 
 ;;; init.el ends here
+
