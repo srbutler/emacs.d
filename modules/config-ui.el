@@ -39,7 +39,7 @@
   :diminish (auto-revert-mode . "ar")
   :config (global-auto-revert-mode t))
 
-;; hippie expand is dabbrev expand on steroids
+;; setup `hippie-expand' expand functions
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
                                          try-expand-dabbrev-all-buffers
                                          try-expand-dabbrev-from-kill
@@ -51,7 +51,6 @@
                                          try-complete-lisp-symbol-partially
                                          try-complete-lisp-symbol))
 
-
 ;; set some basic defaults
 (setq-default abbrev-file-name                "~/.emacs.d/savefile/abbrev_defs"
               auto-save-default               t
@@ -60,6 +59,7 @@
               delete-by-moving-to-trash       t
               disabled-command-function       nil         ;; don't prompt for some disabled functions
               enable-local-variables          :all
+              fill-column                     100
               ffap-machine-p-known            'reject     ;; stop attempts at pinging websites on autocomplete
               indent-tabs-mode                nil
               indicate-empty-lines            nil
@@ -77,6 +77,7 @@
               tab-always-indent               'complete   ;; smart tab behavior - indent or complete
               tab-width                       4
               truncate-lines                  t
+              vc-follow-symlinks              t
               visible-bell                    t
               x-stretch-cursor                t           ;; stretch cursor for tab characters.
               )
@@ -87,88 +88,96 @@
   :ensure helm
   :diminish helm-mode
   :init
-
   (require 'helm-config)
-  (require 'helm-ag)
 
-  (setq helm-split-window-in-side-p           t
-        helm-buffers-fuzzy-matching           t
-        helm-M-x-fuzzy-match                  t
-        helm-recentf-fuzzy-match              t
-        helm-move-to-line-cycle-in-source     t
-        helm-ff-search-library-in-sexp        t
-        helm-ff-file-name-history-use-recentf t
-        helm-ff-skip-boring-files             t
-        helm-autoresize-max-height            40
-        helm-autoresize-min-height            40
+  (setq helm-split-window-in-side-p               t
+        helm-M-x-fuzzy-match                      t
+        helm-move-to-line-cycle-in-source         t
+        helm-ff-search-library-in-sexp            t
+        helm-ff-file-name-history-use-recentf     t
+        helm-ff-skip-boring-files                 t
+        helm-autoresize-max-height                40
+        helm-autoresize-min-height                40
+        helm-use-frame-when-more-than-two-windows nil
+
+        ;; fuzzy matching
+        helm-buffers-fuzzy-matching               t
+        helm-completion-in-region-fuzzy-match     t
+        helm-M-x-fuzzy-match                      t
+        helm-apropos-fuzzy-match                  t
+        helm-imenu-fuzzy-match                    t
+        helm-lisp-fuzzy-completion                t
+        helm-locate-fuzzy-match                   t
+        helm-mode-fuzzy-match                     t
+        helm-recentf-fuzzy-match                  t
+        helm-semantic-fuzzy-match                 t
         )
-
-  (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-
-  ;; The default "C-x c" is quite close to "C-x C-c", which quits
-  ;; Emacs. Changed to "C-c h". Note: We must set "C-c h" globally,
-  ;; because we cannot change helm-command-prefix-key'
-  ;; oncehelm-config' is loaded.
-  (global-set-key (kbd "C-c h") 'helm-command-prefix)
-  (global-unset-key (kbd "C-x c"))
 
   (when (executable-find "curl")
     (setq helm-net-prefer-curl t))
 
-  :bind (("C-x b" . helm-mini)
-         ("C-h f" . helm-apropos)
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (global-unset-key (kbd "C-x c")) ;; old key is risky
+
+  :bind (("C-x b"   . helm-mini)
          ("C-x C-b" . helm-buffers-list)
+         ("C-x C-f" . helm-find-files)
+         ("C-x C-r" . helm-recentf)
+
          ("M-x" . helm-M-x)
          ("M-y" . helm-show-kill-ring)
-         ("C-c h w" . helm-wikipedia-suggest)
+
          ("C-c h o" . helm-occur)
          ("C-c h x" . helm-register)
-         ("C-h C-l" . helm-locate-library)
-         ("C-h SPC" . helm-all-mark-rings)
+         ("C-c h w" . helm-wikipedia-suggest)
+
+         ("C-h f" . helm-apropos)
          ("C-h r" . helm-info-emacs)
-         ("C-x C-f" . helm-find-files)
-         ("C-x r j" . jump-to-register)
-         ("C-x C-r" . helm-recentf)
-         ("C-c h C-a" . helm-ag)
-         :map helm-ag-mode-map
-         ("<return>" . help-grep-mode-jump-other-window)
-         ("n" . helm-grep-mode-jump-other-window-forward)
-         ("p" . helm-grep-mode-jump-other-window-backward))
+         ("C-h C-l" . helm-locate-library)
+         ("C-h SPC" . helm-all-mark-rings))
 
   :config
-  (define-key 'help-command (kbd "C-f") 'helm-apropos)
-  (define-key 'help-command (kbd "r") 'helm-info-emacs)
-  (define-key 'help-command (kbd "C-l") 'helm-locate-library)
-
   (helm-mode)
   (helm-autoresize-mode nil)
+  (helm-descbinds-mode))
 
-  (substitute-key-definition 'find-tag 'helm-etags-select global-map)
-  (setq projectile-completion-system 'helm)
-  (helm-descbinds-mode)
 
-  ;; enable Helm version of Projectile with replacment commands
-  (helm-projectile-on)
+(use-package helm-projectile
+  :ensure t
+  :after helm projectile
+  :init
+  :custom
+  (helm-projectile-fuzzy-match t)
+  (projectile-completion-system 'helm)
+  :config (helm-projectile-on))
 
-  ;; use GNU global
-  (use-package helm-gtags
-    :ensure t
-    :diminish (helm-gtags-mode . "gtags")
-    :bind (:map helm-gtags-mode-map
-                ("M-." . helm-gtags-dwim)
-                ("C-c C-t c" . helm-gtags-create-tags)
-                ("C-c C-t u" . helm-gtags-update-tags)
-                ("C-c C-t s" . helm-gtags-select))
-    :init
-    (custom-set-variables
-     '(helm-gtags-prefix-key "C-c C-t")
-     '(helm-gtags-suggested-key-mapping t)
-     '(helm-gtags-path-style 'relative)
-     '(helm-gtags-ignore-case t)
-     '(helm-gtags-auto-update t)
-     '(helm-gtags--label-option "pygments"))
 
-    (add-hook 'prog-mode-hook 'helm-gtags-mode)))
+;; use ag for searching in helm
+(use-package helm-ag
+  :ensure t
+  :after helm
+  :commands helm-do-ag
+  :bind (("C-c h g" . helm-do-ag)))
+
+
+;; use GNU global
+(use-package helm-gtags
+  :ensure t
+  :after helm
+  :diminish (helm-gtags-mode . "gtags")
+  :bind (:map helm-gtags-mode-map
+              ("M-." . helm-gtags-dwim)
+              ("C-c C-t c" . helm-gtags-create-tags)
+              ("C-c C-t u" . helm-gtags-update-tags)
+              ("C-c C-t s" . helm-gtags-select))
+  :custom
+  (helm-gtags-prefix-key "C-c C-t")
+  (helm-gtags-suggested-key-mapping t)
+  (helm-gtags-path-style 'relative)
+  (helm-gtags-ignore-case t)
+  (helm-gtags-auto-update t)
+  (helm-gtags--label-option "pygments")
+  :init (add-hook 'prog-mode-hook 'helm-gtags-mode))
 
 
 ;; set up some of crux's convenience functions
@@ -186,6 +195,7 @@
 ;; get the PATH variable working correctly
 (use-package exec-path-from-shell
   :ensure t
+  :if (memq window-system '(mac ns))
   :init (exec-path-from-shell-initialize))
 
 
@@ -224,29 +234,22 @@
   (savehist-mode +1))
 
 
-;; have speedbar in side frame
-(use-package sr-speedbar
-  :ensure t
-  :defer t
-  :bind ("C-c s" . sr-speedbar-toggle)
-  :config
-  (setq sr-speedbar-right-side nil
-        speedbar-show-unknown-files t
-        speedbar-use-images nil))
-
-
 ;; visual undo history
 (use-package undo-tree
   :ensure t
   :diminish undo-tree-mode
-  :custom (undo-tree-auto-save-history t)
+  :custom
+  (undo-tree-auto-save-history t)
+  (undo-tree-visualizer-diff t)
   :config (global-undo-tree-mode))
+
 
 ;; unfill commands
 (use-package unfill
   :ensure t
   :commands (unfill-region unfill-paragraph unfill-toggle)
   :bind ("M-Q" . unfill-paragraph))
+
 
 ;; meaningful names for buffers with the same name
 (use-package uniquify
@@ -260,6 +263,13 @@
 ;; use shift + arrow keys to switch between visible buffers
 (use-package windmove
   :init (windmove-default-keybindings))
+
+
+;; unobtrusively trim trailing whitespace
+(use-package ws-butler
+  :ensure t
+  :diminish ws-butler-mode
+  :config (ws-butler-global-mode))
 
 
 (provide 'config-ui)

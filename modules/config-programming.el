@@ -12,10 +12,7 @@
   (company-idle-delay 0.5)
   (company-tooltip-limit 10)
   (company-minimum-prefix-length 2)
-
-  ;; invert the navigation direction if the the completion
-  ;; popup-isearch-match is displayed on top (happens near the bottom
-  ;; of windows)
+  (company-selection-wrap-around t)
   (company-tooltip-flip-when-above t)
   :config
   (global-company-mode 1)
@@ -55,7 +52,7 @@
 
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
-  :diminish
+  :diminish (eldoc-mode . "eldoc")
   :hook prog-mode
   :config
   ;; give current argument distinctive highlighting
@@ -93,15 +90,6 @@
   (when (or (eq current-theme-name "solarized-dark")
             (eq current-theme-name "solarized-light"))
     (set-face-foreground 'flycheck-fringe-info "#268bd2")))
-
-
-;; have flycheck info appear in a popup
-(use-package flycheck-pos-tip
-  :disabled t
-  :ensure t
-  :config
-  (with-eval-after-load 'flycheck
-    (flycheck-pos-tip-mode)))
 
 
 ;; make language server protocol services available

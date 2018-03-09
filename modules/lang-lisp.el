@@ -53,17 +53,31 @@
 
 
 ;; EMACS LISP
+
+;; smartly visit an ielm buffer
+ (defun visit-ielm ()
+  "Create or visit a `ielm' buffer."
+  (interactive)
+  (if (not (get-buffer "*ielm*"))
+      (progn
+        (split-window-sensibly (selected-window))
+        (other-window 1)
+        (ielm))
+    (switch-to-buffer-other-window "*ielm*")))
+
 (use-package emacs-lisp-mode
   :mode (("\\.el\\'" . emacs-lisp-mode)
          ("Cask\\'" . emacs-lisp-mode))
-  :bind (:map emacs-lisp-mode-map ("C-c C-z" . ielm))
+  :bind (:map emacs-lisp-mode-map ("C-c C-z" . visit-ielm))
   :init
   (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
   (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+  :custom (mode-name "Elisp")
 
+  :config
   ;; keep .elc files updated automatically
   (add-hook 'after-save-hook
             (lambda ()
@@ -73,9 +87,7 @@
                      (file-exists-p (byte-compile-dest-file buffer-file-name)))
                 (emacs-lisp-byte-compile)))
             nil
-            t)
-
-  (setq mode-name "Elisp"))
+            t))
 
 
 ;; SCHEME/RACKET
