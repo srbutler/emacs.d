@@ -8,7 +8,6 @@
 ;; get the PATH variable working correctly
 (use-package exec-path-from-shell
   :ensure t
-  :if (memq window-system '(mac ns))
   :init (exec-path-from-shell-initialize))
 
 

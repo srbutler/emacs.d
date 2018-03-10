@@ -16,14 +16,9 @@
         ))
 (package-initialize)
 
-;; (unless (package-installed-p 'use-package)
-;;   (package-refresh-contents)
-;;   (package-install 'use-package))
-
-;; (customize-set-variable 'use-package-always-ensure t)
-
-;; (eval-when-compile
-;;   (require 'use-package))
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 ;; cask/pallet setup
 (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
@@ -33,6 +28,10 @@
 (use-package pallet
   :ensure t
   :config (pallet-mode t))
+
+;; load use-package extensions
+(use-package use-package-ensure-system-package
+  :ensure t)
 
 ;; Always load newest byte code
 (setq load-prefer-newer +1)
@@ -80,11 +79,6 @@
     (load (expand-file-name (format format-string f) modules-dir))))
 
 
-;; load use-package extensions
-(use-package use-package-ensure-system-package
-  :ensure t)
-
-
 ;; load the settings files
 (load-file-list "config-%s.el"
                 '("appearance" "functions" "git" "keybindings"
@@ -95,6 +89,9 @@
                 '("c" "clojure" "ess" "go" "haskell" "java" "latex"
                   "lisp" "markdown" "ocaml" "org" "python" "rust"
                   "scala" "web-js"))
+
+(when (memq window-system '(mac ns))
+  (load "config-osx.el"))
 
 ;;; init.el ends here
 
