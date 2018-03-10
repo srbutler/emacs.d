@@ -11,7 +11,7 @@
   :init (exec-path-from-shell-initialize))
 
 
-;; only run the following on Macs
+;; only run the following in mac windows
 (when (eq window-system 'mac)
 
   ;; define key-commands that are common in text-editor interfaces

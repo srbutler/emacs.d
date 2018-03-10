@@ -166,13 +166,6 @@
   (setq projectile-cache-file (expand-file-name  "projectile.cache" savefile-dir)))
 
 
-;; displays colors for color hex values
-(use-package rainbow-mode
-  :ensure t
-  :hook (emacs-lisp-mode css-mode)
-  :diminish rainbow-mode)
-
-
 ;; makes parentheses colorful
 (use-package rainbow-delimiters-mode
   :hook (lisp-mode emacs-lisp-mode clojure-mode scheme-mode LaTeX-mode))
@@ -216,39 +209,6 @@
   (sp-local-pair '(markdown-mode gfm-mode) "*" "*"
                  :unless '(sp-in-string-p)
                  :actions '(insert wrap)))
-
-
-;; define a bunch of wrapping operations in text modes
-(use-package wrap-region
-  :ensure t
-  :hook ((org-mode . wrap-region-mode)
-         (markdown-mode . wrap-region-mode)
-         (text-mode . wrap-region-mode))
-  :diminish wrap-region-mode
-  :config
-  (wrap-region-add-wrappers
-   '(("(" ")")
-     ("[" "]")
-     ("{" "}")
-     ("<" ">")
-     ("'" "'")
-     ("\"" "\"")
-     ("‘" "’"   "q")
-     ("“" "”"   "Q")
-     ("*" "*"   "b"   org-mode)       ;; bolden
-     ("*" "*"   "*"   org-mode)       ;; bolden
-     ("/" "/"   "i"   org-mode)       ;; italics
-     ("/" "/"   "/"   org-mode)       ;; italics
-     ("~" "~"   "c"   org-mode)       ;; code
-     ("~" "~"   "~"   org-mode)       ;; code
-     ("=" "="   "v"   org-mode)       ;; verbatim
-     ("=" "="   "="   org-mode)       ;; verbatim
-     ("_" "_"   "u"   org-mode)       ;; underline
-     ("_" "_"   "u"   markdown-mode)  ;; underline
-     ("**" "**" "b"   markdown-mode)  ;; bolden
-     ("*" "*"   "i"   markdown-mode)  ;; italics
-     ("`" "`"   "c"   markdown-mode)  ;; code
-     )))
 
 
 ;; enable YASnippet globally

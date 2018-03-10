@@ -81,7 +81,7 @@
 ;; some keybindings
 
 ;; auto-indent on Enter
-(bind-key "RET" #'newline-and-indent global-map)
+(bind-key "<return>" #'newline-and-indent global-map)
 
 ;; try and have a normal way to delete things
 (bind-key "<delete>" #'delete-region global-map)
@@ -238,6 +238,7 @@ point reaches the beginning or end of the buffer, stop there."
   (helm-gtags--label-option "pygments")
   :init (add-hook 'prog-mode-hook 'helm-gtags-mode))
 
+
 ;; testing out ivy/counsel as replacement for helm
 (use-package counsel
   :ensure t
@@ -259,14 +260,17 @@ point reaches the beginning or end of the buffer, stop there."
           ("C-h SPC" . counsel-mark-ring))
   :custom
   (counsel-find-file-at-point t)
-  (counsel-find-file-ignore-regexp "\\.DS_Store\\|.git")
+  (counsel-find-file-ignore-regexp
+   "\\.DS_Store\\|.git\\|\.*~undo-tree~\\|GPATH\\|GRTAGS\\|GTAGS\\|.*.elc")
   (counsel-grep-base-command
    "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
   :config (counsel-mode 1))
 
+
 ;; provides sorting for ivy
 (use-package flx
   :ensure t)
+
 
 (use-package ivy
   :ensure t
@@ -291,7 +295,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 
 (use-package counsel-projectile
-  :after projectile
+  :after (counsel projectile)
   :ensure t
   :config (counsel-projectile-mode))
 
@@ -300,7 +304,8 @@ point reaches the beginning or end of the buffer, stop there."
   :ensure t
   :after counsel
   :diminish (counsel-gtags-mode . "gtags")
-  :bind (("M-." . counsel-gtags-dwim)
+  :bind (:map counsel-gtags-mode-map
+         ("M-." . counsel-gtags-dwim)
          ("C-c C-t c" . counsel-gtags-create-tags)
          ("C-c C-t u" . counsel-gtags-update-tags)
          ("C-c C-t d" . counsel-gtags-find-definition)
@@ -353,6 +358,13 @@ point reaches the beginning or end of the buffer, stop there."
   (key-chord-define-global "jj" 'avy-goto-word-1)
   (key-chord-define-global "jl" 'avy-goto-line)
   (key-chord-define-global "jk" 'avy-goto-char))
+
+
+;; displays colors for color hex values
+(use-package rainbow-mode
+  :ensure t
+  :hook (emacs-lisp-mode css-mode)
+  :diminish rainbow-mode)
 
 
 ;; save recent files
@@ -422,6 +434,39 @@ point reaches the beginning or end of the buffer, stop there."
 ;; use shift + arrow keys to switch between visible buffers
 (use-package windmove
   :init (windmove-default-keybindings))
+
+
+;; define a bunch of wrapping operations in text modes
+(use-package wrap-region
+  :ensure t
+  :hook ((org-mode . wrap-region-mode)
+         (markdown-mode . wrap-region-mode)
+         (text-mode . wrap-region-mode))
+  :diminish wrap-region-mode
+  :config
+  (wrap-region-add-wrappers
+   '(("(" ")")
+     ("[" "]")
+     ("{" "}")
+     ("<" ">")
+     ("'" "'")
+     ("\"" "\"")
+     ("‘" "’"   "q")
+     ("“" "”"   "Q")
+     ("*" "*"   "b"   org-mode)       ;; bolden
+     ("*" "*"   "*"   org-mode)       ;; bolden
+     ("/" "/"   "i"   org-mode)       ;; italics
+     ("/" "/"   "/"   org-mode)       ;; italics
+     ("~" "~"   "c"   org-mode)       ;; code
+     ("~" "~"   "~"   org-mode)       ;; code
+     ("=" "="   "v"   org-mode)       ;; verbatim
+     ("=" "="   "="   org-mode)       ;; verbatim
+     ("_" "_"   "u"   org-mode)       ;; underline
+     ("_" "_"   "u"   markdown-mode)  ;; underline
+     ("**" "**" "b"   markdown-mode)  ;; bolden
+     ("*" "*"   "i"   markdown-mode)  ;; italics
+     ("`" "`"   "c"   markdown-mode)  ;; code
+     )))
 
 
 ;; unobtrusively trim trailing whitespace
