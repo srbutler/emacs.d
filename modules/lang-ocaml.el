@@ -29,6 +29,7 @@
 (use-package merlin
   :ensure t
   :defer t
+  :after tuareg company
   :bind (:map tuareg-mode-map
          ("C-c C-t" . merlin-type-enclosing))
   :init
@@ -37,6 +38,7 @@
 
   (setq merlin-completion-with-doc t)
 
+  :config
   (with-eval-after-load 'company
     (add-to-list 'company-backends 'merlin-company-backend)))
 

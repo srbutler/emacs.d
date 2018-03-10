@@ -29,7 +29,7 @@
 (defvar current-theme-name 'default)
 
 ;; only load themes when opened in a window system
-(when nil ;window-system
+(when window-system
 
   (use-package solarized-theme
     :disabled t

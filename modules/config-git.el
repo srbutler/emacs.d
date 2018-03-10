@@ -9,6 +9,7 @@
 (use-package magit
   :ensure t
   :defer t
+  :custom (magit-completing-read-function 'ivy-completing-read)
   :bind
   (("C-c g l"   . magit-log-popup)
    ("C-c g p s" . magit-push-popup)

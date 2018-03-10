@@ -23,7 +23,10 @@
   :ensure org-plus-contrib
   :bind (("C-c o l" . org-store-link)
          ("C-c o a" . org-agenda)
-         ("C-c o b" . org-iswitchb))
+         ("C-c o b" . org-iswitchb)
+         :map org-mode-map
+         ("M-<up>"  . org-move-subtree-up)
+         ("M-<down>"  . org-move-subtree-down))
   :custom
   (org-confirm-babel-evaluate nil)
   (org-export-backends '(ascii beamer html latex md))
@@ -66,10 +69,10 @@
   ;;       org-log-done t)
 
   ;; make windmove work in org-mode
-  (add-hook 'org-shiftup-final-hook 'windmove-up)
-  (add-hook 'org-shiftleft-final-hook 'windmove-left)
-  (add-hook 'org-shiftdown-final-hook 'windmove-down)
-  (add-hook 'org-shiftright-final-hook 'windmove-right)
+  ;; (add-hook 'org-shiftup-final-hook 'windmove-up)
+  ;; (add-hook 'org-shiftleft-final-hook 'windmove-left)
+  ;; (add-hook 'org-shiftdown-final-hook 'windmove-down)
+  ;; (add-hook 'org-shiftright-final-hook 'windmove-right)
 
   ;; org-babel code block enabling
   (org-babel-do-load-languages
