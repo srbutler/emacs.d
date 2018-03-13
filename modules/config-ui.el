@@ -62,6 +62,16 @@
   (tool-bar-mode 0)           ;; Disable the tool bar
   (tooltip-mode 0))           ;; Disable the tooltips
 
+;; If launching Emacs as in windowing system, show the menu. If
+;; launching in a tty/terminal window, don't display the menu.
+(if window-system
+    (menu-bar-mode t)
+  (menu-bar-mode -1))
+
+;; remove the redundant scroll-bars
+(when (fboundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
+
 ;; setup `hippie-expand' expand functions
 (setq hippie-expand-try-functions-list
       '(try-expand-dabbrev

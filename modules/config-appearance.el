@@ -10,20 +10,6 @@
 (add-to-list 'default-frame-alist '(height . 40))
 (add-to-list 'default-frame-alist '(width . 100))
 
-;; remove the redundant scroll-bars
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
-
-;; If launching Emacs as in windowing system, show the menu. If
-;; launching in a tty/terminal window, don't display the menu.
-(if window-system
-    (menu-bar-mode t)
-  (menu-bar-mode -1))
-
-;; disable toolbar
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
-
 ;; THEME SETTINGS -----------------------------
 
 (defvar current-theme-name 'default)
@@ -140,48 +126,33 @@
  ((font-existsp "Consolas")
   (set-face-attribute 'default nil :height 131 :font "Consolas")))
 
-;; Line-spacing tweak: Set this to a different number depending on
-;; taste and the font selected. The value can be a integer or decimal
-;; number. if integer: it means pixels, added below each line. if
-;; float (e.g 0.02): a scaling factor relative to current window's
-;; default line height. if nil: add no extra spacing.
-
-;; (setq-default line-spacing 0.06) ;; tuned for Pragmata Pro
-
-
-;; Enable emoji, and stop the UI from freezing when trying to display them.
-(if (fboundp 'set-fontset-font)
-    (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
-
-
 ;; setup ligatures
-;; comment out #46 for Clojure's CIDER mode if there are problems
-(let ((alist '((33 . ".\\(?:\\(?:==\\)\\|[!=]\\)")
-               (35 . ".\\(?:[(?[_{]\\)")
-               (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
-               ;; (42 . ".\\(?:\\(?:\\*\\*\\)\\|[*/]\\)")    ;; disabled for org-mode sanity
-               (43 . ".\\(?:\\(?:\\+\\+\\)\\|\\+\\)")
-               (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
-               (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=]\\)")
-               (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
-               (58 . ".\\(?:[:=]\\)")
-               (59 . ".\\(?:;\\)")
-               (60 . ".\\(?:\\(?:!--\\)\\|\\(?:\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[/<=>|-]\\)")
-               (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
-               (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
-               (63 . ".\\(?:[:=?]\\)")
-               (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
-               (94 . ".\\(?:=\\)")
-               (123 . ".\\(?:-\\)")
-               (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
-               (126 . ".\\(?:[=@~-]\\)")
-               )
-             ))
-  (dolist (char-regexp alist)
-    (set-char-table-range composition-function-table (car char-regexp)
-                          `([,(cdr char-regexp) 0 font-shape-gstring]))))
-;; (mac-auto-operator-composition-mode)
-
+(when window-system
+  ;; comment out #46 for Clojure's CIDER mode if there are problems
+  (let ((alist '((33 . ".\\(?:\\(?:==\\)\\|[!=]\\)")
+                 (35 . ".\\(?:[(?[_{]\\)")
+                 (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
+                 ;; (42 . ".\\(?:\\(?:\\*\\*\\)\\|[*/]\\)")    ;; disabled for org-mode sanity
+                 (43 . ".\\(?:\\(?:\\+\\+\\)\\|\\+\\)")
+                 (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
+                 (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=]\\)")
+                 (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
+                 (58 . ".\\(?:[:=]\\)")
+                 (59 . ".\\(?:;\\)")
+                 (60 . ".\\(?:\\(?:!--\\)\\|\\(?:\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[/<=>|-]\\)")
+                 (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
+                 (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
+                 (63 . ".\\(?:[:=?]\\)")
+                 (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
+                 (94 . ".\\(?:=\\)")
+                 (123 . ".\\(?:-\\)")
+                 (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
+                 (126 . ".\\(?:[=@~-]\\)")
+                 )
+               ))
+    (dolist (char-regexp alist)
+      (set-char-table-range composition-function-table (car char-regexp)
+                            `([,(cdr char-regexp) 0 font-shape-gstring])))))
 
 
 (provide 'config-appearance)
