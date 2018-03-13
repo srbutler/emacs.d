@@ -7,13 +7,10 @@
 ;; Load package managment directories
 (require 'package)
 (setq package-archives
-      '(
-        ("org"          . "http://orgmode.org/elpa/")
+      '(("org"          . "http://orgmode.org/elpa/")
         ("gnu"          . "http://elpa.gnu.org/packages/")
         ("melpa"        . "http://melpa.milkbox.net/packages/")
-        ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
-        ;; ("marmalade"    . "http://marmalade-repo.org/packages/")
-        ))
+        ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -56,6 +53,8 @@
 
 ;; set the custom file
 (setq-default custom-file (expand-file-name "custom.el" dotfiles-dir))
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 ;; setup savefiles/backups in a way that's not annoying
 (setq backup-directory-alist `(("." . "~/.emacs.d/savefile/"))
@@ -72,17 +71,18 @@
 ;; warn when opening files bigger than 100MB
 (setq large-file-warning-threshold 100000000)
 
+;; garbage collect when Emacs loses focus
+(add-hook 'focus-out-hook #'garbage-collect)
+
 ;; make adding new module files easy
 (defun load-file-list (format-string files)
   "Load a list of FILES in the modules dir using FORMAT-STRING."
   (dolist (f files)
     (load (expand-file-name (format format-string f) modules-dir))))
 
-
 ;; load the settings files
 (load-file-list "config-%s.el"
-                '("appearance" "functions" "git" "keybindings"
-                  "programming" "ui"))
+                '("appearance" "functions" "git" "programming" "ui"))
 
 ;; load the language modules
 (load-file-list "lang-%s.el"
@@ -90,6 +90,12 @@
                   "lisp" "markdown" "ocaml" "org" "python" "rust"
                   "scala" "web-js"))
 
+;; load the stuff I don't want in VC
+(let ((secret.el (expand-file-name "secrets.el" dotfiles-dir)))
+  (when (file-exists-p secret.el)
+    (load secret.el)))
+
+;; load OS-specific stuff
 (when (memq window-system '(mac ns))
   (load "config-osx.el"))
 

@@ -52,7 +52,7 @@
 
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
-  :diminish (eldoc-mode . "eldoc")
+  :diminish ""
   :hook prog-mode
   :config
   ;; give current argument distinctive highlighting

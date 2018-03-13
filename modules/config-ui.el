@@ -5,10 +5,6 @@
 ;;; Code:
 
 
-;; put my user info
-(setq user-full-name "Steven Butler"
-      user-mail-address "srbutler@gmail.com")
-
 ;; more useful frame title, that show either a file or a buffer name
 ;; (if the buffer isn't visiting a file)
 (setq frame-title-format
@@ -16,69 +12,68 @@
                                            (abbreviate-file-name (buffer-file-name))
                                          "%b"))))
 
-;; shorten yes-or-no to y-or-n
-(fset 'yes-or-no-p 'y-or-n-p)
+;; set some basic defaults
+(setq-default
+ abbrev-file-name                "~/.emacs.d/savefile/abbrev_defs"
+ auto-save-default               t
+ blink-matching-paren            t
+ confirm-kill-emacs              'yes-or-no-p  ;; Confirm before exiting Emacs
+ delete-active-region            t
+ delete-by-moving-to-trash       t
+ disabled-command-function       nil           ;; don't prompt for some disabled functions
+ display-time-format             "%H:%M"       ;; Format the time string
+ enable-local-variables          :all
+ fill-column                     80
+ ffap-machine-p-known            'reject       ;; stop attempts at pinging websites on autocomplete
+ help-window-select              t             ;; Focus new help windows when opened
+ indent-tabs-mode                nil           ;; Stop using tabs to indent
+ indicate-empty-lines            nil
+ inhibit-startup-message         t
+ kill-do-not-save-duplicates     t
+ linum-format                    " %4d "
+ major-mode                      'text-mode
+ mode-require-final-newline      t
+ next-line-add-newlines          t             ;; adds newline for C-n at end of buffer
+ require-final-newline           t
+ ring-bell-function              'ignore
+ scroll-preserve-screen-position t
+ sentence-end-double-space       nil
+ show-trailing-whitespace        t
+ tab-always-indent               'complete     ;; smart tab behavior - indent or complete
+ tab-width                       4
+ truncate-lines                  t
+ vc-follow-symlinks              t
+ visible-bell                    t
+ window-combination-resize       t             ;; Resize windows proportionally
+ x-stretch-cursor                t             ;; stretch cursor for tab characters.
+ )
 
-;; get rid of the blinking cursor
-(blink-cursor-mode -1)
-
-;; mode line settings
-(line-number-mode t)
-(column-number-mode t)
+(blink-cursor-mode 0)          ;; get rid of the blinking cursor
+(column-number-mode t)         ;; put column number in mode-line
+(delete-selection-mode)        ;; Replace region when inserting text
+(display-time-mode)            ;; Enable time in the mode-line
+(fset 'yes-or-no-p 'y-or-n-p)  ;; shorten yes-or-no to y-or-n
+(global-visual-line-mode 0)    ;; do not wrap long lines
+(line-number-mode t)           ;; put column number in mode-line
 (size-indication-mode t)
 
-;; highlight the current line
-(if window-system
-    (global-hl-line-mode +1))
-
-;; delete on selection
-(add-hook 'prog-mode-hook 'delete-selection-mode)
+(when window-system
+  (global-hl-line-mode +1)    ;; highlight the current line
+  (tool-bar-mode 0)           ;; Disable the tool bar
+  (tooltip-mode 0))           ;; Disable the tooltips
 
 ;; setup `hippie-expand' expand functions
-(setq hippie-expand-try-functions-list '(try-expand-dabbrev
-                                         try-expand-dabbrev-all-buffers
-                                         try-expand-dabbrev-from-kill
-                                         try-complete-file-name-partially
-                                         try-complete-file-name
-                                         try-expand-all-abbrevs
-                                         try-expand-list
-                                         try-expand-line
-                                         try-complete-lisp-symbol-partially
-                                         try-complete-lisp-symbol))
-
-;; set some basic defaults
-(setq-default abbrev-file-name                "~/.emacs.d/savefile/abbrev_defs"
-              auto-save-default               t
-              blink-matching-paren            t
-              delete-active-region            t
-              delete-by-moving-to-trash       t
-              disabled-command-function       nil         ;; don't prompt for some disabled functions
-              enable-local-variables          :all
-              fill-column                     100
-              ffap-machine-p-known            'reject     ;; stop attempts at pinging websites on autocomplete
-              indent-tabs-mode                nil
-              indicate-empty-lines            nil
-              inhibit-startup-message         t
-              kill-do-not-save-duplicates     t
-              linum-format                    " %4d "
-              major-mode                      'text-mode
-              mode-require-final-newline      t
-              next-line-add-newlines          t           ;; adds newline for C-n at end of buffer
-              require-final-newline           t
-              ring-bell-function              'ignore
-              scroll-preserve-screen-position t
-              sentence-end-double-space       nil
-              show-trailing-whitespace        t
-              tab-always-indent               'complete   ;; smart tab behavior - indent or complete
-              tab-width                       4
-              truncate-lines                  t
-              vc-follow-symlinks              t
-              visible-bell                    t
-              x-stretch-cursor                t           ;; stretch cursor for tab characters.
-              )
-
-
-;; some keybindings
+(setq hippie-expand-try-functions-list
+      '(try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill
+        try-complete-file-name-partially
+        try-complete-file-name
+        try-expand-all-abbrevs
+        try-expand-list
+        try-expand-line
+        try-complete-lisp-symbol-partially
+        try-complete-lisp-symbol))
 
 ;; auto-indent on Enter
 (bind-key "<return>" #'newline-and-indent global-map)
@@ -106,36 +101,6 @@
       (when (looking-at "^    ")
         (replace-match "")))))
 (bind-key "<backtab>" #'un-indent-by-removing-4-spaces global-map)
-
-
-;; taken from http://pages.sachachua.com/.emacs.d/Sacha.html
-(defun sachachua/smarter-move-beginning-of-line (arg)
-  "Move point back to indentation of beginning of line.
-
-Move point to the first non-whitespace character on this line.
-If point is already there, move to the beginning of the line.
-Effectively toggle between the first non-whitespace character and
-the beginning of the line.
-
-If ARG is not nil or 1, move forward ARG - 1 lines first.  If
-point reaches the beginning or end of the buffer, stop there."
-  (interactive "^p")
-  (setq arg (or arg 1))
-
-  ;; Move lines first
-  (when (/= arg 1)
-    (let ((line-move-visual nil))
-      (forward-line (1- arg))))
-
-  (let ((orig-point (point)))
-    (back-to-indentation)
-    (when (= orig-point (point))
-      (move-beginning-of-line 1))))
-
-;; remap C-a to `smarter-move-beginning-of-line'
-(global-set-key [remap move-beginning-of-line]
-                'sachachua/smarter-move-beginning-of-line)
-
 
 ;; disabled for now, using ivy/counsel/swiper
 ;; setup helm for as many things as possible
@@ -264,6 +229,7 @@ point reaches the beginning or end of the buffer, stop there."
    "\\.DS_Store\\|.git\\|\.*~undo-tree~\\|GPATH\\|GRTAGS\\|GTAGS\\|.*.elc")
   (counsel-grep-base-command
    "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
+  (counsel-)
   :config (counsel-mode 1))
 
 
@@ -281,17 +247,24 @@ point reaches the beginning or end of the buffer, stop there."
          ("C-c C-r" . ivy-resume)
          :map ivy-minibuffer-map  ;; mimic helm reflexes
          ("C-l" . ivy-backward-delete-char)
-         ("C-j" . ivy-alt-done))
+         ("C-j" . ivy-alt-done)
+         ("<return>" . ivy-alt-done))
   :custom
+  (ivy-initial-inputs-alist nil)  ;; don't start ivy with ^
+  (ivy-use-selectable-prompt t)
   (ivy-use-virtual-buffers t)
   (ivy-count-format "(%d/%d) ")
   (ivy-height 10)
   (ivy-wrap t)
-  ;; (ivy-initial-inputs-alist nil)
   ;; configure regexp engine
   (ivy-re-builders-alist
    '((t   . ivy--regex-ignore-order)))
   :config (ivy-mode 1))
+
+;; hydra presents menus for ivy commands.
+(use-package ivy-hydra
+  :ensure t
+  :after ivy)
 
 
 (use-package counsel-projectile
@@ -334,21 +307,29 @@ point reaches the beginning or end of the buffer, stop there."
 ;; set up some of crux's convenience functions
 (use-package crux
   :ensure t
+  :demand
   :bind (("C-c e"   . crux-eval-and-replace)
          ("C-x 4 t" . crux-transpose-windows)
          ("C-c I"   . crux-find-user-init-file)
          ("C-c S"   . crux-find-shell-init-file))
   :config
   ;; kills to end of line first, then whole line
-  (global-set-key [remap kill-line] #'crux-smart-kill-line))
+  (global-set-key [remap kill-line] #'crux-smart-kill-line)
+  (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
+  )
 
 
 ;; diminish keeps the modeline tidy
 (use-package diminish)
 
 
+;; expands the selection region progressively
+(use-package expand-region
+  :ensure t
+  :bind ("C-=" . er/expand-region))
+
+
 ;; define a bunch of quick key combos for basic actions
-;; these are a mix of movement and helm calls for convenience
 (use-package key-chord
   :ensure t
   :after avy

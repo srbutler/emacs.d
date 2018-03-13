@@ -2,9 +2,9 @@
 ;;
 ;;; Commentary:
 ;;
-;;; Code
+;;; Code:
 
-(require 'cl)
+;; (require 'cl)
 
 ;; Make RefTeX work with Org-Mode
 ;; use 'C-c (' instead of 'C-c [' because the latter is already
@@ -25,6 +25,7 @@
          ("C-c o a" . org-agenda)
          ("C-c o b" . org-iswitchb)
          :map org-mode-map
+         ("")
          ("M-<up>"  . org-move-subtree-up)
          ("M-<down>"  . org-move-subtree-down))
   :custom
@@ -47,6 +48,7 @@
   (defun yas-org-very-safe-expand ()
     (let ((yas-fallback-behavior 'return-nil))
       (and (fboundp 'yas-expand) (yas-expand))))
+
   ;; enable yasnippet configuration
   (add-hook 'org-mode-hook
             (lambda ()
@@ -59,14 +61,6 @@
   ;; turn on RefTeX
   (add-hook 'org-mode-hook 'org-mode-reftex-setup)
   (add-hook 'org-mode-hook 'turn-on-reftex)
-
-  ;; code block highlighting
-  ;; (setq org-src-fontify-natively t
-  ;;       org-src-tab-acts-natively t
-  ;;       org-export-with-smart-quotes t
-  ;;       org-confirm-babel-evaluate nil
-  ;;       org-replace-disputed-keys t
-  ;;       org-log-done t)
 
   ;; make windmove work in org-mode
   ;; (add-hook 'org-shiftup-final-hook 'windmove-up)
@@ -88,27 +82,37 @@
   ;; ensure R blocks are called correctly
   (add-to-list 'org-src-lang-modes '("r" . ess-mode))
 
-  ;; enable LaTeX math-mode entry via CDLaTeX
-  (use-package cdlatex-mode
-    :init (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-    :defer t
-    :diminish (org-cdlatex-mode . "ocdl"))
-
-  ;; Fancy bullet rendering.
-  (use-package org-bullets
-    :ensure t
-    :defer t
-    :init (add-hook 'org-mode-hook 'org-bullets-mode))
-
-  ;; downloaded from github, allows linguistics examples via linguex
-  ;; or gb4e
-  (use-package ox-linguistics
-    :load-path "~/.emacs.d/vendor/ox-linguistics/lisp")
-
   ;; org-export settings
   (require 'ox-latex)
   (unless (boundp 'org-latex-classes)
     (setq org-latex-classes nil))
+
+  ;; mobile-org setup
+  ;; Set to the location of your Org files on your local system
+  (setq org-directory "~/Dropbox/Org")
+
+  ;; Set to the name of the file where new notes will be stored
+  ;; (setq org-mobile-inbox-for-pull "~/org/flagged.org")
+  ;; Set to <your Dropbox root directory>/MobileOrg.
+  (setq org-mobile-directory "~/Dropbox/Org")
+
+  ;; LaTeX compilation command. For orgmode docs we just always use
+  ;; xelatex for convenience. You can change it to pdflatex if you like,
+  ;; just remember to make the adjustments to the packages-alist below.
+  (setq org-latex-pdf-process
+        '("latexmk -pdflatex='xelatex -synctex=1 --shell-escape' -pdf %f"))
+
+  ;; Default packages included in the tex file. As before,
+  ;; org-preamble-xelatex is part of latex-custom-kjh. There's
+  ;; org-preamble-pdflatex as well, if you wish to use that instead.
+  (setq org-latex-default-packages-alist nil)
+  (setq org-latex-packages-alist
+        '(
+          ;; ("" "org-preamble-xelatex" t)    ;; disabled for flexibility
+          ;; ("" "graphicx" t)
+          ;; ("" "linguex" t)
+          ;; ("" "float" )
+          ))
 
   ;; bare form, for incorporating in to other documents
   (add-to-list 'org-latex-classes
@@ -158,34 +162,6 @@
                  ("\\section{%s}" . "\\section*{%s}")
                  ("\\subsection{%s}" . "\\subsection*{%s}")
                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
-
-
-  ;; mobile-org setup
-  ;; Set to the location of your Org files on your local system
-  (setq org-directory "~/Dropbox/Org")
-  ;; Set to the name of the file where new notes will be stored
-  ;; (setq org-mobile-inbox-for-pull "~/org/flagged.org")
-  ;; Set to <your Dropbox root directory>/MobileOrg.
-  (setq org-mobile-directory "~/Dropbox/Org")
-
-
-  ;; LaTeX compilation command. For orgmode docs we just always use
-  ;; xelatex for convenience. You can change it to pdflatex if you like,
-  ;; just remember to make the adjustments to the packages-alist below.
-  (setq org-latex-pdf-process
-        '("latexmk -pdflatex='xelatex -synctex=1 --shell-escape' -pdf %f"))
-
-  ;; Default packages included in the tex file. As before,
-  ;; org-preamble-xelatex is part of latex-custom-kjh. There's
-  ;; org-preamble-pdflatex as well, if you wish to use that instead.
-  (setq org-latex-default-packages-alist nil)
-  (setq org-latex-packages-alist
-        '(
-          ;; ("" "org-preamble-xelatex" t)    ;; disabled for flexibility
-          ;; ("" "graphicx" t)
-          ;; ("" "linguex" t)
-          ;; ("" "float" )
-          ))
 
   ;; ebib types for biblatex (from kjhealy)
   (org-add-link-type "ebib" 'ebib)
@@ -269,7 +245,28 @@
       ((eq format 'latex)
        (if (or (not desc) (equal 0 (search "headlessfullcite:" desc)))
            (format "\\headlessfullcite{%s}" path)
-         (format "\\headlessfullcite[%s]{%s}" desc path)))))))
+         (format "\\headlessfullcite[%s]{%s}" desc path))))))
+  )
+
+
+;; enable LaTeX math-mode entry via CDLaTeX
+(use-package cdlatex-mode
+  :init (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+  :defer t
+  :diminish "ocdl")
+
+
+;; Fancy bullet rendering.
+(use-package org-bullets
+  :ensure t
+  :defer t
+  :init (add-hook 'org-mode-hook 'org-bullets-mode))
+
+
+;; downloaded from github, allows linguistics examples via linguex
+;; or gb4e
+(use-package ox-linguistics
+  :load-path "~/.emacs.d/vendor/ox-linguistics/lisp")
 
 
 ;; time manipulation macro for org-tables
