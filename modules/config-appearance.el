@@ -78,7 +78,7 @@
     ;; :disabled t
     :ensure t
     :init (load-theme 'material t)
-    :config (setq current-theme-name 'material-theme))
+    :config (setq current-theme-name 'material))
 
   (use-package leuven-theme
     :disabled t
@@ -147,7 +147,6 @@
 ;; default line height. if nil: add no extra spacing.
 
 ;; (setq-default line-spacing 0.06) ;; tuned for Pragmata Pro
-;; (setq-default line-spacing 0.06)
 
 
 ;; Enable emoji, and stop the UI from freezing when trying to display them.
