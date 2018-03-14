@@ -25,7 +25,8 @@
          ("C-c o a" . org-agenda)
          ("C-c o b" . org-iswitchb)
          :map org-mode-map
-         ("")
+         ("S-<left>" . org-cycle-list-bullet)
+         ("S-<right>" . org-cycle-list-bullet)
          ("M-<up>"  . org-move-subtree-up)
          ("M-<down>"  . org-move-subtree-down))
   :custom
@@ -63,10 +64,10 @@
   (add-hook 'org-mode-hook 'turn-on-reftex)
 
   ;; make windmove work in org-mode
-  ;; (add-hook 'org-shiftup-final-hook 'windmove-up)
-  ;; (add-hook 'org-shiftleft-final-hook 'windmove-left)
-  ;; (add-hook 'org-shiftdown-final-hook 'windmove-down)
-  ;; (add-hook 'org-shiftright-final-hook 'windmove-right)
+  (add-hook 'org-shiftup-final-hook 'windmove-up)
+  (add-hook 'org-shiftleft-final-hook 'windmove-left)
+  (add-hook 'org-shiftdown-final-hook 'windmove-down)
+  (add-hook 'org-shiftright-final-hook 'windmove-right)
 
   ;; org-babel code block enabling
   (org-babel-do-load-languages
@@ -247,13 +248,6 @@
            (format "\\headlessfullcite{%s}" path)
          (format "\\headlessfullcite[%s]{%s}" desc path))))))
   )
-
-
-;; enable LaTeX math-mode entry via CDLaTeX
-(use-package cdlatex-mode
-  :init (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-  :defer t
-  :diminish "ocdl")
 
 
 ;; Fancy bullet rendering.

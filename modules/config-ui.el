@@ -408,6 +408,7 @@
 
 ;; meaningful names for buffers with the same name
 (use-package uniquify
+  :ensure nil
   :init
   (setq uniquify-buffer-name-style 'forward
         uniquify-separator "/"
@@ -424,7 +425,11 @@
 
 ;; use shift + arrow keys to switch between visible buffers
 (use-package windmove
-  :init (windmove-default-keybindings))
+  :demand
+  :bind (("M-S-<left>" . windmove-left)
+         ("M-S-<right>" . windmove-right)
+         ("M-S-<down>" . windmove-down)
+         ("M-S-<up>" . windmove-up)))
 
 
 ;; define a bunch of wrapping operations in text modes

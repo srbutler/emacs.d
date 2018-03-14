@@ -18,6 +18,7 @@
 
 
 (use-package emacs-lisp-mode
+  :ensure nil
   :mode (("\\.el\\'" . emacs-lisp-mode)
          ("Cask\\'" . emacs-lisp-mode))
   :bind (:map emacs-lisp-mode-map ("C-c C-z" . visit-ielm))
@@ -44,10 +45,10 @@
 
 ;; COMMON LISP
 (use-package lisp-mode
+  :ensure nil
   :mode (("\\.cl\\'" . lisp-mode)
          ("\\.lisp\\'" . lisp-mode)
          ("\\.sbclrc\\'" . lisp-mode))
-  :bind (:map emacs-lisp-mode-map ("C-c C-z" . ielm))
   :config
   (add-hook 'lisp-mode-hook 'smartparens-strict-mode)
   (add-hook 'lisp-mode-hook 'paredit-mode)

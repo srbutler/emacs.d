@@ -52,6 +52,7 @@
 
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
+  :ensure nil
   :diminish ""
   :hook prog-mode
   :config
@@ -111,6 +112,7 @@
 
 ;; let LSP work with imenu
 (use-package lsp-imenu
+  :ensure nil
   :after lsp-mode
   :init (add-hook 'lsp-after-open-hook 'lsp-enable-imenu))
 
@@ -168,6 +170,7 @@
 
 ;; makes parentheses colorful
 (use-package rainbow-delimiters-mode
+  :ensure nil
   :hook (lisp-mode emacs-lisp-mode clojure-mode scheme-mode LaTeX-mode))
 
 
@@ -176,7 +179,7 @@
   :ensure t
   :diminish (smartparens-mode . "sp")
   :init
-  (use-package smartparens-config)
+  (use-package smartparens-config :ensure nil)
   (sp-use-paredit-bindings)
   (smartparens-global-mode 1)
   (show-smartparens-global-mode 1)
@@ -247,6 +250,7 @@
 
 
 (use-package nxml-mode
+  :ensure nil
   :mode (("\\.xml\\'" . nxml-mode)
          ("\\.pom$"   . nxml-mode))
   :custom
