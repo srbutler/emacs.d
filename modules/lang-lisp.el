@@ -35,8 +35,8 @@
   (add-hook 'after-save-hook
             (lambda ()
               (when (and
-                     (or (string-prefix-p modules-dir (file-truename buffer-file-name))
-                         (string-prefix-p dotfiles-dir (file-truename buffer-file-name)))
+                     (or (string-prefix-p *modules-dir* (file-truename buffer-file-name))
+                         (string-prefix-p *dotfiles-dir* (file-truename buffer-file-name)))
                      (file-exists-p (byte-compile-dest-file buffer-file-name)))
                 (emacs-lisp-byte-compile)))
             nil

@@ -28,6 +28,9 @@
 (use-package company-statistics
   :ensure t
   :after company
+  :custom
+  (company-statistics-file
+   (expand-file-name "company-statistics-cache.el" *savefile-dir*))
   :config (company-statistics-mode))
 
 
@@ -165,7 +168,7 @@
   :diminish projectile-mode
   :config
   (projectile-mode t)
-  (setq projectile-cache-file (expand-file-name  "projectile.cache" savefile-dir)))
+  (setq projectile-cache-file (expand-file-name  "projectile.cache" *savefile-dir*)))
 
 
 ;; makes parentheses colorful

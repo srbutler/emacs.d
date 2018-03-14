@@ -28,31 +28,32 @@
 
 ;; load use-package extensions
 (use-package use-package-ensure-system-package
+  :disabled t
   :ensure t)
 
 ;; Always load newest byte code
 (setq load-prefer-newer +1)
 
 ;; get all the directory names
-(defvar dotfiles-dir (file-name-directory load-file-name)
+(defvar *dotfiles-dir* (file-name-directory load-file-name)
   "The emacs.d root directory.")
-(defvar modules-dir (expand-file-name "modules" dotfiles-dir)
+(defvar *modules-dir* (expand-file-name "modules" *dotfiles-dir*)
   "A directory for configuration files.")
-(defvar vendor-dir (expand-file-name "vendor" dotfiles-dir)
+(defvar *vendor-dir* (expand-file-name "vendor" *dotfiles-dir*)
   "This directory houses packages that are not yet available in ELPA (or MELPA).")
-(defvar savefile-dir (expand-file-name "savefile" dotfiles-dir)
+(defvar *savefile-dir* (expand-file-name "savefile" *dotfiles-dir*)
   "This folder stores all the automatically generated save/history-files.")
 
 ;; create the savefile dir if it doesn't exist
-(unless (file-exists-p savefile-dir)
-  (make-directory savefile-dir))
+(unless (file-exists-p *savefile-dir*)
+  (make-directory *savefile-dir*))
 
 ;; add the needed directories to the load-path
-(add-to-list 'load-path modules-dir)
-(add-to-list 'load-path vendor-dir)
+(add-to-list 'load-path *modules-dir*)
+(add-to-list 'load-path *vendor-dir*)
 
 ;; set the custom file
-(setq-default custom-file (expand-file-name "custom.el" dotfiles-dir))
+(setq-default custom-file (expand-file-name "custom.el" *savefile-dir*))
 (when (file-exists-p custom-file)
   (load custom-file))
 
@@ -78,7 +79,7 @@
 (defun load-file-list (format-string files)
   "Load a list of FILES in the modules dir using FORMAT-STRING."
   (dolist (f files)
-    (load (expand-file-name (format format-string f) modules-dir))))
+    (load (expand-file-name (format format-string f) *modules-dir*))))
 
 ;; load the settings files
 (load-file-list "config-%s.el"
@@ -91,7 +92,7 @@
                   "scala" "web-js"))
 
 ;; load the stuff I don't want in VC
-(let ((secret.el (expand-file-name "secrets.el" dotfiles-dir)))
+(let ((secret.el (expand-file-name "secrets.el" *dotfiles-dir*)))
   (when (file-exists-p secret.el)
     (load secret.el)))
 

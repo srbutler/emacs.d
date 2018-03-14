@@ -5,6 +5,11 @@ irony/
 projectile-bookmarks.*
 recentf
 games/
+custom.el
+secrets.el
+.mc-lists.el
+url/
+javacomp/
 
 ## GNU Global/Gtags indexes
 GPATH

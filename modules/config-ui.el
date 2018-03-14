@@ -361,7 +361,7 @@
 ;; save recent files
 (use-package recentf
   :init
-  (setq recentf-save-file (expand-file-name "recentf" savefile-dir)
+  (setq recentf-save-file (expand-file-name "recentf" *savefile-dir*)
         recentf-max-saved-items 500
         recentf-max-menu-items 15
         ;; disable recentf-cleanup on Emacs start, because it can cause
@@ -373,7 +373,7 @@
 ;; saveplace remembers your location in a file when saving files
 (use-package saveplace
   :init
-  (setq save-place-file (expand-file-name "saveplace" savefile-dir))
+  (setq save-place-file (expand-file-name "saveplace" *savefile-dir*))
   ;; activate it for all buffers
   (setq-default save-place t))
 
@@ -385,7 +385,7 @@
         ;; save every minute
         savehist-autosave-interval 60
         ;; keep the home clean
-        savehist-file (expand-file-name "savehist" savefile-dir))
+        savehist-file (expand-file-name "savehist" *savefile-dir*))
   (savehist-mode +1))
 
 
