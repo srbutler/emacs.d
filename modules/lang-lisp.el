@@ -28,9 +28,8 @@
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-  :custom
-  (mode-name "ELisp")
   :config
+  (setq mode-name "ELisp")
   ;; keep .elc files updated automatically
   (add-hook 'after-save-hook
             (lambda ()
@@ -41,6 +40,13 @@
                 (emacs-lisp-byte-compile)))
             nil
             t))
+
+(use-package ielm
+  :ensure nil
+  :config
+  (add-hook 'ielm-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'ielm-mode-hook 'smartparens-strict-mode)
+  (add-hook 'ielm-mode-hook 'paredit-mode))
 
 
 ;; COMMON LISP
