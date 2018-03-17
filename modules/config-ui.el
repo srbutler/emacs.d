@@ -38,7 +38,7 @@
  ring-bell-function              'ignore
  scroll-preserve-screen-position t
  sentence-end-double-space       nil
- show-trailing-whitespace        t
+ ;show-trailing-whitespace        t
  tab-always-indent               'complete     ;; smart tab behavior - indent or complete
  tab-width                       4
  truncate-lines                  t
@@ -71,6 +71,10 @@
 ;; remove the redundant scroll-bars
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
+
+;; show whitespace in prog-modes only
+(add-hook 'prog-mode-hook
+          #'(lambda () (setq-local show-trailing-whitespace t)))
 
 ;; setup `hippie-expand' expand functions
 (setq hippie-expand-try-functions-list

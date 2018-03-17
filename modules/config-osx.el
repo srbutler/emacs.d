@@ -10,9 +10,11 @@
   :ensure t
   :init (exec-path-from-shell-initialize))
 
-
 ;; only run the following in mac windows
 (when (eq window-system 'mac)
+
+  ;; turn on all ligatures
+  (mac-auto-operator-composition-mode)
 
   ;; define key-commands that are common in text-editor interfaces
   ;; a customer version of CUA really

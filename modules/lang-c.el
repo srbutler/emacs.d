@@ -22,7 +22,7 @@
   (add-hook 'c++-mode-hook
             (lambda () (progn
                          (setq flycheck-gcc-language-standard "c++11")
-`                         (setq flycheck-clang-language-standard "c++11")))))
+                         (setq flycheck-clang-language-standard "c++11")))))
 
 
 ;; use with lsp-mode

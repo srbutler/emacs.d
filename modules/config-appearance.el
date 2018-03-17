@@ -99,14 +99,17 @@
   (if (null (x-list-fonts font))
       nil t))
 
+;; set a default here, override below if needed
+(setq-default line-spacing 2)
+
 ;; set default font--first one found is selected
 (cond
  ((eq window-system nil) nil)
  ((font-existsp "IosevkaX")
-  (set-face-attribute 'default nil :height 151 :font "IosevkaX")
+  (set-face-attribute 'default nil :height 151 :font "IosevkaX" :weight 'light)
   (setq-default line-spacing 0.06))
  ((font-existsp "Iosevka")
-  (set-face-attribute 'default nil :height 151 :font "Iosevka")
+  (set-face-attribute 'default nil :height 151 :font "Iosevka" :weight 'light)
   (setq-default line-spacing 0.06))
  ((font-existsp "PragmataPro")
   (set-face-attribute 'default nil :height 151 :font "PragmataPro")

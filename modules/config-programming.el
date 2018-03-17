@@ -36,9 +36,9 @@
 
 ;; set up dash integration
 (use-package dash-at-point
+  :disabled
   :ensure t
   :defer t
-  :init (global-set-key (kbd "C-c d") 'dash-at-point-with-docset)
   :config
   (dolist
       (pair

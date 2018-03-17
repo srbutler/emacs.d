@@ -51,8 +51,6 @@
   :ensure t
   :mode (("\\.jsx?$"  . js2-mode)
          ("\\.es6\\'" . js2-mode)
-         ("\\.ejs\\'" . js2-mode)
-         ("\\.pac\\'" . js2-mode)
          ("\\.jsx?\\'" . js2-jsx-mode))
   :interpreter ("node" . js2-mode)
   :custom
@@ -77,17 +75,16 @@
   (setq flycheck-disabled-checkers
         (append flycheck-disabled-checkers
                 '(javascript-jshint)))
-  (add-hook 'js2-mode-hook 'subword-mode))
+
+  (add-hook 'js2-mode-hook 'subword-mode)
+  (add-hook 'js2-jsx-mode-hook 'subword-mode)
+  )
 
 
 ;; formatting/beatufication for HTML/CSS/JS
 (use-package web-beautify
   :ensure t
-  :after (:any js2-mode web-mode css-mode)
-  :bind (:map js2-mode-map  ("C-c C-f" . web-beautify-js)
-         :map json-mode-map ("C-c C-f" . web-beautify-js)
-         :map html-mode-map ("C-c C-f" . web-beautify-html)
-         :map css-mode-map  ("C-c C-f" . web-beautify-css)))
+  :after (:any js2-mode web-mode css-mode))
 
 
 ;; set up javascript refactoring, all prefixed to =C-c r=
