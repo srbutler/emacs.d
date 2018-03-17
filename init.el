@@ -83,7 +83,7 @@
 
 ;; load the settings files
 (load-file-list "config-%s.el"
-                '("ui" "helm" "appearance" "functions" "git" "programming"))
+                '("ui" "ivy" "appearance" "functions" "git" "programming"))
 
 ;; load the language modules
 (load-file-list "lang-%s.el"

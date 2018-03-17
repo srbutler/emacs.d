@@ -4,6 +4,7 @@
 ;;    Load this in `init.el' if to use it instead of helm.
 ;;; Code:
 
+;; adds usage ordering to counsel-M-x
 (use-package smex
   :ensure t
   :config (setq smex-save-file
@@ -19,6 +20,7 @@
           ("M-y" . counsel-yank-pop)
           ("C-x C-f" . counsel-find-file)
           ("C-x C-r" . counsel-recentf)
+          ("C-x C-b" . counsel-ibuffer)
 
           ("C-s" . counsel-grep-or-swiper)
           ("C-x l" . counsel-locate)
@@ -49,7 +51,7 @@
   :demand
   :after flx
   :diminish
-  :bind (("C-x C-b" . ivy-switch-buffer)
+  :bind (("C-x b" . ivy-switch-buffer)
          ("C-c C-r" . ivy-resume)
          :map ivy-minibuffer-map  ;; mimic helm reflexes
          ("C-l" . ivy-backward-delete-char)
@@ -64,8 +66,9 @@
   (ivy-wrap t)
   ;; configure regexp engine
   (ivy-re-builders-alist
-   '((t   . ivy--regex-ignore-order)))
+   '((t . ivy--regex-ignore-order)))
   :config (ivy-mode 1))
+
 
 ;; hydra presents menus for ivy commands.
 (use-package ivy-hydra
@@ -73,16 +76,19 @@
   :after ivy)
 
 
+;; project browsing
 (use-package counsel-projectile
   :after (counsel projectile)
   :ensure t
   :config (counsel-projectile-mode))
 
 
+;; access to GNU Global tags
 (use-package counsel-gtags
   :ensure t
   :after counsel
   :diminish (counsel-gtags-mode . "gtags")
+  :init (add-hook 'prog-mode-hook 'counsel-gtags-mode)
   :bind (:map counsel-gtags-mode-map
          ("M-." . counsel-gtags-dwim)
          ("C-c C-t c" . counsel-gtags-create-tags)
@@ -92,6 +98,51 @@
          ("C-c C-t s" . counsel-gtags-find-symbol)
          ("C-c C-t f" . counsel-gtags-go-forward)
          ("C-c C-t b" . counsel-gtags-go-backward)))
+
+
+;; browse documentation
+(use-package counsel-dash
+  :ensure t
+  :after counsel
+  :bind ("C-c d" . counsel-dash)
+  :config
+  ;; browse in emacs
+  (setq counsel-dash-browser-func 'eww-browse-url)
+
+  ;; set hooks for docsets
+  ;; TODO: write a function for this
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("Emacs_Lisp"))))
+  (add-hook 'python-mode-hook
+            (lambda () (setq-local counsel-dash-docsets
+                                   '("Python_3" "Python_2" "NumPy" "SciPy" "Pandas"))))
+  (add-hook 'ess-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("R"))))
+  (add-hook 'LaTeX-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("LaTeX"))))
+  (add-hook 'clojure-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("Clojure"))))
+  (add-hook 'java-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("Java_SE8" "Java_SE9"))))
+  (add-hook 'lisp-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("Common_Lisp"))))
+  (add-hook 'js2-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("Javascript"))))
+  (add-hook 'scala-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("Scala"))))
+  (add-hook 'haskell-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("Haskell"))))
+  (add-hook 'tuareg-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("Ocaml"))))
+  (add-hook 'rust-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("Rust"))))
+  (add-hook 'go-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("Go"))))
+  (add-hook 'c-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("C"))))
+  (add-hook 'c++-mode-hook
+            (lambda () (setq-local counsel-dash-docsets '("C++")))))
+
 
 (provide 'config-ivy)
 ;;; config-ivy.el ends here
