@@ -21,6 +21,7 @@
  delete-active-region            t
  delete-by-moving-to-trash       t
  disabled-command-function       nil           ;; don't prompt for some disabled functions
+ display-time-24hr-format        nil
  display-time-format             "%H:%M"       ;; Format the time string
  enable-local-variables          :all
  fill-column                     80
@@ -38,7 +39,6 @@
  ring-bell-function              'ignore
  scroll-preserve-screen-position t
  sentence-end-double-space       nil
- ;show-trailing-whitespace        t
  tab-always-indent               'complete     ;; smart tab behavior - indent or complete
  tab-width                       4
  truncate-lines                  t
@@ -100,7 +100,7 @@
 (bind-key "M-o" #'other-window global-map)
 
 ;; set a general key for goto-line
-(bind-key "C-c l" #'goto-line)
+(bind-key "C-c l" #'goto-line global-map)
 
 
 ;; defines the standard backtab behavior of most editors

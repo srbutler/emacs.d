@@ -247,26 +247,6 @@
          ("\\.gp\\'"  . gnuplot-mode)))
 
 
-(use-package json-mode
-  :ensure t
-  :mode ("\\.json\\'" . json-mode))
-
-
-(use-package nxml-mode
-  :ensure nil
-  :mode (("\\.xml\\'" . nxml-mode)
-         ("\\.pom$"   . nxml-mode))
-  :custom
-  (nxml-child-indent 4)
-  (nxml-attribute-indent 5)
-  (nxml-auto-insert-xml-declaration-flag nil)
-  (nxml-bind-meta-tab-to-complete-flag t)
-  (nxml-slash-auto-complete-flag t)
-  :config
-  (add-hook 'nxml-mode-hook 'smartparens-mode)
-  (add-hook 'nxml-mode-hook 'emmet-mode))
-
-
 ;; personal mode for phoenix grammars
 (use-package phoenix-grammar-mode
   :mode ("\\.gra\\'" . phoenix-grammar-mode)

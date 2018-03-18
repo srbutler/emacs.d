@@ -23,6 +23,7 @@
           ("C-x C-b" . counsel-ibuffer)
 
           ("C-s" . counsel-grep-or-swiper)
+          ("C-r" . counsel-grep-or-swiper)
           ("C-x l" . counsel-locate)
           ("C-c k" . counsel-rg)
           ("C-c i" . counsel-imenu)
