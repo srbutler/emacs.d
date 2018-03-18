@@ -85,20 +85,20 @@
 (load-file-list "config-%s.el"
                 '("ui" "ivy" "appearance" "functions" "git" "programming"))
 
+;; load OS-specific stuff
+(when (memq window-system '(mac ns))
+  (load "config-osx.el"))
+
 ;; load the language modules
 (load-file-list "lang-%s.el"
-                '("c" "clojure" "ess" "go" "haskell" "java" "latex"
-                  "lisp" "markdown" "ocaml" "org" "python" "rust"
-                  "scala" "web-js"))
+                '("c" "clojure" "ess" "go" "haskell" "java" "js" "latex"
+                  "lisp" "markdown" "ocaml" "org" "python" "rust" "scala"
+                  "web"))
 
 ;; load the stuff I don't want in VC
 (let ((secret.el (expand-file-name "secrets.el" *dotfiles-dir*)))
   (when (file-exists-p secret.el)
     (load secret.el)))
-
-;; load OS-specific stuff
-(when (memq window-system '(mac ns))
-  (load "config-osx.el"))
 
 ;;; init.el ends here
 

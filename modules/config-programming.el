@@ -175,7 +175,7 @@
 ;; makes parentheses colorful
 (use-package rainbow-delimiters-mode
   :ensure nil
-  :hook (lisp-mode emacs-lisp-mode clojure-mode scheme-mode LaTeX-mode))
+  :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 
 ;; get smartparens in programming modes
