@@ -123,6 +123,7 @@
 ;; edit with multiple cursors
 (use-package multiple-cursors
   :ensure t
+  :config (setq mc/list-file (expand-file-name "mc-lists.el" *savefile-dir*))
   :bind
    (("C-c m t" . mc/mark-all-like-this)
     ("C-c m m" . mc/mark-all-like-this-dwim)

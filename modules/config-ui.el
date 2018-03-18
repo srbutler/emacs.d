@@ -5,7 +5,7 @@
 ;;; Code:
 
 
-;; more useful frame title, that show either a file or a buffer name
+;; more useful frame title, that shows either a file or a buffer name
 ;; (if the buffer isn't visiting a file)
 (setq frame-title-format
       '("" invocation-name ": " (:eval (if (buffer-file-name)
@@ -145,8 +145,7 @@
   :config
   ;; kills to end of line first, then whole line
   (global-set-key [remap kill-line] #'crux-smart-kill-line)
-  (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
-  )
+  (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line))
 
 
 ;; diminish keeps the modeline tidy
