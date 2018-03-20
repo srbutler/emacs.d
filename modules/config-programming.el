@@ -175,7 +175,7 @@
 ;; makes parentheses colorful
 (use-package rainbow-delimiters-mode
   :ensure nil
-  :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+  :hook (prog-mode))
 
 
 ;; get smartparens in programming modes

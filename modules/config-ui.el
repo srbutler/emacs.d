@@ -30,6 +30,7 @@
  indent-tabs-mode                nil           ;; Stop using tabs to indent
  indicate-empty-lines            nil
  inhibit-startup-message         t
+ initial-scratch-message         ";; scratch\n"
  kill-do-not-save-duplicates     t
  linum-format                    " %4d "
  major-mode                      'text-mode
@@ -126,8 +127,7 @@
 
 ;; linked to key-chords below
 (use-package avy
-  :ensure t
-  :defer t)
+  :ensure t)
 
 
 ;; used in a few places to define keybindings easily
@@ -141,11 +141,21 @@
   :bind (("C-c e"   . crux-eval-and-replace)
          ("C-x 4 t" . crux-transpose-windows)
          ("C-c I"   . crux-find-user-init-file)
-         ("C-c S"   . crux-find-shell-init-file))
+         ("C-c S"   . crux-find-shell-init-file)
+         ("C-c n"   . crux-cleanup-buffer-or-region))
   :config
   ;; kills to end of line first, then whole line
   (global-set-key [remap kill-line] #'crux-smart-kill-line)
-  (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line))
+  (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
+  (global-set-key [remap open-line] #'crux-smart-open-line)
+  (global-set-key [remap kill-whole-line] #'crux-kill-whole-line)
+
+  ;; advice that modifies some general behavior
+  ;; C-M-\ indents the whole file
+  (crux-with-region-or-buffer indent-region)
+  ;; tabify/untabify the whole buffer
+  (crux-with-region-or-buffer untabify)
+  (crux-with-region-or-buffer tabify))
 
 
 ;; diminish keeps the modeline tidy

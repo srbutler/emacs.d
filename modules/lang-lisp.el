@@ -62,6 +62,9 @@
   (add-hook 'lisp-mode-hook 'eldoc-mode))
 
 
+(use-package slime-company
+  :ensure t)
+
 ;; common-lisp REPL
 (use-package slime
   :ensure t
@@ -69,32 +72,29 @@
   :bind (:map slime-mode-map ("C-c C-s" . slime-selector))
   :commands (slime slime-mode)
   :config
-  (setq tab-always-indent 'complete)
-  (setq slime-contribs '(slime-fancy
-                         slime-indentation
-                         slime-sbcl-exts
-                         slime-scratch))
+  ;; (setq slime-contribs '(slime-fancy
+  ;;                        slime-indentation
+  ;;                        slime-sbcl-exts
+  ;;                        slime-scratch))
 
-  (defun slime/disable-smartparens ()
-    (smartparens-strict-mode -1)
-    (turn-off-smartparens-mode))
-  (add-hook 'slime-repl-mode-hook #'slime/disable-smartparens)
+  (slime-setup '(slime-company
+                 slime-fancy
+                 slime-indentation
+                 slime-sbcl-exts
+                 slime-scratch))
 
   (setq slime-lisp-implementations
         '((ccl ("ccl"))
-          (clisp ("clisp" "-q"))
-          (cmucl ("cmucl" "-quiet"))
           (sbcl ("sbcl" "--noinform") :coding-system utf-8-unix)))
-  (setq slime-default-lisp 'sbcl)
 
-  (eval-after-load "slime"
-    '(progn
-       (setq slime-completion-at-point-functions 'slime-fuzzy-complete-symbol
-             slime-complete-symbol*-fancy t
-             slime-fuzzy-completion-in-place t
-             slime-enable-evaluate-in-emacs t
-             slime-autodoc-use-multiline-p t
-             slime-auto-start 'always))))
+  (setq inferior-lisp-program "sbcl"
+        slime-default-lisp 'sbcl
+        slime-completion-at-point-functions 'slime-fuzzy-complete-symbol
+        slime-complete-symbol*-fancy t
+        slime-fuzzy-completion-in-place t
+        slime-enable-evaluate-in-emacs t
+        slime-autodoc-use-multiline-p t
+        slime-auto-start 'always))
 
 
 ;; SCHEME/RACKET

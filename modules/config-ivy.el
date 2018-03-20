@@ -10,6 +10,8 @@
   :config (setq smex-save-file
                 (expand-file-name ".smex-items" *savefile-dir*)))
 
+
+
 ;; testing out ivy/counsel as replacement for helm
 (use-package counsel
   :ensure t
