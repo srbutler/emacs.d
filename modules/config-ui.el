@@ -118,6 +118,10 @@
         (replace-match "")))))
 (bind-key "<backtab>" #'un-indent-by-removing-4-spaces global-map)
 
+;; ensure proper bracket handling happens outside of smartparens
+(add-hook 'prog-mode-hook 'electric-pair-mode)
+(add-hook 'prog-mode-hook 'electric-indent-mode)
+
 
 ;; revert buffers automatically when underlying files are changed externally
 (use-package autorevert

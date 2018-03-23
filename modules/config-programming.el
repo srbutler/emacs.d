@@ -187,11 +187,11 @@
   (sp-use-paredit-bindings)
   (smartparens-global-mode 1)
   (show-smartparens-global-mode 1)
-  :custom
-  (sp-base-key-bindings 'paredit)
-  (sp-autoskip-closing-pair 'always)
-  (sp-hybrid-kill-entire-symbol nil)
   :config
+
+  (setq sp-base-key-bindings 'paredit)
+  (setq sp-autoskip-closing-pair 'always)
+  (setq sp-hybrid-kill-entire-symbol nil)
   ;; smartparens defaults taken from graphene, to make bracket handling
   ;; a little better
   (defun graphene--sp-pair-on-newline (id action context)

@@ -9,15 +9,13 @@
   :ensure t
   :mode (("\\.ml[ily]?$"  . tuareg-mode)
          ("\\.topml$"     . tuareg-mode)
-         ("\\.ocamlinit$" . tuareg-mode))
+         ("\\.ocamlinit$" . tuareg-mode)
+         ("jbuild$"       . tuareg-dune-mode))
   :init
   ;; Make OCaml-generated files invisible to filename completion
   (dolist
       (ext '(".cmo" ".cmx" ".cma" ".cmxa" ".cmi" ".cmxs" ".cmt" ".cmti" ".annot"))
     (add-to-list 'completion-ignored-extensions ext))
-
-  ;; open Jbuild s-exp files in lisp-mode
-  (add-to-list 'auto-mode-alist '("jbuild\\'" . lisp-mode))
 
   :config
   ;; disable backtick/single-quote pairing
@@ -77,7 +75,7 @@
   :init (add-hook 'tuareg-mode-hook 'ocp-indent-caml-mode-setup))
 
 
-;; taken from spacemacs (package not in [M]ELPA)
+;; taken from spacemacs (package not in MELPA)
 (use-package merlin-eldoc
   :defer t
   :load-path "~/.emacs.d/vendor/merlin-eldoc/merlin-eldoc.el"
