@@ -185,8 +185,9 @@
   :init
   (use-package smartparens-config :ensure nil)
   (sp-use-paredit-bindings)
-  (smartparens-global-mode 1)
-  (show-smartparens-global-mode 1)
+  ;; (smartparens-global-mode 1)
+  (add-hook 'prog-mode-hook 'smartparens-mode)
+  ;; (show-smartparens-global-mode 1)
   :config
 
   (setq sp-base-key-bindings 'paredit)

@@ -25,8 +25,8 @@
          ("C-c o a" . org-agenda)
          ("C-c o b" . org-iswitchb)
          :map org-mode-map
-         ("S-<left>" . org-cycle-list-bullet)
-         ("S-<right>" . org-cycle-list-bullet)
+         ("S-<left>" . org-shiftleft)
+         ("S-<right>" . org-shiftright)
          ("M-<up>"  . org-move-subtree-up)
          ("M-<down>"  . org-move-subtree-down))
   :custom
