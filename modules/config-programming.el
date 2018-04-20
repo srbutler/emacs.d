@@ -174,7 +174,7 @@
 
 ;; makes parentheses colorful
 (use-package rainbow-delimiters-mode
-  :ensure nil
+  :ensure rainbow-delimiters
   :hook (prog-mode))
 
 

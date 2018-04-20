@@ -41,6 +41,7 @@
             nil
             t))
 
+
 (use-package ielm
   :ensure nil
   :config
@@ -62,8 +63,8 @@
   (add-hook 'lisp-mode-hook 'eldoc-mode))
 
 
-(use-package slime-company
-  :ensure t)
+;; (use-package slime-company
+;;   :ensure t)
 
 ;; common-lisp REPL
 (use-package slime

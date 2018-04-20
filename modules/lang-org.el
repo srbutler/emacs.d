@@ -75,7 +75,7 @@
    '((emacs-lisp . t)
      (python     . t)
      (haskell    . t)
-     (sh         . t)
+     ;; (sh         . t)
      (ocaml      . t)
      ;; (r          . t)
      ))

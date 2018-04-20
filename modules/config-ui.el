@@ -163,7 +163,8 @@
 
 
 ;; diminish keeps the modeline tidy
-(use-package diminish)
+(use-package diminish
+  :ensure t)
 
 
 ;; expands the selection region progressively

@@ -162,6 +162,7 @@
 (depends-on "tern")
 (depends-on "tide")
 (depends-on "tuareg")
+(depends-on "typescript-mode")
 (depends-on "undo-tree")
 (depends-on "unfill")
 (depends-on "use-package")
