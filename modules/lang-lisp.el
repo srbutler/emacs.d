@@ -21,7 +21,12 @@
   :ensure nil
   :mode (("\\.el\\'" . emacs-lisp-mode)
          ("Cask\\'" . emacs-lisp-mode))
-  :bind (:map emacs-lisp-mode-map ("C-c C-z" . visit-ielm))
+  :bind (:map emacs-lisp-mode-map
+              ("C-c C-z" . visit-ielm)
+              ("C-c C-j" . eval-print-last-sexp)
+         :map lisp-interaction-mode-map
+              ("C-c C-z" . visit-ielm)
+              ("C-c C-j" . eval-print-last-sexp))
   :init
   (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
   (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
