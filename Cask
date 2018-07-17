@@ -1,6 +1,6 @@
-(source "gnu" "http://elpa.gnu.org/packages/")
-(source "melpa" "http://melpa.milkbox.net/packages/")
-(source "melpa-stable" "http://melpa-stable.milkbox.net/packages/")
+(source "melpa" "https://melpa.milkbox.net/packages/")
+(source "melpa-stable" "https://melpa-stable.milkbox.net/packages/")
+(source gnu)
 (source org)
 
 (depends-on "async")
@@ -106,6 +106,7 @@
 (depends-on "leuven-theme")
 (depends-on "lsp-java")
 (depends-on "lsp-mode")
+(depends-on "lua-mode")
 (depends-on "macrostep")
 (depends-on "magit")
 (depends-on "magit-gitflow")
