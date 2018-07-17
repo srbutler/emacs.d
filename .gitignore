@@ -10,6 +10,7 @@ secrets.el
 .mc-lists.el
 url/
 javacomp/
+network-security.data
 
 ## GNU Global/Gtags indexes
 GPATH
