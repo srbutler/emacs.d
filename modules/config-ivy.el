@@ -22,7 +22,6 @@
           ("M-y" . counsel-yank-pop)
           ("C-x C-f" . counsel-find-file)
           ("C-x C-r" . counsel-recentf)
-          ("C-x C-b" . counsel-ibuffer)
 
           ("C-s" . counsel-grep-or-swiper)
           ("C-r" . counsel-grep-or-swiper)
@@ -55,6 +54,7 @@
   :after flx
   :diminish
   :bind (("C-x b" . ivy-switch-buffer)
+         ("C-x C-b" . ivy-switch-buffer)
          ("C-c C-r" . ivy-resume)
          :map ivy-minibuffer-map  ;; mimic helm reflexes
          ("C-l" . ivy-backward-delete-char)
@@ -72,6 +72,13 @@
    '((t . ivy--regex-ignore-order)))
   :config (ivy-mode 1))
 
+y
+;; a better version of ivy-switch-buffer
+(use-package ivy-rich
+  :ensure t
+  :after ivy
+  :config (ivy-rich-mode 1))
+
 
 ;; hydra presents menus for ivy commands.
 (use-package ivy-hydra
@@ -84,6 +91,13 @@
   :after (counsel projectile)
   :ensure t
   :config (counsel-projectile-mode))
+
+
+;; ivy interface for yasnippet
+(use-package ivy-yasnippet
+  :ensure t
+  :after (ivy yasnippet)
+  :bind ("C-c y" . ivy-yasnippet))
 
 
 ;; access to GNU Global tags

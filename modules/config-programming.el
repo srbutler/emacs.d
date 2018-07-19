@@ -222,8 +222,7 @@
 ;; enable YASnippet globally
 (use-package yasnippet
   :ensure t
-  :init
-  (yas-global-mode)
+  :init (yas-global-mode)
   :bind (("C-c C-e" . yas-expand))
   :config (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets/"))
 
