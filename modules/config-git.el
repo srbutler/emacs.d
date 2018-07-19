@@ -10,12 +10,11 @@
   :ensure t
   :defer t
   :custom (magit-completing-read-function 'ivy-completing-read)
-  :bind
-  (("C-c g l"   . magit-log-popup)
-   ("C-c g p s" . magit-push-popup)
-   ("C-c g p l" . magit-pull-and-fetch-popup)
-   ("C-c g r"   . magit-rebase-popup)
-   ("C-c g s"   . magit-status)))
+  :bind (("C-c g l"   . magit-log-popup)
+         ("C-c g p s" . magit-push-popup)
+         ("C-c g p l" . magit-pull-and-fetch-popup)
+         ("C-c g r"   . magit-rebase-popup)
+         ("C-c g s"   . magit-status)))
 
 
 ;; have git indications in gutter
@@ -63,5 +62,12 @@
   :ensure t
   :defer t
   :hook magit-mode)
+
+
+;; display TODOs in status buffer
+(use-package magit-todos
+  :ensure t
+  :hook (magit-mode . magit-todos-mode))
+
 
 ;;; config-git.el ends here
