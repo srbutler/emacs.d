@@ -72,7 +72,7 @@
    '((t . ivy--regex-ignore-order)))
   :config (ivy-mode 1))
 
-y
+
 ;; a better version of ivy-switch-buffer
 (use-package ivy-rich
   :ensure t
