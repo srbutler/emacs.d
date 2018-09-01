@@ -187,9 +187,8 @@
   (sp-use-paredit-bindings)
   ;; (smartparens-global-mode 1)
   (add-hook 'prog-mode-hook 'smartparens-mode)
-  ;; (show-smartparens-global-mode 1)
+  (show-smartparens-global-mode 1)
   :config
-
   (setq sp-base-key-bindings 'paredit)
   (setq sp-autoskip-closing-pair 'always)
   (setq sp-hybrid-kill-entire-symbol nil)
@@ -277,9 +276,8 @@
   :config (add-hook 'yaml-mode-hook 'subword-mode))
 
 
-;; this macro and list will download the appropriate major mode
-;; when it encouters a language file that needs one
-;; taken from emacs-prelude
+;; this macro and list will download the appropriate major mode when it
+;; encouters a language file that needs one taken from emacs-prelude
 (defmacro lang-mode-auto-install (extension package mode)
   "When file with EXTENSION is opened triggers auto-install of PACKAGE.
 PACKAGE is installed only if not already present.  The file is opened in MODE."

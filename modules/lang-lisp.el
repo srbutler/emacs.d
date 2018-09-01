@@ -78,11 +78,6 @@
   :bind (:map slime-mode-map ("C-c C-s" . slime-selector))
   :commands (slime slime-mode)
   :config
-  ;; (setq slime-contribs '(slime-fancy
-  ;;                        slime-indentation
-  ;;                        slime-sbcl-exts
-  ;;                        slime-scratch))
-
   (slime-setup '(slime-company
                  slime-fancy
                  slime-indentation
