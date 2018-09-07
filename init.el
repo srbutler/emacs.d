@@ -18,8 +18,13 @@
   (package-install 'use-package))
 
 ;; cask/pallet setup
-(require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
-(cask-initialize)
+(if (eq window-system 'mac)
+    (progn
+      (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
+      (cask-initialize))
+  (progn
+    (require 'cask "~/.cask/cask.el")
+    (cask-initialize)))
 
 ;; add pallet to manage packages
 (use-package pallet
@@ -101,4 +106,3 @@
     (load secret.el)))
 
 ;;; init.el ends here
-

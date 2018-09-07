@@ -90,6 +90,17 @@
 (use-package counsel-projectile
   :after (counsel projectile)
   :ensure t
+  :bind (("C-c p p" . counsel-projectile-switch-project)
+         ("C-c p f" . counsel-projectile-find-file)
+         ("C-c p g" . counsel-projectile-find-file-dwim)
+         ("C-c p d" . counsel-projectile-find-dir)
+         ("C-c p b" . counsel-projectile-switch-to-buffer)
+         ("C-c p s g" . counsel-projectile-grep)
+         ("C-c p s s" . counsel-projectile-ag)
+         ("C-c p s r" . counsel-projectile-rg)
+         ("C-c p SPC" . counsel-projectile)
+         ("C-c p s i" . counsel-projectile-git-grep)
+         ("C-c p O c" . counsel-projectile-org-capture))
   :config (counsel-projectile-mode))
 
 

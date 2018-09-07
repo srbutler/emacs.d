@@ -40,6 +40,7 @@
 (depends-on "diminish")
 (depends-on "edit-indirect")
 (depends-on "edn")
+(depends-on "eglot")
 (depends-on "elixir-mode")
 (depends-on "elpy")
 (depends-on "emmet-mode")

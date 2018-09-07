@@ -17,6 +17,9 @@
   (font-lock-add-keywords
    'c++-mode '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
 
+  (add-hook 'c-mode-hook 'eglot)
+  (add-hook 'c++-mode-hook 'eglot)
+
   ;; via https://stackoverflow.com/questions/30949847/configuring-flycheck-to-work-with-c11
   ;; this defaults the standard to c++11, should use dir local variables in most cases
   (add-hook 'c++-mode-hook
@@ -25,12 +28,15 @@
                          (setq flycheck-clang-language-standard "c++11")))))
 
 
+
 ;; use with lsp-mode
+;; disabled, using eglot instead (see config-programming.el)
 (use-package cquery
-  :when (executable-find "cquery")
+  :disabled t
   :after lsp-mode
   :hook ((c-mode . lsp-cquery-enable)
          (c++-mode . lsp-cquery-enable))
+  :init (setq cquery-executable "~/checkout/cquery/build/release/bin/cquery")
   :custom (lsp-response-timeout 45)
   :config (require 'lsp-flycheck))
 
@@ -38,8 +44,9 @@
 (use-package google-c-style
   :ensure
   :defer t
-  :hook ((c-common-mode . google-set-c-style)
-         (c-common-mode . google-make-newline-indent)))
+  :init
+  (add-hook 'c-common-mode-hook 'google-set-c-style)
+  (add-hook 'c-common-mode-hook 'google-make-newline-indent))
 
 
 (use-package clang-format
