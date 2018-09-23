@@ -12,7 +12,7 @@
 
 ;; THEME SETTINGS -----------------------------
 
-(defvar current-theme-name 'default)
+(defvar *current-theme-name* 'default)
 
 ;; only load themes when opened in a window system
 (when window-system
@@ -26,7 +26,7 @@
       (setq solarized-distinct-doc-face t
             solarized-distinct-fringe-background nil
             solarized-emphasize-indicators nil
-            solarized-high-contrast-mode-line nil
+            solarized-high-contrast-mode-line t
             solarized-scale-org-headlines t
             solarized-use-variable-pitch nil
             solarized-use-less-bold t
@@ -40,7 +40,7 @@
 
     :config
     ;; just a variable for calling later face changes
-    (setq current-theme-name 'solarized-dark)
+    (setq *current-theme-name* 'solarized-dark)
 
     ;; general font locking
     (set-face-foreground 'font-lock-preprocessor-face "#cb4b16")
@@ -49,34 +49,35 @@
     (set-face-attribute 'font-lock-builtin-face nil :bold t))
 
   (use-package zenburn-theme
-    :disabled t
+    ;; :disabled t
     :ensure t
     :init (load-theme 'zenburn t)
     :config
-    (setq current-theme-name 'zenburn)
+    (setq *current-theme-name* 'zenburn)
 
     ;; hide the fringe
-    (set-face-attribute 'fringe nil
-                        :foreground (face-foreground 'default)
-                        :background (face-background 'default)))
+    ;; (set-face-attribute 'fringe nil
+    ;;                     :foreground (face-foreground 'default)
+    ;;                     :background (face-background 'default))
+    )
 
   (use-package material-theme
-    ;; :disabled t
+    :disabled t
     :ensure t
     :init (load-theme 'material t)
-    :config (setq current-theme-name 'material))
+    :config (setq *current-theme-name* 'material))
 
   (use-package leuven-theme
     :disabled t
     :ensure t
     :init (load-theme 'leuven t)
-    :config (setq current-theme-name 'leuven))
+    :config (setq *current-theme-name* 'leuven))
 
   (use-package darkokai-theme
     :disabled t
     :ensure t
     :init (load-theme 'darkokai t)
-    :config (setq current-theme-name 'darkokai)))
+    :config (setq *current-theme-name* 'darkokai)))
 
 
 ;; make the mode-line nice and simple

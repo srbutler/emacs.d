@@ -73,17 +73,18 @@
   :config
   (global-flycheck-mode)
 
+  ;; constant rechecking gets annoying
   (setq flycheck-check-syntax-automatically '(mode-enabled save new-line))
 
-  ;; change flycheck's error display to only margin tick
-  (eval-after-load 'flycheck
-    '(progn
-       (defun srb/flycheck-display-errors-function (errors)
-         (mapc (lambda (err)
-                 (message "FlyC: %s" (flycheck-error-message err)) (sit-for 1))
-               errors))
-       (setq flycheck-highlighting-mode nil
-             flycheck-display-errors-function 'srb/flycheck-display-errors-function)))
+  ;; ;; change flycheck's error display to only margin tick
+  ;; (eval-after-load 'flycheck
+  ;;   '(progn
+  ;;      (defun srb/flycheck-display-errors-function (errors)
+  ;;        (mapc (lambda (err)
+  ;;                (message "FlyC: %s" (flycheck-error-message err)) (sit-for 1))
+  ;;              errors))
+  ;;      (setq flycheck-highlighting-mode nil
+  ;;            flycheck-display-errors-function 'srb/flycheck-display-errors-function)))
 
   ;; get rid of annoying contrasts when using certain themes
   (set-face-background 'flycheck-fringe-info nil)
@@ -91,62 +92,9 @@
   (set-face-background 'flycheck-fringe-warning nil)
 
   ;; change the info color when using solarized
-  (when (or (eq current-theme-name "solarized-dark")
-            (eq current-theme-name "solarized-light"))
+  (when (or (eq *current-theme-name* "solarized-dark")
+            (eq *current-theme-name* "solarized-light"))
     (set-face-foreground 'flycheck-fringe-info "#268bd2")))
-
-;; simpler automatic backend for lsp servers
-;; see list of automatic backends here: https://github.com/joaotavora/eglot
-(use-package eglot
-  :ensure t
-  :defer t
-  :bind (:map eglot-mode-map
-              ("C-c e e" . eglot)
-              ("C-c e c" . eglot-reconnect)
-              ("C-c e s" . eglot-shutdown)
-              ("C-c e r" . eglot-rename)
-
-              ("C-c e a" . eglot-code-actions)
-              ("C-c e h" . eglot-help-at-point)
-
-              ("C-c C-f" . eglot-format)
-              ("M-." . xref-find-definitions))
-  :init
-  (add-hook 'c-mode-hook 'eglot)
-  (add-hook 'c++-mode-hook 'eglot)
-  (add-hook 'rust-mode-hook 'eglot)
-  (add-hook 'python-mode-hook 'eglot)
-  (add-hook 'haskell-mode-hook 'eglot)
-  (add-hook 'go-mode-hook 'eglot))
-
-
-;; disabled for eglot
-;; make language server protocol services available
-(use-package lsp-mode
-  :disabled t
-  :ensure t
-  :defer t)
-
-
-;; disabled for eglot
-;; link lsp output with company
-(use-package company-lsp
-  :disabled t
-  :after (lsp-mode company)
-  :custom
-  (company-lsp-enable-recompletion t)
-  (company-lsp-async t)
-  (company-lsp-enable-snippet t)
-  :init (add-to-list 'company-backends 'company-lsp))
-
-
-;; disabled for eglot
-;; let LSP work with imenu
-(use-package lsp-imenu
-  :disabled t
-  :ensure nil
-  :after lsp-mode
-  :init (add-hook 'lsp-after-open-hook 'lsp-enable-imenu))
 
 
 ;; edit with multiple cursors
@@ -244,7 +192,15 @@
 
   (sp-local-pair '(markdown-mode gfm-mode) "*" "*"
                  :unless '(sp-in-string-p)
-                 :actions '(insert wrap)))
+                 :actions '(insert wrap))
+  :config
+  ;; conflicts with xref
+  (define-key smartparens-mode-map (kbd "M-?") nil))
+
+
+(use-package xref
+  :bind (("M-." . xref-find-definitions)
+         ("M-?" . xref-find-references)))
 
 
 ;; enable YASnippet globally

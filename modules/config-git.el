@@ -24,8 +24,8 @@
   :diminish git-gutter-mode
   :config
   ;; change the indicator colors to something nicer
-  (when (or (eq current-theme-name "solarized-dark")
-            (eq current-theme-name "solarized-light"))
+  (when (or (eq *current-theme-name* "solarized-dark")
+            (eq *current-theme-name* "solarized-light"))
     (progn
       (set-face-foreground 'git-gutter:added "#859900")
       (set-face-foreground 'git-gutter:deleted "#dc322f")

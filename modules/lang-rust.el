@@ -12,7 +12,15 @@
   ;; disable matching for single quotes
   (sp-local-pair 'rust-mode "'" nil :actions nil))
 
+
+;; set up LSP server for Rust
+(use-package lsp-rust
+  :ensure t
+  :hook ((rust-mode . lsp-rust-enable)))
+
+
 (use-package racer
+  :disabled t
   :ensure t
   :after rust-mode
   :bind (:map rust-mode-map
@@ -28,6 +36,7 @@
   (add-hook 'racer-mode-hook 'eldoc-mode))
 
 (use-package flycheck-rust
+  :disabled t
   :ensure t
   :defer t
   :init (add-hook 'flycheck-mode-hook 'flycheck-rust-setup))

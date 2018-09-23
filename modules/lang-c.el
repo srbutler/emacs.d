@@ -17,28 +17,44 @@
   (font-lock-add-keywords
    'c++-mode '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
 
-  (add-hook 'c-mode-hook 'eglot)
-  (add-hook 'c++-mode-hook 'eglot)
-
   ;; via https://stackoverflow.com/questions/30949847/configuring-flycheck-to-work-with-c11
   ;; this defaults the standard to c++11, should use dir local variables in most cases
   (add-hook 'c++-mode-hook
             (lambda () (progn
-                         (setq flycheck-gcc-language-standard "c++11")
-                         (setq flycheck-clang-language-standard "c++11")))))
+                         (setq flycheck-gcc-language-standard "c++14")
+                         (setq flycheck-clang-language-standard "c++14")))))
 
+
+;; slightly better font-lock for c++
+(use-package modern-cpp-font-lock
+  :ensure t
+  :defer t
+  :hook ((c++-mode . modern-c++-font-lock-mode)))
+
+
+(use-package ccls
+  :ensure t
+  :hook ((c-mode   . lsp-ccls-enable)
+         (c++-mode . lsp-ccls-enable))
+  :config
+  (setq ccls-executable "/usr/local/bin/ccls")
+
+  (with-eval-after-load 'projectile
+    (setq projectile-project-root-files-top-down-recurring
+          (append '("compile_commands.json"
+                    ".ccls")
+                  projectile-project-root-files-top-down-recurring))))
+
+(require 'ccls)
 
 
 ;; use with lsp-mode
 ;; disabled, using eglot instead (see config-programming.el)
 (use-package cquery
   :disabled t
-  :after lsp-mode
-  :hook ((c-mode . lsp-cquery-enable)
+  :hook ((c-mode   . lsp-cquery-enable)
          (c++-mode . lsp-cquery-enable))
-  :init (setq cquery-executable "~/checkout/cquery/build/release/bin/cquery")
-  :custom (lsp-response-timeout 45)
-  :config (require 'lsp-flycheck))
+  :init (setq cquery-executable "/usr/local/bin/cquery"))
 
 
 (use-package google-c-style
@@ -50,6 +66,7 @@
 
 
 (use-package clang-format
+  :disabled t
   :ensure t
   :after cc-mode
   :bind (:map c-mode-base-map ("C-c C-f" . clang-format-buffer))
@@ -57,6 +74,7 @@
 
 
 (use-package irony
+  :disabled t
   :ensure t
   :defer t
   :diminish "irony"
@@ -74,6 +92,7 @@
 
 
 (use-package company-irony
+  :disabled t
   :ensure t
   :defer t
   :init
@@ -86,6 +105,7 @@
 
 
 (use-package company-irony-c-headers
+  :disabled t
   :ensure t
   :defer t
   :init
@@ -94,12 +114,14 @@
 
 
 (use-package irony-eldoc
+  :disabled t
   :ensure t
   :defer t
   :init (add-hook 'irony-mode-hook 'irony-eldoc))
 
 
 (use-package cmake-ide
+  :disabled t
   :ensure t
   :defer t
   :init (add-hook 'c-mode-common-hook 'cmake-ide-setup))

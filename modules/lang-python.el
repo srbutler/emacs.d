@@ -31,7 +31,14 @@
      ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face))))
 
 
+(use-package lsp-python
+  :ensure t
+  :hook ((python-mode . lsp-python-enable)))
+
+
+;; disabling (use eglot/lsp instead)
 (use-package elpy
+  :disabled t
   :ensure t
   :commands elpy-enable
   :init (with-eval-after-load 'python (elpy-enable))

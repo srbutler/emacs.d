@@ -86,6 +86,12 @@
   :after ivy)
 
 
+;; use ivy for xref candidates
+(use-package ivy-xref
+  :ensure t
+  :init (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
+
+
 ;; project browsing
 (use-package counsel-projectile
   :after (counsel projectile)
@@ -113,6 +119,7 @@
 
 ;; access to GNU Global tags
 (use-package counsel-gtags
+  :disabled t
   :ensure t
   :after counsel
   :diminish (counsel-gtags-mode . "gtags")

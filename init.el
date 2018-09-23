@@ -88,7 +88,7 @@
 
 ;; load the settings files
 (load-file-list "config-%s.el"
-                '("ui" "ivy" "appearance" "functions" "git" "programming"))
+                '("ui" "ivy" "appearance" "functions" "git" "programming" "lsp"))
 
 ;; load OS-specific stuff
 (when (memq window-system '(mac ns))
