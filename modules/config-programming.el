@@ -141,7 +141,10 @@
   :diminish projectile-mode
   :config
   (projectile-mode t)
-  (setq projectile-cache-file (expand-file-name  "projectile.cache" *savefile-dir*)))
+  (setq projectile-cache-file
+        (expand-file-name  "projectile.cache" *savefile-dir*))
+  (setq projectile-known-projects-file
+        (expand-file-name "projectile-bookmarks.eld" *savefile-dir*)))
 
 
 ;; makes parentheses colorful

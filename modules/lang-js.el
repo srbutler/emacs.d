@@ -69,7 +69,7 @@
 ;; formatting/beatufication for HTML/CSS/JS
 (use-package web-beautify
   :ensure t
-  :ensure-system-package (js-beautify . "sudo npm -g install js-beautify")
+  :ensure-system-package (js-beautify . "npm -g install js-beautify")
   :init
   (with-eval-after-load 'js-mode
     (bind-key "C-c C-f" #'web-beautify-js js-mode-map))

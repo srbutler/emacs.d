@@ -7,6 +7,7 @@
 ;; Ocaml major mode
 (use-package tuareg
   :ensure t
+  :ensure-system-package "opam"
   :mode (("\\.ml[ily]?$"  . tuareg-mode)
          ("\\.topml$"     . tuareg-mode)
          ("\\.ocamlinit$" . tuareg-mode)
@@ -23,9 +24,19 @@
   (sp-local-pair 'tuareg-mode "`" nil :actions nil))
 
 
+(use-package lsp-ocaml
+  :ensure t
+  :ensure-system-package
+  ((ocaml-language-server . "npm i -g ocaml-language-server")
+   (ocamlmerlin . "opam install merlin"))
+  :hook ((tuareg-mode caml-mode reason-mode) . lsp-ocaml-enable))
+
+
 ;; completion engine
 (use-package merlin
+  :disabled t
   :ensure t
+  :ensure-system-package (ocamlmerlin . "opam install merlin")
   :defer t
   :after tuareg company
   :bind (:map tuareg-mode-map
@@ -43,6 +54,7 @@
 
 ;; error checking
 (use-package flycheck-ocaml
+  :disabled t
   :ensure t
   :defer t
   :init
@@ -57,6 +69,7 @@
 ;; REPL control
 (use-package utop
   :ensure t
+  :ensure-system-package (utop . "opam install utop")
   :defer t
   :init
   (add-hook 'tuareg-mode-hook 'utop-minor-mode)
@@ -70,6 +83,7 @@
 (use-package ocp-indent
   :after tuareg-mode
   :ensure t
+  :ensure-system-package (ocp-indent . "opam install ocp-indent")
   :defer t
   :bind (:map tuareg-mode-map ("C-c C-f" . ocp-indent-buffer))
   :init (add-hook 'tuareg-mode-hook 'ocp-indent-caml-mode-setup))

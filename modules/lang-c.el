@@ -34,11 +34,14 @@
 ;; lsp server
 (use-package ccls
   :ensure t
-  ;; :ensure-system-package ccls
+  :ensure-system-package (ccls . "brew tap twlz0ne/homebrew-ccls && brew install ccls")
   :hook ((c-mode   . lsp-ccls-enable)
          (c++-mode . lsp-ccls-enable))
+  :commands projectile-project-root-files-top-down-recurring
   :config
   (setq ccls-executable "/usr/local/bin/ccls")
+  ;; adds irony-style detailed laels
+  (setq ccls-extra-init-params '(:completion (:detailedLabel t)))
 
   (with-eval-after-load 'projectile
     (setq projectile-project-root-files-top-down-recurring

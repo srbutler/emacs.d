@@ -11,33 +11,15 @@
   :mode (("\\.py\\'" . python-mode)
          ("\\.wsgi$" . python-mode))
   :interpreter ("python" . python-mode)
-  :ensure-system-package
-  ((pyls    . "pip install \"python-language-server[all]\"")
-   (ipython . "pip install ipython"))
+  :ensure-system-package (ipython . "pip install ipython")
   :custom
   (indent-tabs-mode nil)
   (python-indent-offset 4)
-
   :config
-  ;; use ipython3 instead of standard interpreter if found
+  ;; use ipython instead of standard interpreter if found
   (when (executable-find "ipython")
-      (progn
-        ;; helps to prevent issues with ipython/jupyter shells
-        ;; https://github.com/jorgenschaefer/elpy/issues/908
-        (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
-        (setenv "JUPYTER_CONSOLE_TEST" "1")
-
-        ;; set as ipython
-        (setq python-shell-interpreter "ipython"
-              python-shell-interpreter-args "-i --simple-prompt")))
-
-  ;; set up LSP-Python manually
-  (require 'lsp-mode)
-  (lsp-define-stdio-client lsp-python "python"
-                           #'projectile-project-root
-                           '("pyls"))
-  (add-hook 'python-mode-hook
-            (lambda () (lsp-python-enable)))
+      (setq python-shell-interpreter "ipython"
+            python-shell-interpreter-args "-i --simple-prompt"))
 
   ;; add smarparens to inferior-python mode
   (add-hook 'inferior-python-mode-hook 'smartparens-mode)
@@ -46,13 +28,19 @@
   (font-lock-add-keywords
    'python-mode
    '(
-     ;; ("[ \t]*\\<\\(from\\)\\>" 1 'font-lock-preprocessor-face)
+     ("[ \t]*\\<\\(from\\)\\>" 1 'font-lock-preprocessor-face)
      ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
      ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
      ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face))))
+
+
+(use-package lsp-python
+  :ensure t
+  :ensure-system-package (pyls . "pip install \"python-language-server[all]\"")
+  :init (add-hook 'python-mode-hook 'lsp-python-enable))
 
 
 ;; disabling (using LSP instead)

@@ -14,7 +14,7 @@
 
 ;; set some basic defaults
 (setq-default
- abbrev-file-name                "~/.emacs.d/savefile/abbrev_defs"
+ abbrev-file-name                (expand-file-name "abbrev_defs" *savefile-dir*)
  auto-save-default               t
  blink-matching-paren            t
  confirm-kill-emacs              'yes-or-no-p  ;; Confirm before exiting Emacs
@@ -35,6 +35,7 @@
  linum-format                    " %4d "
  major-mode                      'text-mode
  mode-require-final-newline      t
+ nsm-settings-file               (expand-file-name "network-security.data" *savefile-dir*)
  next-line-add-newlines          t             ;; adds newline for C-n at end of buffer
  require-final-newline           t
  ring-bell-function              'ignore

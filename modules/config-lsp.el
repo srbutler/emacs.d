@@ -9,16 +9,36 @@
 (use-package lsp-mode
   :ensure t
   :defer t
-  :bind (("M-." . xref-find-definitions)
-         ("M-?" . xref-find-references)
-         ("C-c r" . lsp-rename)))
+  :config (counsel-gtags-mode -1)
+
+  (defun restart-lsp-server ()
+    "Restart LSP server."
+    (interactive)
+    (lsp-restart-workspace)
+    (revert-buffer t t)
+    (message "LSP server restarted.")))
 
 
 ;; flycheck support and code previews/lenses
 (use-package lsp-ui
   :ensure t
   :after lsp-mode
-  :hook ((lsp-mode . lsp-ui-mode)))
+  :hook ((lsp-mode . lsp-ui-mode))
+  :bind (:map lsp-ui-mode-map
+              ;; use the peak functions instead of jumps
+              ("M-." . lsp-ui-peek-find-definitions)
+              ("M-?" . lsp-ui-peek-find-references)
+              ("C-c C-l c" . lsp-capabilities)
+              ("C-c C-l d" . lsp-ui-doc-enable)
+              ("C-c C-l h" . lsp-describe-thing-at-point)
+              ("C-c C-l r" . lsp-rename)
+              ("C-c C-l s" . lsp-ui-sideline-toggle-symbols-info)
+              ("C-c C-l w" . restart-lsp-server)
+              :map lsp-ui-peek-mode-map
+              ("C-j" . lsp-ui-peek--goto-xref))
+  :config
+  (setq lsp-ui-sideline-delay 0.5
+        lsp-ui-sideline-ignore-duplicate t))
 
 
 ;; link lsp output with company
@@ -29,7 +49,7 @@
   (push 'company-lsp company-backends)
 
   (setq company-lsp-async t
-        company-lsp-cache-candidates t
+        company-lsp-cache-candidates nil
         company-lsp-enable-recompletion t
         company-lsp-enable-snippet t))
 
@@ -38,32 +58,6 @@
 (use-package lsp-imenu
   :ensure lsp-mode
   :hook ((lsp-after-open . lsp-enable-imenu)))
-
-
-;; simpler automatic backend for lsp servers
-;; see list of automatic backends here: https://github.com/joaotavora/eglot
-(use-package eglot
-  :disabled t
-  :ensure t
-  :defer t
-  :bind (:map eglot-mode-map
-              ("C-c e e" . eglot)
-              ("C-c e c" . eglot-reconnect)
-              ("C-c e s" . eglot-shutdown)
-              ("C-c e r" . eglot-rename)
-
-              ("C-c e a" . eglot-code-actions)
-              ("C-c e h" . eglot-help-at-point)
-
-              ("C-c C-f" . eglot-format)
-              ("M-." . xref-find-definitions))
-  :init
-  (add-hook 'c-mode-hook 'eglot-ensure)
-  (add-hook 'c++-mode-hook 'eglot-ensure)
-  (add-hook 'rust-mode-hook 'eglot-ensure)
-  (add-hook 'python-mode-hook 'eglot-ensure)
-  (add-hook 'haskell-mode-hook 'eglot-ensure)
-  (add-hook 'go-mode-hook 'eglot-ensure))
 
 
 (provide 'config-lsp)
