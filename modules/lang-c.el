@@ -10,7 +10,7 @@
 
 
 (use-package cc-mode
-  :defer t
+  :mode ("\\.h\\'" . c++-mode)  ;; headers default to C++
   :config
   (font-lock-add-keywords
    'c-mode '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
@@ -19,10 +19,9 @@
 
   ;; via https://stackoverflow.com/questions/30949847/configuring-flycheck-to-work-with-c11
   ;; this defaults the standard to c++11, should use dir local variables in most cases
-  (add-hook 'c++-mode-hook
-            (lambda () (progn
-                         (setq flycheck-gcc-language-standard "c++14")
-                         (setq flycheck-clang-language-standard "c++14")))))
+  (with-eval-after-load 'flycheck
+    (setq flycheck-gcc-language-standard "c++14")
+    (setq flycheck-clang-language-standard "c++14")))
 
 
 ;; slightly better font-lock for c++
@@ -32,8 +31,10 @@
   :hook ((c++-mode . modern-c++-font-lock-mode)))
 
 
+;; lsp server
 (use-package ccls
   :ensure t
+  ;; :ensure-system-package ccls
   :hook ((c-mode   . lsp-ccls-enable)
          (c++-mode . lsp-ccls-enable))
   :config
@@ -45,20 +46,9 @@
                     ".ccls")
                   projectile-project-root-files-top-down-recurring))))
 
-(require 'ccls)
-
-
-;; use with lsp-mode
-;; disabled, using eglot instead (see config-programming.el)
-(use-package cquery
-  :disabled t
-  :hook ((c-mode   . lsp-cquery-enable)
-         (c++-mode . lsp-cquery-enable))
-  :init (setq cquery-executable "/usr/local/bin/cquery"))
-
 
 (use-package google-c-style
-  :ensure
+  :ensure t
   :defer t
   :init
   (add-hook 'c-common-mode-hook 'google-set-c-style)
@@ -66,7 +56,6 @@
 
 
 (use-package clang-format
-  :disabled t
   :ensure t
   :after cc-mode
   :bind (:map c-mode-base-map ("C-c C-f" . clang-format-buffer))

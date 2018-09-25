@@ -25,11 +25,13 @@
 (use-package company-lsp
   :ensure t
   :after (lsp-mode company)
-  :custom
-  (company-lsp-enable-recompletion t)
-  (company-lsp-async t)
-  (company-lsp-enable-snippet t)
-  :config (push 'company-lsp company-backends))
+  :config
+  (push 'company-lsp company-backends)
+
+  (setq company-lsp-async t
+        company-lsp-cache-candidates t
+        company-lsp-enable-recompletion t
+        company-lsp-enable-snippet t))
 
 
 ;; let LSP work with imenu

@@ -49,20 +49,14 @@
     (set-face-attribute 'font-lock-builtin-face nil :bold t))
 
   (use-package zenburn-theme
-    ;; :disabled t
+    :disabled t
     :ensure t
     :init (load-theme 'zenburn t)
     :config
-    (setq *current-theme-name* 'zenburn)
-
-    ;; hide the fringe
-    ;; (set-face-attribute 'fringe nil
-    ;;                     :foreground (face-foreground 'default)
-    ;;                     :background (face-background 'default))
-    )
+    (setq *current-theme-name* 'zenburn))
 
   (use-package material-theme
-    :disabled t
+    ;; :disabled t
     :ensure t
     :init (load-theme 'material t)
     :config (setq *current-theme-name* 'material))

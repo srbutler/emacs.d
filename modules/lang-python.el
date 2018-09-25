@@ -8,13 +8,35 @@
 ;;; Code:
 
 (use-package python
-  :mode ("\\.py\\'" . python-mode)
-        ("\\.wsgi$" . python-mode)
+  :mode (("\\.py\\'" . python-mode)
+         ("\\.wsgi$" . python-mode))
   :interpreter ("python" . python-mode)
+  :ensure-system-package (pyls . "pip install \"python-language-server[all]\"")
   :custom
   (indent-tabs-mode nil)
   (python-indent-offset 4)
+
   :config
+  ;; use ipython3 instead of standard interpreter if found
+  (when (executable-find "ipython")
+      (progn
+        ;; helps to prevent issues with ipython/jupyter shells
+        ;; https://github.com/jorgenschaefer/elpy/issues/908
+        (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
+        (setenv "JUPYTER_CONSOLE_TEST" "1")
+
+        ;; set as ipython
+        (setq python-shell-interpreter "ipython"
+              python-shell-interpreter-args "-i --simple-prompt")))
+
+  ;; set up LSP-Python manually
+  (require 'lsp-mode)
+  (lsp-define-stdio-client lsp-python "python"
+                           #'projectile-project-root
+                           '("pyls"))
+  (add-hook 'python-mode-hook
+            (lambda () (lsp-python-enable)))
+
   ;; add smarparens to inferior-python mode
   (add-hook 'inferior-python-mode-hook 'smartparens-mode)
 
@@ -31,12 +53,7 @@
      ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face))))
 
 
-(use-package lsp-python
-  :ensure t
-  :hook ((python-mode . lsp-python-enable)))
-
-
-;; disabling (use eglot/lsp instead)
+;; disabling (using LSP instead)
 (use-package elpy
   :disabled t
   :ensure t
@@ -52,22 +69,6 @@
   ;; set RPC backend and interpreter using pyenv values
   (elpy-rpc-python-command "~/.pyenv/shims/python3")
   :config
-
-  ;; use ipython3 instead of standard interpreter if found
-  (if (executable-find "ipython")
-      (progn
-        ;; helps to prevent issues with ipython/jupyter shells
-        ;; https://github.com/jorgenschaefer/elpy/issues/908
-        (setenv "IPY_TEST_SIMPLE_PROMPT" "1")
-        (setenv "JUPYTER_CONSOLE_TEST" "1")
-
-        ;; set as ipython
-        (setq python-shell-interpreter "ipython"
-              python-shell-interpreter-args "-i --simple-prompt"))
-
-    ;; just use the standard interpreter otherwise
-    (setq python-shell-interpreter "python"
-          python-shell-interpreter-args "-i"))
 
   ;; set up elpy modules
   (setq elpy-modules '(elpy-module-sane-defaults
@@ -114,6 +115,7 @@
      ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
      ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face)
      )))
+
 
 (provide 'lang-python)
 ;;; lang-python.el ends here

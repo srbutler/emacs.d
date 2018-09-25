@@ -33,7 +33,7 @@
 
 ;; load use-package extensions
 (use-package use-package-ensure-system-package
-  :disabled t
+  ;; :disabled t
   :ensure t)
 
 ;; Always load newest byte code
