@@ -11,6 +11,8 @@ secrets.el
 url/
 javacomp/
 network-security.data
+workspace/
+eclipse.jdt.ls/
 
 ## GNU Global/Gtags indexes
 GPATH
