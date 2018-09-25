@@ -272,7 +272,7 @@
   :hook ((org-mode . wrap-region-mode)
          (markdown-mode . wrap-region-mode)
          (text-mode . wrap-region-mode))
-  :diminish wrap-region-mode
+  :diminish (wrap-region-mode . "wrap")
   :config
   (wrap-region-add-wrappers
    '(("(" ")")

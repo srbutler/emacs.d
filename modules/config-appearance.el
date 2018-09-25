@@ -46,7 +46,11 @@
     (set-face-foreground 'font-lock-preprocessor-face "#cb4b16")
     (set-face-foreground 'font-lock-constant-face "#6c71c4")
     (set-face-attribute 'font-lock-constant-face nil :bold nil)
-    (set-face-attribute 'font-lock-builtin-face nil :bold t))
+    (set-face-attribute 'font-lock-builtin-face nil :bold t)
+
+    ;; fix info fringe for flycheck
+    (with-eval-after-load 'flycheck
+      (set-face-foreground 'flycheck-fringe-info "#268bd2")))
 
   (use-package zenburn-theme
     :disabled t

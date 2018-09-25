@@ -16,6 +16,7 @@
 (use-package counsel
   :ensure t
   :after smex
+  :ensure-system-package rg
   :demand
   :diminish
   :bind  (("M-x" . counsel-M-x)

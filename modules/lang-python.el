@@ -11,7 +11,9 @@
   :mode (("\\.py\\'" . python-mode)
          ("\\.wsgi$" . python-mode))
   :interpreter ("python" . python-mode)
-  :ensure-system-package (pyls . "pip install \"python-language-server[all]\"")
+  :ensure-system-package
+  ((pyls    . "pip install \"python-language-server[all]\"")
+   (ipython . "pip install ipython"))
   :custom
   (indent-tabs-mode nil)
   (python-indent-offset 4)
@@ -88,13 +90,13 @@
   :config
   (define-key pyenv-mode-map (kbd "C-c C-s") nil)
 
-  (defun setup-pyenv-mode ()
-    (let ((target-file (expand-file-name ".python-version" (projectile-project-root))))
-      (when (file-exists-p target-file)
-        (pyenv-mode-set (with-temp-buffer
-                          (insert-file-contents target-file)
-                          (current-word))))))
-  (add-hook 'projectile-switch-project-hook 'setup-pyenv-mode))
+  (defun projectile-pyenv-mode-set ()
+    "Set pyenv version matching project name."
+    (let ((project (projectile-project-name)))
+      (if (member project (pyenv-mode-versions))
+          (pyenv-mode-set project)
+        (pyenv-mode-unset))))
+  (add-hook 'projectile-after-switch-project-hook 'projectile-pyenv-mode-set))
 
 
 ;; cython-mode configuration

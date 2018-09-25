@@ -39,6 +39,7 @@
 (depends-on "dash-at-point")
 (depends-on "delight")
 (depends-on "diminish")
+(depends-on "dockerfile-mode")
 (depends-on "edit-indirect")
 (depends-on "edn")
 (depends-on "eglot")
