@@ -50,6 +50,33 @@
                   projectile-project-root-files-top-down-recurring))))
 
 
+(use-package flycheck-clang-analyzer
+  :ensure t
+  :after flycheck
+  :commands flycheck-clang-analyzer-executable
+  :config
+  (progn
+    (setq flycheck-clang-analyzer-executable "clang")
+    (flycheck-clang-analyzer-setup)
+    ;; automatically sets itself up as next checker after lsp-ui so undo
+    ;; that so is instead after cppcheck
+    (delete '(warning . clang-analyzer)
+            (flycheck-checker-get 'lsp-ui 'next-checkers))
+    (flycheck-add-next-checker 'c/c++-cppcheck '(t . clang-analyzer))))
+
+
+(use-package flycheck-cstyle
+  :disabled t
+  :ensure t
+  :ensure-system-package (cstyle . "pip3 install cstyle")
+  :after lsp-ui
+  :config
+  (progn
+    (flycheck-cstyle-setup)
+    (flycheck-add-next-checker 'lsp-ui '(warning . cstyle))
+    (flycheck-add-next-checker 'cstyle '(t . c/c++-cppcheck))))
+
+
 (use-package google-c-style
   :ensure t
   :defer t
@@ -102,7 +129,7 @@
   :defer t
   :init
   (eval-after-load 'company
-  '(add-to-list 'company-backends 'company-irony-c-headers)))
+    '(add-to-list 'company-backends 'company-irony-c-headers)))
 
 
 (use-package irony-eldoc

@@ -76,16 +76,6 @@
   ;; constant rechecking gets annoying
   (setq flycheck-check-syntax-automatically '(mode-enabled save new-line))
 
-  ;; ;; change flycheck's error display to only margin tick
-  ;; (eval-after-load 'flycheck
-  ;;   '(progn
-  ;;      (defun srb/flycheck-display-errors-function (errors)
-  ;;        (mapc (lambda (err)
-  ;;                (message "FlyC: %s" (flycheck-error-message err)) (sit-for 1))
-  ;;              errors))
-  ;;      (setq flycheck-highlighting-mode nil
-  ;;            flycheck-display-errors-function 'srb/flycheck-display-errors-function)))
-
   ;; get rid of annoying contrasts when using certain themes
   (set-face-background 'flycheck-fringe-info nil)
   (set-face-background 'flycheck-fringe-error nil)
