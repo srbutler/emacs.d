@@ -120,8 +120,8 @@
 
 ;; access to GNU Global tags
 (use-package counsel-gtags
-  :disabled t
   :ensure t
+  :ensure-system-package global
   :after counsel
   :diminish (counsel-gtags-mode . "gtags")
   :init (add-hook 'prog-mode-hook 'counsel-gtags-mode)
