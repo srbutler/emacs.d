@@ -4,37 +4,23 @@
 ;;
 ;;; Code:
 
+;; setup proxies for packages
+(setq url-proxy-services
+      '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+        ("http"     . "devproxyfarm.bloomberg.com:82")
+        ("https"    . "devproxyfarm.bloomberg.com:82")))
+
 ;; Load package managment directories
 (require 'package)
 (setq package-archives
       '(("org"          . "http://orgmode.org/elpa/")
         ("gnu"          . "http://elpa.gnu.org/packages/")
-        ("melpa"        . "http://melpa.milkbox.net/packages/")
-        ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
+        ("melpa"        . "http://melpa.org/packages/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-
-;; cask/pallet setup
-(if (eq window-system 'mac)
-    (progn
-      (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
-      (cask-initialize))
-  (progn
-    (require 'cask "~/.cask/cask.el")
-    (cask-initialize)))
-
-;; add pallet to manage packages
-(use-package pallet
-  :ensure t
-  :config (pallet-mode t))
-
-;; load use-package extensions
-(use-package use-package-ensure-system-package
-  :disabled t
-  :ensure t)
 
 ;; Always load newest byte code
 (setq load-prefer-newer +1)
@@ -95,10 +81,10 @@
   (load "config-osx.el"))
 
 ;; load the language modules
-(load-file-list "lang-%s.el"
-                '("c" "clojure" "ess" "go" "haskell" "java" "js" "latex"
-                  "lisp" "markdown" "ocaml" "org" "python" "rust" "scala"
-                  "web"))
+;; (load-file-list "lang-%s.el"
+;;                 '("c" "clojure" "ess" "go" "haskell" "java" "js" "latex"
+;;                   "lisp" "markdown" "ocaml" "org" "python" "rust" "scala"
+;;                   "web"))
 
 ;; load the stuff I don't want in VC
 (let ((secret.el (expand-file-name "secrets.el" *dotfiles-dir*)))
