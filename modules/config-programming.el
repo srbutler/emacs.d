@@ -95,59 +95,6 @@
             (eq current-theme-name "solarized-light"))
     (set-face-foreground 'flycheck-fringe-info "#268bd2")))
 
-;; simpler automatic backend for lsp servers
-;; see list of automatic backends here: https://github.com/joaotavora/eglot
-(use-package eglot
-  :ensure t
-  :defer t
-  :bind (:map eglot-mode-map
-              ("C-c e e" . eglot)
-              ("C-c e c" . eglot-reconnect)
-              ("C-c e s" . eglot-shutdown)
-              ("C-c e r" . eglot-rename)
-
-              ("C-c e a" . eglot-code-actions)
-              ("C-c e h" . eglot-help-at-point)
-
-              ("C-c C-f" . eglot-format)
-              ("M-." . xref-find-definitions))
-  :init
-  (add-hook 'c-mode-hook 'eglot)
-  (add-hook 'c++-mode-hook 'eglot)
-  (add-hook 'rust-mode-hook 'eglot)
-  (add-hook 'python-mode-hook 'eglot)
-  (add-hook 'haskell-mode-hook 'eglot)
-  (add-hook 'go-mode-hook 'eglot))
-
-
-;; disabled for eglot
-;; make language server protocol services available
-(use-package lsp-mode
-  :disabled t
-  :ensure t
-  :defer t)
-
-
-;; disabled for eglot
-;; link lsp output with company
-(use-package company-lsp
-  :disabled t
-  :after (lsp-mode company)
-  :custom
-  (company-lsp-enable-recompletion t)
-  (company-lsp-async t)
-  (company-lsp-enable-snippet t)
-  :init (add-to-list 'company-backends 'company-lsp))
-
-
-;; disabled for eglot
-;; let LSP work with imenu
-(use-package lsp-imenu
-  :disabled t
-  :ensure nil
-  :after lsp-mode
-  :init (add-hook 'lsp-after-open-hook 'lsp-enable-imenu))
-
 
 ;; edit with multiple cursors
 (use-package multiple-cursors
