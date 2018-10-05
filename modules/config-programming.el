@@ -36,7 +36,7 @@
 
 ;; set up dash integration
 (use-package dash-at-point
-  :disabled
+  :disabled t
   :ensure t
   :defer t
   :config
@@ -73,27 +73,13 @@
   :config
   (global-flycheck-mode)
 
+  ;; constant rechecking gets annoying
   (setq flycheck-check-syntax-automatically '(mode-enabled save new-line))
-
-  ;; change flycheck's error display to only margin tick
-  (eval-after-load 'flycheck
-    '(progn
-       (defun srb/flycheck-display-errors-function (errors)
-         (mapc (lambda (err)
-                 (message "FlyC: %s" (flycheck-error-message err)) (sit-for 1))
-               errors))
-       (setq flycheck-highlighting-mode nil
-             flycheck-display-errors-function 'srb/flycheck-display-errors-function)))
 
   ;; get rid of annoying contrasts when using certain themes
   (set-face-background 'flycheck-fringe-info nil)
   (set-face-background 'flycheck-fringe-error nil)
-  (set-face-background 'flycheck-fringe-warning nil)
-
-  ;; change the info color when using solarized
-  (when (or (eq current-theme-name "solarized-dark")
-            (eq current-theme-name "solarized-light"))
-    (set-face-foreground 'flycheck-fringe-info "#268bd2")))
+  (set-face-background 'flycheck-fringe-warning nil))
 
 
 ;; edit with multiple cursors
@@ -145,7 +131,10 @@
   :diminish projectile-mode
   :config
   (projectile-mode t)
-  (setq projectile-cache-file (expand-file-name  "projectile.cache" *savefile-dir*)))
+  (setq projectile-cache-file
+        (expand-file-name  "projectile.cache" *savefile-dir*))
+  (setq projectile-known-projects-file
+        (expand-file-name "projectile-bookmarks.eld" *savefile-dir*)))
 
 
 ;; makes parentheses colorful
@@ -191,7 +180,15 @@
 
   (sp-local-pair '(markdown-mode gfm-mode) "*" "*"
                  :unless '(sp-in-string-p)
-                 :actions '(insert wrap)))
+                 :actions '(insert wrap))
+  :config
+  ;; conflicts with xref
+  (define-key smartparens-mode-map (kbd "M-?") nil))
+
+
+(use-package xref
+  :bind (("M-." . xref-find-definitions)
+         ("M-?" . xref-find-references)))
 
 
 ;; enable YASnippet globally
@@ -214,6 +211,11 @@
   :ensure t
   :mode (("\\.csv\\'" . csv-mode)
          ("\\.tsv\\'" . csv-mode)))
+
+
+(use-package dockerfile-mode
+  :ensure t
+  :mode ("Dockerfile\\'" . dockerfile-mode))
 
 
 (use-package gnuplot-mode
@@ -250,59 +252,6 @@
          ("\\.yaml\\'" . yaml-mode))
   :commands yaml-mode
   :config (add-hook 'yaml-mode-hook 'subword-mode))
-
-
-;; this macro and list will download the appropriate major mode when it
-;; encouters a language file that needs one taken from emacs-prelude
-(defmacro lang-mode-auto-install (extension package mode)
-  "When file with EXTENSION is opened triggers auto-install of PACKAGE.
-PACKAGE is installed only if not already present.  The file is opened in MODE."
-  `(add-to-list 'auto-mode-alist
-                `(,extension . (lambda ()
-                                 (unless (package-installed-p ',package)
-                                   (package-install ',package))
-                                 (,mode)))))
-
-(defvar lang-mode-auto-install-alist
-  '(("\\.cmake\\'" cmake-mode cmake-mode)
-    ("CMakeLists\\.txt\\'" cmake-mode cmake-mode)
-    ("\\.coffee\\'" coffee-mode coffee-mode)
-    ("\\.d\\'" d-mode d-mode)
-    ("\\.dart\\'" dart-mode dart-mode)
-    ("\\.elm\\'" elm-mode elm-mode)
-    ("\\.ex\\'" elixir-mode elixir-mode)
-    ("\\.exs\\'" elixir-mode elixir-mode)
-    ("\\.elixir\\'" elixir-mode elixir-mode)
-    ("\\.erl\\'" erlang erlang-mode)
-    ("\\.feature\\'" feature-mode feature-mode)
-    ("\\.groovy\\'" groovy-mode groovy-mode)
-    ("\\.haml\\'" haml-mode haml-mode)
-    ("\\.kt\\'" kotlin-mode kotlin-mode)
-    ("\\.kv\\'" kivy-mode kivy-mode)
-    ("\\.less\\'" less-css-mode less-css-mode)
-    ("\\.lua\\'" lua-mode lua-mode)
-    ("\\.pp\\'" puppet-mode puppet-mode)
-    ("\\.php\\'" php-mode php-mode)
-    ("\\.proto\\'" protobuf-mode protobuf-mode)
-    ("PKGBUILD\\'" pkgbuild-mode pkgbuild-mode)
-    ("\\.sass\\'" sass-mode sass-mode)
-    ("\\.slim\\'" slim-mode slim-mode)
-    ("\\.styl\\'" stylus-mode stylus-mode)
-    ("\\.swift\\'" swift-mode swift-mode)
-    ("\\.textile\\'" textile-mode textile-mode)
-    ("\\.thrift\\'" thrift thrift-mode)
-    ("\\.ts\\'" typescript-mode typescript-mode)
-    ("Dockerfile\\'" dockerfile-mode dockerfile-mode)))
-
-;; build auto-install mappings
-(mapc
- (lambda (entry)
-   (let ((extension (car entry))
-         (package (cadr entry))
-         (mode (cadr (cdr entry))))
-     (unless (package-installed-p package)
-       (lang-mode-auto-install extension package mode))))
- lang-mode-auto-install-alist)
 
 
 (provide 'config-programming)

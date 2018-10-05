@@ -10,14 +10,14 @@
   :ensure t
   :init (exec-path-from-shell-initialize))
 
-;; only run the following in mac windows
+;; only run the following in the railwaycat version of emacs
 (when (eq window-system 'mac)
 
   ;; turn on all ligatures
   (mac-auto-operator-composition-mode)
 
   ;; define key-commands that are common in text-editor interfaces
-  ;; a customer version of CUA really
+  ;; a custom version of CUA really
   (global-set-key [(hyper a)] 'mark-whole-buffer)      ;; select all
   (global-set-key [(hyper c)] 'kill-ring-save)         ;; copy
   (global-set-key [(hyper f)] 'counsel-grep-or-swiper) ;; find

@@ -16,6 +16,7 @@
 (use-package counsel
   :ensure t
   :after smex
+  :ensure-system-package rg
   :demand
   :diminish
   :bind  (("M-x" . counsel-M-x)
@@ -86,6 +87,12 @@
   :after ivy)
 
 
+;; use ivy for xref candidates
+(use-package ivy-xref
+  :ensure t
+  :init (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
+
+
 ;; project browsing
 (use-package counsel-projectile
   :after (counsel projectile)
@@ -114,6 +121,7 @@
 ;; access to GNU Global tags
 (use-package counsel-gtags
   :ensure t
+  :ensure-system-package global
   :after counsel
   :diminish (counsel-gtags-mode . "gtags")
   :init (add-hook 'prog-mode-hook 'counsel-gtags-mode)
