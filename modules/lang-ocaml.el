@@ -7,11 +7,12 @@
 ;; Ocaml major mode
 (use-package tuareg
   :ensure t
-  :ensure-system-package "opam"
+  :ensure-system-package opam
   :mode (("\\.ml[ily]?$"  . tuareg-mode)
          ("\\.topml$"     . tuareg-mode)
          ("\\.ocamlinit$" . tuareg-mode)
          ("jbuild$"       . tuareg-dune-mode))
+
   :init
   ;; Make OCaml-generated files invisible to filename completion
   (dolist
@@ -86,14 +87,14 @@
   :ensure-system-package (ocp-indent . "opam install ocp-indent")
   :defer t
   :bind (:map tuareg-mode-map ("C-c C-f" . ocp-indent-buffer))
-  :init (add-hook 'tuareg-mode-hook 'ocp-indent-caml-mode-setup))
+  :init (add-hook 'tuareg-mode-hook 'ocp-setup-indent))
 
 
 ;; taken from spacemacs (package not in MELPA)
 (use-package merlin-eldoc
   :defer t
   :load-path "~/.emacs.d/vendor/merlin-eldoc/merlin-eldoc.el"
-  :init (add-hook 'merlin-mode-hook #'merlin-eldoc/setup))
+  :init (add-hook 'merlin-mode-hook 'merlin-eldoc/setup))
 
 
 ;; for using Reason's syntax instead of OCaml's

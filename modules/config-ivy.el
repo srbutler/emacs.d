@@ -16,7 +16,7 @@
 (use-package counsel
   :ensure t
   :after smex
-  :ensure-system-package rg
+  :ensure-system-package (rg . "ripgrep")
   :demand
   :diminish
   :bind  (("M-x" . counsel-M-x)
@@ -102,12 +102,12 @@
          ("C-c p g" . counsel-projectile-find-file-dwim)
          ("C-c p d" . counsel-projectile-find-dir)
          ("C-c p b" . counsel-projectile-switch-to-buffer)
+         ("C-c p s a" . counsel-projectile-ag)
          ("C-c p s g" . counsel-projectile-grep)
-         ("C-c p s s" . counsel-projectile-ag)
+         ("C-c p s i" . counsel-projectile-git-grep)
          ("C-c p s r" . counsel-projectile-rg)
          ("C-c p SPC" . counsel-projectile)
-         ("C-c p s i" . counsel-projectile-git-grep)
-         ("C-c p O c" . counsel-projectile-org-capture))
+         ("C-c p o" . counsel-projectile-org-capture))
   :config (counsel-projectile-mode))
 
 

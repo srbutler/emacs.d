@@ -9,14 +9,9 @@
 (use-package lsp-mode
   :ensure t
   :defer t
-  :config (counsel-gtags-mode -1)
-
-  (defun restart-lsp-server ()
-    "Restart LSP server."
-    (interactive)
-    (lsp-restart-workspace)
-    (revert-buffer t t)
-    (message "LSP server restarted.")))
+  :config
+  (with-eval-after-load 'counsel-gtags
+    (counsel-gtags-mode -1)))
 
 
 ;; flycheck support and code previews/lenses
@@ -33,12 +28,19 @@
               ("C-c C-l h" . lsp-describe-thing-at-point)
               ("C-c C-l r" . lsp-rename)
               ("C-c C-l s" . lsp-ui-sideline-toggle-symbols-info)
-              ("C-c C-l w" . restart-lsp-server)
               :map lsp-ui-peek-mode-map
               ("C-j" . lsp-ui-peek--goto-xref))
   :config
   (setq lsp-ui-sideline-delay 0.5
-        lsp-ui-sideline-ignore-duplicate t))
+        lsp-ui-sideline-ignore-duplicate t)
+
+  (defun restart-lsp-server ()
+    "Restart LSP server."
+    (interactive)
+    (lsp-restart-workspace)
+    (revert-buffer t t)
+    (message "LSP server restarted."))
+  (bind-key "C-c C-l w" 'restart-lsp-server lsp-ui-mode-map))
 
 
 ;; link lsp output with company

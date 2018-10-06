@@ -69,6 +69,7 @@
 ;; syntax-checking
 (use-package flycheck
   :ensure t
+  :ensure-system-package (cppcheck shellcheck)
   :diminish (flycheck-mode . "flyc")
   :config
   (global-flycheck-mode)

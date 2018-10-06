@@ -18,22 +18,20 @@
   (package-install 'use-package))
 
 ;; cask/pallet setup
-(if (eq window-system 'mac)
-    (progn
-      (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
-      (cask-initialize))
-  (progn
-    (require 'cask "~/.cask/cask.el")
-    (cask-initialize)))
 
-;; add pallet to manage packages
-(use-package pallet
-  :ensure t
-  :config (pallet-mode t))
+(when (string-equal system-type "darwin")
+  (progn
+    (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
+    (cask-initialize)
+
+    ;; add pallet to manage packages
+    (use-package pallet
+      :ensure t
+      :config (pallet-mode t))))
+
 
 ;; load use-package extensions
 (use-package use-package-ensure-system-package
-  ;; :disabled t
   :ensure t)
 
 ;; Always load newest byte code

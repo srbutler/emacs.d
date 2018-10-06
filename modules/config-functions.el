@@ -16,5 +16,11 @@ programming."
           1 font-lock-warning-face t))))
 (add-hook 'prog-mode-hook 'font-lock-comment-annotations)
 
+
+(defun byte-compile-modules ()
+  "Byte-compile everything in the modules dir."
+  (interactive)
+  (byte-recompile-directory *modules-dir* 0))
+
 (provide 'config-fuctions)
 ;;; config-functions.el ends here
