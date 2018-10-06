@@ -1,4 +1,8 @@
 
+# LSP stuff
+eclipse.jdt.ls/
+workspace/
+
 savefile/
 auto-save-list/
 irony/
