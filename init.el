@@ -17,24 +17,22 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; cask/pallet setup
-(if (eq window-system 'mac)
-    (progn
-      (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
-      (cask-initialize))
-  (progn
-    (require 'cask "~/.cask/cask.el")
-    (cask-initialize)))
-
-;; add pallet to manage packages
-(use-package pallet
-  :ensure t
-  :config (pallet-mode t))
-
 ;; load use-package extensions
 (use-package use-package-ensure-system-package
-  :disabled t
   :ensure t)
+
+
+(when (string-equal system-type "darwin")
+  (progn
+    ;; set up cask
+    (use-package cask
+      :load-path "/usr/local/share/emacs/site-lisp/cask/"
+      :config (cask-initialize))
+
+    ;; add pallet to manage packages
+    (use-package pallet
+      :ensure t
+      :config (pallet-mode t))))
 
 ;; Always load newest byte code
 (setq load-prefer-newer +1)
@@ -63,7 +61,7 @@
   (load custom-file))
 
 ;; setup savefiles/backups in a way that's not annoying
-(setq backup-directory-alist `(("." . "~/.emacs.d/savefile/"))
+(setq backup-directory-alist `(("." . *savefile-dir*))
       backup-by-copying t
       delete-old-versions t
       kept-new-versions 6
@@ -78,7 +76,18 @@
 (setq large-file-warning-threshold 100000000)
 
 ;; garbage collect when Emacs loses focus
-(add-hook 'focus-out-hook #'garbage-collect)
+(add-hook 'focus-out-hook 'garbage-collect)
+
+;; don't throw errors if something doesn't exist
+(defun load-if-exists (filename dir)
+  "Load FILENAME in DIR if it exists."
+  (let ((target-file (expand-file-name filename dir)))
+    (if (file-exists-p target-file)
+        (load target-file)
+      (message
+       (format
+        "File does not exist, skipping: %s"
+        target-file)))))
 
 ;; make adding new module files easy
 (defun load-file-list (format-string files)
@@ -88,21 +97,49 @@
 
 ;; load the settings files
 (load-file-list "config-%s.el"
-                '("ui" "ivy" "appearance" "functions" "git" "programming"))
+                '(
+                  "ui"
+                  "ivy"
+                  ;; "helm"
+                  "appearance"
+                  "functions"
+                  "git"
+                  "programming"
+                  ;; "lsp"
+                  ))
 
 ;; load OS-specific stuff
-(when (memq window-system '(mac ns))
-  (load "config-osx.el"))
+(cond
+ ((string-equal system-type "darwin")
+  (load-if-exists "config-osx.el" *modules-dir*))
+ ((string-equal system-type "gnu/linux")
+  (load-if-exists "config-linux.el" *modules-dir*))
+ ((string-equal system-type "windows-nt")
+  (load-if-exists "config-windows.el" *modules-dir*)))
+
+;; load non-VCed stuff
+(load-if-exists "secrets.el" *dotfiles-dir*)
 
 ;; load the language modules
 (load-file-list "lang-%s.el"
-                '("c" "clojure" "ess" "go" "haskell" "java" "js" "latex"
-                  "lisp" "markdown" "ocaml" "org" "python" "rust" "scala"
-                  "web"))
+                '(
+                  "c"
+                  "clojure"
+                  "ess"
+                  "go"
+                  "haskell"
+                  "java"
+                  "js"
+                  "latex"
+                  "lisp"
+                  "markdown"
+                  "ocaml"
+                  "org"
+                  "python"
+                  "rust"
+                  "scala"
+                  "web"
+                  ))
 
-;; load the stuff I don't want in VC
-(let ((secret.el (expand-file-name "secrets.el" *dotfiles-dir*)))
-  (when (file-exists-p secret.el)
-    (load secret.el)))
 
 ;;; init.el ends here
