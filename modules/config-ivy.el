@@ -16,6 +16,7 @@
 (use-package counsel
   :ensure t
   :after smex
+  :ensure-system-package (rg . "ripgrep")
   :demand
   :diminish
   :bind  (("M-x" . counsel-M-x)
@@ -86,6 +87,12 @@
   :after ivy)
 
 
+;; use ivy for xref candidates
+(use-package ivy-xref
+  :ensure t
+  :init (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
+
+
 ;; project browsing
 (use-package counsel-projectile
   :after (counsel projectile)
@@ -95,12 +102,12 @@
          ("C-c p g" . counsel-projectile-find-file-dwim)
          ("C-c p d" . counsel-projectile-find-dir)
          ("C-c p b" . counsel-projectile-switch-to-buffer)
+         ("C-c p s a" . counsel-projectile-ag)
          ("C-c p s g" . counsel-projectile-grep)
-         ("C-c p s s" . counsel-projectile-ag)
+         ("C-c p s i" . counsel-projectile-git-grep)
          ("C-c p s r" . counsel-projectile-rg)
          ("C-c p SPC" . counsel-projectile)
-         ("C-c p s i" . counsel-projectile-git-grep)
-         ("C-c p O c" . counsel-projectile-org-capture))
+         ("C-c p o" . counsel-projectile-org-capture))
   :config (counsel-projectile-mode))
 
 
@@ -114,6 +121,7 @@
 ;; access to GNU Global tags
 (use-package counsel-gtags
   :ensure t
+  :ensure-system-package global
   :after counsel
   :diminish (counsel-gtags-mode . "gtags")
   :init (add-hook 'prog-mode-hook 'counsel-gtags-mode)
