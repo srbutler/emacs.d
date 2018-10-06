@@ -18,8 +18,7 @@
   (package-install 'use-package))
 
 ;; load use-package extensions
-(use-package use-package-ensure-system-package
-  :ensure t)
+(use-package use-package-ensure-system-package)
 
 
 (when (string-equal system-type "darwin")
@@ -61,7 +60,7 @@
   (load custom-file))
 
 ;; setup savefiles/backups in a way that's not annoying
-(setq backup-directory-alist `(("." . *savefile-dir*))
+(setq backup-directory-alist `(("." . "~/.emacs.d/savefile/"))
       backup-by-copying t
       delete-old-versions t
       kept-new-versions 6
@@ -105,7 +104,7 @@
                   "functions"
                   "git"
                   "programming"
-                  ;; "lsp"
+                  "lsp"
                   ))
 
 ;; load OS-specific stuff
@@ -123,23 +122,29 @@
 ;; load the language modules
 (load-file-list "lang-%s.el"
                 '(
-                  "c"
+                  ;; "cc"
+                  "cc-lsp"
                   "clojure"
                   "ess"
-                  "go"
+                  ;; "go"
+                  "go-lsp"
                   "haskell"
-                  "java"
-                  "js"
+                  "java-lsp"
+                  ;; "js"
+                  "js-lsp"
                   "latex"
                   "lisp"
                   "markdown"
-                  "ocaml"
+                  ;; "ocaml"
+                  "ocaml-lsp"
                   "org"
-                  "python"
-                  "rust"
+                  ;; "python"
+                  "python-lsp"
+                  ;; "rust"
+                  "rust-lsp"
                   "scala"
-                  "web"
+                  ;; "web"
+                  "web-lsp"
                   ))
-
 
 ;;; init.el ends here
