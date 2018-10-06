@@ -17,10 +17,6 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; load use-package extensions
-(use-package use-package-ensure-system-package)
-
-
 (when (string-equal system-type "darwin")
   (progn
     ;; set up cask
@@ -31,7 +27,11 @@
     ;; add pallet to manage packages
     (use-package pallet
       :ensure t
-      :config (pallet-mode t))))
+      :config (pallet-mode t))
+
+    ;; load use-package extensions
+    (use-package use-package-ensure-system-package
+      :ensure t)))
 
 ;; Always load newest byte code
 (setq load-prefer-newer +1)
