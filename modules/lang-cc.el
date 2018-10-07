@@ -10,39 +10,29 @@
 
 
 (use-package cc-mode
-  :defer t
+  :mode ("\\.h\\'" . c++-mode)  ;; headers default to C++
   :config
   (font-lock-add-keywords
    'c-mode '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
   (font-lock-add-keywords
    'c++-mode '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
 
-  (add-hook 'c-mode-hook 'eglot)
-  (add-hook 'c++-mode-hook 'eglot)
-
   ;; via https://stackoverflow.com/questions/30949847/configuring-flycheck-to-work-with-c11
   ;; this defaults the standard to c++11, should use dir local variables in most cases
-  (add-hook 'c++-mode-hook
-            (lambda () (progn
-                         (setq flycheck-gcc-language-standard "c++11")
-                         (setq flycheck-clang-language-standard "c++11")))))
+  (with-eval-after-load 'flycheck
+    (setq flycheck-gcc-language-standard "c++14")
+    (setq flycheck-clang-language-standard "c++14")))
 
 
-
-;; use with lsp-mode
-;; disabled, using eglot instead (see config-programming.el)
-(use-package cquery
-  :disabled t
-  :after lsp-mode
-  :hook ((c-mode . lsp-cquery-enable)
-         (c++-mode . lsp-cquery-enable))
-  :init (setq cquery-executable "~/checkout/cquery/build/release/bin/cquery")
-  :custom (lsp-response-timeout 45)
-  :config (require 'lsp-flycheck))
+;; slightly better font-lock for c++
+(use-package modern-cpp-font-lock
+  :ensure t
+  :defer t
+  :hook ((c++-mode . modern-c++-font-lock-mode)))
 
 
 (use-package google-c-style
-  :ensure
+  :ensure t
   :defer t
   :init
   (add-hook 'c-common-mode-hook 'google-set-c-style)
