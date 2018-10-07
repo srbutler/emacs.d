@@ -69,7 +69,6 @@
 ;; syntax-checking
 (use-package flycheck
   :ensure t
-  :ensure-system-package (cppcheck shellcheck)
   :diminish (flycheck-mode . "flyc")
   :config
   (global-flycheck-mode)
@@ -100,11 +99,12 @@
 
 
 ;; pandoc
-(use-package pandoc-mode
-  :ensure t
-  :diminish (pandoc-mode . "pandoc")
-  :hook (markdown-mode org-mode TeX-mode)
-  :config (pandoc-load-default-settings))
+(if (executable-find "pandoc")
+    (use-package pandoc-mode
+      :ensure t
+      :diminish (pandoc-mode . "pandoc")
+      :hook (markdown-mode org-mode TeX-mode)
+      :config (pandoc-load-default-settings)))
 
 
 ;; hardcore parentheses management

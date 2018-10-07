@@ -162,6 +162,7 @@
 (depends-on "smart-mode-line")
 (depends-on "smartparens")
 (depends-on "smex")
+(depends-on "smooth-scrolling")
 (depends-on "solarized-theme")
 (depends-on "spinner")
 (depends-on "sr-speedbar")
