@@ -224,6 +224,12 @@
   (savehist-mode +1))
 
 
+;; better line-by-line scrolling, especially in terminals
+(use-package smooth-scrolling
+  :ensure t
+  :config (smooth-scrolling-mode 1))
+
+
 ;; visual undo history
 (use-package undo-tree
   :ensure t
@@ -238,7 +244,8 @@
 (use-package unfill
   :ensure t
   :commands (unfill-region unfill-paragraph unfill-toggle)
-  :bind ("M-Q" . unfill-paragraph))
+  :bind (("C-M-Q" . unfill-toggle)
+         ("M-Q" . unfill-paragraph)))
 
 
 ;; meaningful names for buffers with the same name

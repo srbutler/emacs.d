@@ -1,4 +1,4 @@
-;;; config-js.el -- Summary
+;;; config-js-lsp.el -- Summary
 ;;
 ;;; Commentary:
 ;;
@@ -52,25 +52,13 @@
     (bind-key "C-k" 'js2r-kill js2-mode-map)))
 
 
-;; for JS/TS autocompletion
-(use-package tide
+;; from https://github.com/seagle0128/.emacs.d
+(use-package lsp-javascript-typescript
   :ensure t
-  :defer t
-  :init
-  (add-hook 'js2-mode-hook
-            #'(lambda ()
-                (tide-mode)
-                (flycheck-add-next-checker 'javascript-eslint
-                                           'javascript-tide
-                                           'append)))
-  (add-hook 'rjsx-mode-hook
-            #'(lambda ()
-                (tide-mode)
-                (flycheck-add-next-checker 'javascript-eslint
-                                           'jsx-tide
-                                           'append)))
-  (add-hook 'typescript-mode-hook 'tide-mode)
-  :config (tide-setup))
+  :ensure-system-package
+  (javascript-typescript-langserver . "npm i -g javascript-typescript-langserver")
+  :commands lsp-javascript-typescript-enable
+  :hook ((typescript-mode js2-mode) . lsp-javascript-typescript-enable))
 
 
 (use-package json-mode
@@ -81,6 +69,7 @@
 ;; formatting/beatufication for HTML/CSS/JS
 (use-package web-beautify
   :ensure t
+  :ensure-system-package (js-beautify . "npm -g install js-beautify")
   :init
   (with-eval-after-load 'js-mode
     (bind-key "C-c C-f" #'web-beautify-js js-mode-map))
@@ -99,28 +88,6 @@
   (setq web-beautify-args '("-s" "2" "-f" "-")))
 
 
-
-;; JS autocompletion
-(use-package tern
-  :disabled t
-  :ensure t
-  :if (executable-find "tern")
-  :commands tern-mode
-  :diminish (tern-mode . "tern")
-  :init (add-hook 'js2-mode-hook 'tern-mode))
-
-
-;; connect tern with company
-(use-package company-tern
-  :disabled t
-  :after (company tern-mode)
-  :init
-  (add-hook 'js2-mode-hook
-            #'(lambda ()
-                (set (make-local-variable 'company-backends)
-                     '((company-tern company-files company-yasnippet))))))
-
-
 ;; REPL/dev environment
 (use-package indium
   :ensure t
@@ -130,5 +97,5 @@
   :hook ((js2-mode . indium-interaction-mode)))
 
 
-(provide 'lang-js.el)
-;;; lang-js.el ends here
+(provide 'lang-js-lsp.el)
+;;; lang-js-lsp.el ends here
