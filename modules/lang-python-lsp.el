@@ -1,9 +1,6 @@
-;;; lang-python.el --- Summary:
+;;; lang-python-lsp.el --- Summary:
 ;;
 ;;; Commentary:
-;;
-;; this python and elpy setup taken from
-;; https://github.com/seanfarley/dot-files/blob/master/emacs-python.org
 ;;
 ;;; Code:
 
@@ -43,33 +40,6 @@
   :init (add-hook 'python-mode-hook 'lsp-python-enable))
 
 
-;; disabling (using LSP instead)
-(use-package elpy
-  :disabled t
-  :ensure t
-  :commands elpy-enable
-  :init (with-eval-after-load 'python (elpy-enable))
-  :bind (:map elpy-mode-map
-              ("C-x C-e" . python-shell-send-defun)
-              ("C-c C-r e" . elpy-multiedit-python-symbol-at-point))
-  :custom
-  ;; set refactoring backend ("rope" or "jedi")
-  (elpy-rpc-backend "jedi")
-
-  ;; set RPC backend and interpreter using pyenv values
-  (elpy-rpc-python-command "~/.pyenv/shims/python3")
-  :config
-
-  ;; set up elpy modules
-  (setq elpy-modules '(elpy-module-sane-defaults
-                       elpy-module-company
-                       elpy-module-eldoc
-                       elpy-module-yasnippet
-                       elpy-module-django
-                       ;; elpy-module-highlight-indentation
-                       ;; elpy-module-pyvenv
-                       )))
-
 ;; set up pyenv
 (use-package pyenv-mode
   :ensure t
@@ -107,5 +77,5 @@
      )))
 
 
-(provide 'lang-python)
-;;; lang-python.el ends here
+(provide 'lang-python-lsp)
+;;; lang-python-lsp.el ends here

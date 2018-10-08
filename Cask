@@ -58,6 +58,7 @@
 (depends-on "flx")
 (depends-on "flycheck")
 (depends-on "flycheck-cask")
+(depends-on "flycheck-clang-analyzer")
 (depends-on "flycheck-clojure")
 (depends-on "flycheck-gometalinter")
 (depends-on "flycheck-haskell")

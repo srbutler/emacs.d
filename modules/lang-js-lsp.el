@@ -1,4 +1,4 @@
-;;; config-js.el -- Summary
+;;; config-js-lsp.el -- Summary
 ;;
 ;;; Commentary:
 ;;
@@ -47,7 +47,7 @@
   :hook (js2-mode . js2-refactor-mode)
   :diminish (js2-refactor-mode . "js2r")
   :config
-  (js2r-add-keybindings-with-prefix "C-c C-m")
+  (js2r-add-keybindings-with-prefix "C-c C-r")
   (with-eval-after-load 'js2-mode
     (bind-key "C-k" 'js2r-kill js2-mode-map)))
 
@@ -97,5 +97,5 @@
   :hook ((js2-mode . indium-interaction-mode)))
 
 
-(provide 'lang-js.el)
-;;; lang-js.el ends here
+(provide 'lang-js-lsp.el)
+;;; lang-js-lsp.el ends here
