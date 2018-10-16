@@ -8,7 +8,7 @@
   :mode (("\\.py\\'" . python-mode)
          ("\\.wsgi$" . python-mode))
   :interpreter ("python" . python-mode)
-  :ensure-system-package (ipython . "pip install ipython")
+  ;; :ensure-system-package (ipython . "pip install ipython")
   :custom
   (indent-tabs-mode nil)
   (python-indent-offset 4)
@@ -36,7 +36,7 @@
 
 (use-package lsp-python
   :ensure t
-  :ensure-system-package (pyls . "pip install \"python-language-server[all]\"")
+  ;; :ensure-system-package (pyls . "pip install \"python-language-server[all]\"")
   :init (add-hook 'python-mode-hook 'lsp-python-enable))
 
 
