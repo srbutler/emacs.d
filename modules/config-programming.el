@@ -241,6 +241,10 @@
  pretzo-files)
 
 
+;; add bloomberg files to appropriate modes
+(add-to-list 'auto-mode-alist "\\bbprofile\\'")
+
+
 ;; for thrax/opengrm grammars (.grm)
 (use-package thrax-mode
   :mode ("\\.grm\\'" . thrax-mode)

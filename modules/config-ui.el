@@ -237,7 +237,9 @@
   :custom
   (undo-tree-auto-save-history t)
   (undo-tree-visualizer-diff t)
-  :config (global-undo-tree-mode))
+  :config
+  ;; (setq undo-tree-history-directory-alist '(("." . *savefile-dir*)))
+  (global-undo-tree-mode))
 
 
 ;; unfill commands

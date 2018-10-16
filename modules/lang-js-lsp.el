@@ -10,7 +10,7 @@
 (use-package js2-mode
   :ensure t
   :defines flycheck-javascript-eslint-executable
-  :ensure-system-package (eslint_d . "npm install -g eslint_d")
+  ;; :ensure-system-package (eslint_d . "npm install -g eslint_d")
   :mode (("\\.js\\'"  . js2-mode)
          ("\\.jsx\\'" . js2-jsx-mode))
   :interpreter (("node" . js2-mode)
@@ -55,8 +55,8 @@
 ;; from https://github.com/seagle0128/.emacs.d
 (use-package lsp-javascript-typescript
   :ensure t
-  :ensure-system-package
-  (javascript-typescript-langserver . "npm i -g javascript-typescript-langserver")
+  ;; :ensure-system-package
+  ;; (javascript-typescript-langserver . "npm i -g javascript-typescript-langserver")
   :commands lsp-javascript-typescript-enable
   :hook ((typescript-mode js2-mode) . lsp-javascript-typescript-enable))
 
@@ -69,7 +69,7 @@
 ;; formatting/beatufication for HTML/CSS/JS
 (use-package web-beautify
   :ensure t
-  :ensure-system-package (js-beautify . "npm -g install js-beautify")
+  ;; :ensure-system-package (js-beautify . "npm -g install js-beautify")
   :init
   (with-eval-after-load 'js-mode
     (bind-key "C-c C-f" #'web-beautify-js js-mode-map))

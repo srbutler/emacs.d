@@ -252,6 +252,7 @@
 
 ;; Fancy bullet rendering.
 (use-package org-bullets
+  :disabled t
   :ensure t
   :defer t
   :init (add-hook 'org-mode-hook 'org-bullets-mode))

@@ -29,15 +29,15 @@
         "File does not exist, skipping: %s"
         target-file)))))
 
-;; anything needed outside of VC goes here
-(load-if-exists "secrets.el" *dotfiles-dir*) 
+(load-if-exists "exordium-bbextensions-tap/before-init.el" *vendor-dir*)
 
 ;; Load package managment directories
 (require 'package)
 (setq package-archives
-      '(("org"          . "https://orgmode.org/elpa/")
-        ("gnu"          . "https://elpa.gnu.org/packages/")
-        ("melpa"        . "https://melpa.org/packages/")))
+      '(("org"          . "http://orgmode.org/elpa/")
+        ("gnu"          . "http://elpa.gnu.org/packages/")
+        ("melpa"        . "http://melpa.org/packages/")
+        ("melpa-stable" . "http://stable.melpa.org/packages/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -118,6 +118,11 @@
  ((string-equal system-type "windows-nt")
   (load-if-exists "config-windows.el" *modules-dir*)))
 
+;; anything needed outside of VC goes here
+(load-if-exists "secrets.el" *dotfiles-dir*)
+
+;; (load-if-exists "exordium-bbextensions-tap/after-init.el" *vendor-dir*)
+
 ;; load the language modules
 (load-file-list "lang-%s.el"
                 '(
@@ -130,7 +135,7 @@
                   ;; "haskell"
                   ;; "java-lsp"
                   ;; "js"
-                  ;; "js-lsp"
+                  "js-lsp"
                   "latex"
                   ;; "lisp"
                   "markdown"

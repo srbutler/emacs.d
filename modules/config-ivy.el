@@ -16,7 +16,6 @@
 (use-package counsel
   :ensure t
   :after smex
-  :ensure-system-package rg
   :demand
   :diminish
   :bind  (("M-x" . counsel-M-x)
@@ -27,7 +26,7 @@
           ("C-s" . counsel-grep-or-swiper)
           ("C-r" . counsel-grep-or-swiper)
           ("C-x l" . counsel-locate)
-          ("C-c k" . counsel-rg)
+          ("C-c k" . counsel-ag)
           ("C-c i" . counsel-imenu)
 
           ("C-h b" . counsel-descbinds)
@@ -39,8 +38,8 @@
   (counsel-find-file-ignore-regexp
    "\\.DS_Store\\|.git\\|\.*~undo-tree~\\|GPATH\\|GRTAGS\\|GTAGS\\|.*.elc")
   (counsel-grep-base-command
-   "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
-  (counsel-)
+        "ag -i --noheading --nocolor --nofilename --numbers '%s' %s")
+
   :config (counsel-mode 1))
 
 
@@ -121,7 +120,6 @@
 ;; access to GNU Global tags
 (use-package counsel-gtags
   :ensure t
-  :ensure-system-package global
   :after counsel
   :diminish (counsel-gtags-mode . "gtags")
   :init (add-hook 'prog-mode-hook 'counsel-gtags-mode)

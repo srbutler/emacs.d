@@ -42,7 +42,8 @@
   :init (with-eval-after-load 'python (elpy-enable))
   :bind (:map elpy-mode-map
               ("C-x C-e" . python-shell-send-defun)
-              ("C-c C-r e" . elpy-multiedit-python-symbol-at-point))
+              ("C-c C-r e" . elpy-multiedit-python-symbol-at-point)
+              ("C-c C-f" . elpy-format-code))
   :custom
   ;; set refactoring backend ("rope" or "jedi")
   (elpy-rpc-backend "jedi")
