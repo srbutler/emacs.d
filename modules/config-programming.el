@@ -197,7 +197,7 @@
   :ensure t
   :init (yas-global-mode)
   :bind (("C-c C-e" . yas-expand))
-  :config (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets/"))
+  :config (add-to-list 'yas-snippet-dirs (expand-file-name "snippets/" *dotfiles-dir*)))
 
 
 ;; a solid collection of snippets for many modes
@@ -226,12 +226,6 @@
          ("\\.gp\\'"  . gnuplot-mode)))
 
 
-;; personal mode for phoenix grammars
-(use-package phoenix-grammar-mode
-  :mode ("\\.gra\\'" . phoenix-grammar-mode)
-  :load-path "~/.emacs.d/vendor/phoenix-grammar-mode")
-
-
 ;; edit zsh/prezto files in sh-mode
 (defvar pretzo-files '("zlogin" "zlogout" "zpretzorc"
                        "zprofile" "zshenv" "zshrc"))
@@ -242,7 +236,7 @@
 
 
 ;; add bloomberg files to appropriate modes
-(add-to-list 'auto-mode-alist "\\bbprofile\\'")
+(add-to-list 'auto-mode-alist "\\bbprofile\\'" 'sh-mode)
 
 
 ;; for thrax/opengrm grammars (.grm)
