@@ -8,9 +8,10 @@
 ;; more useful frame title, that shows either a file or a buffer name
 ;; (if the buffer isn't visiting a file)
 (setq frame-title-format
-      '("" invocation-name ": " (:eval (if (buffer-file-name)
-                                           (abbreviate-file-name (buffer-file-name))
-                                         "%b"))))
+      '("" invocation-name "@" (:eval (system-name)) " -- "
+        (:eval (if (buffer-file-name)
+                   (abbreviate-file-name (buffer-file-name))
+                 "%b"))))
 
 ;; set some basic defaults
 (setq-default
@@ -238,7 +239,7 @@
   (undo-tree-auto-save-history t)
   (undo-tree-visualizer-diff t)
   :config
-  ;; (setq undo-tree-history-directory-alist '(("." . *savefile-dir*)))
+  (setq undo-tree-history-directory-alist `(("." . ,*savefile-dir*)))
   (global-undo-tree-mode))
 
 
