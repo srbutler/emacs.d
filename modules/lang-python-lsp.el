@@ -24,8 +24,7 @@
   ;; set custom keywords for python-mode
   (font-lock-add-keywords
    'python-mode
-   '(
-     ("[ \t]*\\<\\(from\\)\\>" 1 'font-lock-preprocessor-face)
+   '(("[ \t]*\\<\\(from\\)\\>" 1 'font-lock-preprocessor-face)
      ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)

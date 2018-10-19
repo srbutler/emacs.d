@@ -73,7 +73,7 @@
   (load custom-file))
 
 ;; setup savefiles/backups in a way that's not annoying
-(setq backup-directory-alist `(("." . "~/.emacs.d/savefile/"))
+(setq backup-directory-alist `(("." . ,*savefile-dir*))
       backup-by-copying t
       delete-old-versions t
       kept-new-versions 6
