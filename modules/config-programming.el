@@ -102,6 +102,7 @@
 ;; pandoc
 (use-package pandoc-mode
   :ensure t
+  :ensure-system-package pandoc
   :diminish (pandoc-mode . "pandoc")
   :hook (markdown-mode org-mode TeX-mode)
   :config (pandoc-load-default-settings))
@@ -197,7 +198,8 @@
   :ensure t
   :init (yas-global-mode)
   :bind (("C-c C-e" . yas-expand))
-  :config (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets/"))
+  :config (add-to-list 'yas-snippet-dirs
+                       (expand-file-name "snippets/" *dotfiles-dir*)))
 
 
 ;; a solid collection of snippets for many modes
@@ -207,6 +209,15 @@
 
 ;;; OTHER MODES ------------------------------------------
 ;; these are language modes that don't need their own file
+
+;; edit zsh/prezto files in sh-mode
+(defvar pretzo-files '("zlogin" "zlogout" "zpretzorc"
+                       "zprofile" "zshenv" "zshrc"))
+(mapc
+ (lambda (file)
+   (add-to-list 'auto-mode-alist `(,(format "\\%s\\'" file) . sh-mode)))
+ pretzo-files)
+
 
 (use-package csv-mode
   :ensure t
@@ -226,29 +237,8 @@
          ("\\.gp\\'"  . gnuplot-mode)))
 
 
-;; personal mode for phoenix grammars
-(use-package phoenix-grammar-mode
-  :mode ("\\.gra\\'" . phoenix-grammar-mode)
-  :load-path "~/.emacs.d/vendor/phoenix-grammar-mode")
-
-
-;; edit zsh/prezto files in sh-mode
-(defvar pretzo-files '("zlogin" "zlogout" "zpretzorc"
-                       "zprofile" "zshenv" "zshrc"))
-(mapc
- (lambda (file)
-   (add-to-list 'auto-mode-alist `(,(format "\\%s\\'" file) . sh-mode)))
- pretzo-files)
-
-
-;; for thrax/opengrm grammars (.grm)
-(use-package thrax-mode
-  :mode ("\\.grm\\'" . thrax-mode)
-  :load-path "~/.emacs.d/vendor/thrax-mode/")
-
-
-;; add subwords into yaml-mode
 (use-package yaml-mode
+  :ensure t
   :mode (("\\.yml\\'" . yaml-mode)
          ("\\.yaml\\'" . yaml-mode))
   :commands yaml-mode
