@@ -8,7 +8,7 @@
 ;; more useful frame title, that shows either a file or a buffer name
 ;; (if the buffer isn't visiting a file)
 (setq frame-title-format
-      '("" invocation-name "@" (:eval (system-name)) " -- "
+      '("emacs@" (:eval (system-name)) " -- "
         (:eval (if (buffer-file-name)
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))

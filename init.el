@@ -4,13 +4,38 @@
 ;;
 ;;; Code:
 
+;; get all the directory names set up
+(defvar *dotfiles-dir* (file-name-directory load-file-name)
+  "The emacs.d root directory.")
+(defvar *modules-dir* (expand-file-name "modules" *dotfiles-dir*)
+  "A directory for configuration files.")
+(defvar *vendor-dir* (expand-file-name "vendor" *dotfiles-dir*)
+  "This directory houses packages that are not yet available in ELPA (or MELPA).")
+(defvar *savefile-dir* (expand-file-name "savefile" *dotfiles-dir*)
+  "This folder stores all the automatically generated save/history-files.")
+
+;; add the needed directories to the load-path
+(add-to-list 'load-path *modules-dir*)
+(add-to-list 'load-path *vendor-dir*)
+
+;; need this function really early so let's handle it here
+(defun load-if-exists (filename dir)
+  "Load FILENAME in DIR if it exists."
+  (let ((target-file (expand-file-name filename dir)))
+    (if (file-exists-p target-file)
+        (load target-file)
+      (message
+       (format
+        "File does not exist, skipping: %s"
+        target-file)))))
+
 ;; Load package managment directories
 (require 'package)
 (setq package-archives
       '(("org"          . "http://orgmode.org/elpa/")
         ("gnu"          . "http://elpa.gnu.org/packages/")
-        ("melpa"        . "http://melpa.milkbox.net/packages/")
-        ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
+        ("melpa"        . "http://melpa.org/packages/")
+        ("melpa-stable" . "http://stable.melpa.org/packages/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -36,23 +61,9 @@
 ;; Always load newest byte code
 (setq load-prefer-newer +1)
 
-;; get all the directory names
-(defvar *dotfiles-dir* (file-name-directory load-file-name)
-  "The emacs.d root directory.")
-(defvar *modules-dir* (expand-file-name "modules" *dotfiles-dir*)
-  "A directory for configuration files.")
-(defvar *vendor-dir* (expand-file-name "vendor" *dotfiles-dir*)
-  "This directory houses packages that are not yet available in ELPA (or MELPA).")
-(defvar *savefile-dir* (expand-file-name "savefile" *dotfiles-dir*)
-  "This folder stores all the automatically generated save/history-files.")
-
 ;; create the savefile dir if it doesn't exist
 (unless (file-exists-p *savefile-dir*)
   (make-directory *savefile-dir*))
-
-;; add the needed directories to the load-path
-(add-to-list 'load-path *modules-dir*)
-(add-to-list 'load-path *vendor-dir*)
 
 ;; set the custom file
 (setq-default custom-file (expand-file-name "custom.el" *savefile-dir*))
@@ -76,17 +87,6 @@
 
 ;; garbage collect when Emacs loses focus
 (add-hook 'focus-out-hook 'garbage-collect)
-
-;; don't throw errors if something doesn't exist
-(defun load-if-exists (filename dir)
-  "Load FILENAME in DIR if it exists."
-  (let ((target-file (expand-file-name filename dir)))
-    (if (file-exists-p target-file)
-        (load target-file)
-      (message
-       (format
-        "File does not exist, skipping: %s"
-        target-file)))))
 
 ;; make adding new module files easy
 (defun load-file-list (format-string files)
@@ -116,8 +116,10 @@
  ((string-equal system-type "windows-nt")
   (load-if-exists "config-windows.el" *modules-dir*)))
 
-;; load non-VCed stuff
+;; anything needed outside of VC goes here
 (load-if-exists "secrets.el" *dotfiles-dir*)
+
+;; (load-if-exists "exordium-bbextensions-tap/after-init.el" *vendor-dir*)
 
 ;; load the language modules
 (load-file-list "lang-%s.el"
