@@ -47,6 +47,7 @@
 
 
 (use-package irony
+  :disabled t
   :ensure t
   :defer t
   :diminish "irony"
@@ -64,6 +65,7 @@
 
 
 (use-package company-irony
+  :disabled t
   :ensure t
   :defer t
   :init
@@ -76,6 +78,7 @@
 
 
 (use-package company-irony-c-headers
+  :disabled t
   :ensure t
   :defer t
   :init
@@ -84,12 +87,14 @@
 
 
 (use-package irony-eldoc
+  :disabled t
   :ensure t
   :defer t
   :init (add-hook 'irony-mode-hook 'irony-eldoc))
 
 
 (use-package cmake-ide
+  :disabled t
   :ensure t
   :defer t
   :init (add-hook 'c-mode-common-hook 'cmake-ide-setup))
