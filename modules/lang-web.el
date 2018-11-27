@@ -56,7 +56,18 @@
 ;; formatting/beatufication for HTML/CSS/JS
 (use-package web-beautify
   :ensure t
-  :after (:any web-mode css-mode))
+  :init
+  (with-eval-after-load 'json-mode
+    (bind-key "C-c C-f" #'web-beautify-js json-mode-map))
+  (with-eval-after-load 'web-mode
+    (bind-key "C-c C-f" #'web-beautify-html web-mode-map))
+  (with-eval-after-load 'sgml-mode
+    (bind-key "C-c C-f" #'web-beautify-html html-mode-map))
+  (with-eval-after-load 'css-mode
+    (bind-key "C-c C-f" #'web-beautify-css css-mode-map))
+  :config
+  ;; Set indent size to 2
+  (setq web-beautify-args '("-s" "2" "-f" "-")))
 
 
 (provide 'lang-web.el)
