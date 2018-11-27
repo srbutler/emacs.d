@@ -1,7 +1,7 @@
-(source "melpa" "https://melpa.milkbox.net/packages/")
-(source "melpa-stable" "https://melpa-stable.milkbox.net/packages/")
+(source "org" "https://orgmode.org/elpa/")
 (source gnu)
-(source org)
+(source melpa)
+(source melpa-stable)
 
 (depends-on "async")
 (depends-on "auctex")
@@ -123,6 +123,7 @@
 (depends-on "markdown-mode")
 (depends-on "material-theme")
 (depends-on "merlin")
+(depends-on "merlin-eldoc")
 (depends-on "mmm-mode")
 (depends-on "multiple-cursors")
 (depends-on "nodejs-repl")

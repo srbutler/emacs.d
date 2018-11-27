@@ -32,10 +32,10 @@
 ;; Load package managment directories
 (require 'package)
 (setq package-archives
-      '(("org"          . "http://orgmode.org/elpa/")
-        ("gnu"          . "http://elpa.gnu.org/packages/")
-        ("melpa"        . "http://melpa.org/packages/")
-        ("melpa-stable" . "http://stable.melpa.org/packages/")))
+      '(("org"          . "https://orgmode.org/elpa/")
+        ("gnu"          . "https://elpa.gnu.org/packages/")
+        ("melpa"        . "https://melpa.org/packages/")
+        ("melpa-stable" . "https://stable.melpa.org/packages/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -132,13 +132,13 @@
                   "go-lsp"
                   "haskell"
                   "java-lsp"
-                  ;; "js"
-                  "js-lsp"
+                  "js"
+                  ;; "js-lsp"
                   "latex"
                   "lisp"
                   "markdown"
-                  ;; "ocaml"
-                  "ocaml-lsp"
+                  "ocaml"
+                  ;; "ocaml-lsp"
                   "org"
                   ;; "python"
                   "python-lsp"
