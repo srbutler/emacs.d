@@ -9,13 +9,15 @@
   :ensure t
   :mode (("\\.ml[ily]?$"  . tuareg-mode)
          ("\\.topml$"     . tuareg-mode)
-         ("\\.ocamlinit$" . tuareg-mode)
-         ("jbuild$"       . tuareg-dune-mode))
+         ("\\.ocamlinit$" . tuareg-mode))
   :init
   ;; Make OCaml-generated files invisible to filename completion
   (dolist
       (ext '(".cmo" ".cmx" ".cma" ".cmxa" ".cmi" ".cmxs" ".cmt" ".cmti" ".annot"))
     (add-to-list 'completion-ignored-extensions ext))
+
+  ;; for dune build files (not in melpa currently)
+  (load-file "~/.opam/4.07.0/share/emacs/site-lisp/dune.el")
 
   :config
   ;; disable backtick/single-quote pairing
@@ -45,13 +47,13 @@
 (use-package flycheck-ocaml
   :ensure t
   :defer t
+  :after merlin
   :init
-  (with-eval-after-load 'merlin
-    ;; Disable Merlin's own error checking
-    (setq merlin-error-after-save nil)
+  ;; Disable Merlin's own error checking
+  (setq merlin-error-after-save nil)
 
-    ;; Enable Flycheck checker
-    (flycheck-ocaml-setup)))
+  ;; Enable Flycheck checker
+  (flycheck-ocaml-setup))
 
 
 ;; REPL control
@@ -68,18 +70,24 @@
 
 ;; indenting/formatting
 (use-package ocp-indent
-  :after tuareg-mode
   :ensure t
-  :defer t
   :bind (:map tuareg-mode-map ("C-c C-f" . ocp-indent-buffer))
-  :init (add-hook 'tuareg-mode-hook 'ocp-indent-caml-mode-setup))
+  :init (add-hook 'tuareg-mode-hook 'ocp-setup-indent))
 
 
-;; taken from spacemacs (package not in MELPA)
 (use-package merlin-eldoc
-  :defer t
-  :load-path "~/.emacs.d/vendor/merlin-eldoc/merlin-eldoc.el"
-  :init (add-hook 'merlin-mode-hook #'merlin-eldoc/setup))
+  :after merlin
+  :ensure t
+  :custom
+  (eldoc-echo-area-use-multiline-p t) ; use multiple lines when necessary
+  (merlin-eldoc-max-lines 8)          ; but not more than 8
+  ;; (merlin-eldoc-type-verbosity 'min)  ; don't display verbose types
+  ;; (merlin-eldoc-function-arguments nil) ; don't show function arguments
+  ;; (merlin-eldoc-doc nil)                ; don't show the documentation
+  :bind (:map merlin-mode-map
+              ("C-c m p" . merlin-eldoc-jump-to-prev-occurrence)
+              ("C-c m n" . merlin-eldoc-jump-to-next-occurrence))
+  :hook ((tuareg-mode reason-mode) . merlin-eldoc-setup))
 
 
 ;; for using Reason's syntax instead of OCaml's
@@ -91,12 +99,6 @@
   (with-eval-after-load 'utop
     (when (executable-find "opam")
      (setq utop-command "opam config exec -- rtop -emacs"))))
-
-
-;; for making #doc calls in utop
-(use-package ocp-index
-  :defer t
-  :load-path "~/.opam/4.05.0/share/emacs/site-lisp")
 
 
 (provide 'lang-ocaml)
