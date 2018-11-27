@@ -187,6 +187,12 @@
   (key-chord-define-global "jk" 'avy-goto-char))
 
 
+;; workspace management
+(use-package perspective
+  :ensure t
+  :config (persp-mode))
+
+
 ;; displays colors for color hex values
 (use-package rainbow-mode
   :ensure t
