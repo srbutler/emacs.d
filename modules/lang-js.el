@@ -11,28 +11,37 @@
   :ensure t
   :defines flycheck-javascript-eslint-executable
   :ensure-system-package (eslint_d . "npm install -g eslint_d")
-  :mode (("\\.js\\'"  . js2-mode)
-         ("\\.jsx\\'" . js2-jsx-mode))
-  :interpreter (("node" . js2-mode)
-                ("node" . js2-jsx-mode))
+  :mode ("\\.js\\'"  . js2-mode)
+  :interpreter ("node" . js2-mode)
   :bind (:map js2-mode-map ("M-." . nil))  ;; don't conflict with xref
   :hook ((js2-mode . js2-imenu-extras-mode)
          (js2-mode . js2-highlight-unused-variables-mode))
   :config
-  (setq js-basic-offset 2
-        ;; mode-name "JS2"
-        js-basic-indent 2
-        js2-basic-offset 2)
+  (setq js2-basic-offset 2)
 
   (with-eval-after-load 'flycheck
-    (if (or (executable-find "eslint_d")
-            (executable-find "eslint")
-            (executable-find "jshint"))
-        (setq js2-mode-show-strict-warnings nil))
-    (if (executable-find "eslint_d")
-        ;; https://github.com/mantoni/eslint_d.js
-        ;; npm -i -g eslint_d
-        (setq flycheck-javascript-eslint-executable "eslint_d"))))
+    (if (executable-find "eslint")
+        (setq js2-mode-show-strict-warnings nil)
+        (setq flycheck-javascript-eslint-executable "eslint"))))
+
+
+;; for jsx
+(use-package rjsx-mode
+  :ensure t
+  :defines flycheck-javascript-eslint-executable
+  :ensure-system-package (eslint_d . "npm install -g eslint_d")
+  :mode (("\\.jsx\\'" . rjsx-mode)
+         ("components\\/.*\\.js\\'" . rjsx-mode))
+  :interpreter ("node" . rjsx-mode)
+  :hook ((rjsx-mode . js2-imenu-extras-mode)
+         (rjsx-mode . js2-highlight-unused-variables-mode))
+  :config
+  (setq js2-basic-offset 2)
+
+  (with-eval-after-load 'flycheck
+    (if (executable-find "eslint")
+        (setq js2-mode-show-strict-warnings nil)
+        (setq flycheck-javascript-eslint-executable "eslint"))))
 
 
 ;; for typescript
@@ -57,20 +66,9 @@
   :ensure t
   :defer t
   :init
-  (add-hook 'js2-mode-hook
-            #'(lambda ()
-                (tide-mode)
-                (flycheck-add-next-checker 'javascript-eslint
-                                           'javascript-tide
-                                           'append)))
-  (add-hook 'rjsx-mode-hook
-            #'(lambda ()
-                (tide-mode)
-                (flycheck-add-next-checker 'javascript-eslint
-                                           'jsx-tide
-                                           'append)))
-  (add-hook 'typescript-mode-hook 'tide-mode)
-  :config (tide-setup))
+  (add-hook 'js2-mode-hook 'tide-setup)
+  (add-hook 'rjsx-mode-hook 'tide-setup)
+  (add-hook 'typescript-mode-hook 'tide-setup))
 
 
 (use-package json-mode
@@ -78,47 +76,14 @@
   :mode ("\\.json\\'" . json-mode))
 
 
-;; formatting/beatufication for HTML/CSS/JS
-(use-package web-beautify
+;; auto-formatter
+(use-package prettier-js
   :ensure t
+  :bind (:map js2-mode-map ("C-c C-f" . prettier-js)
+         :map rjsx-mode-map ("C-c C-f" . prettier-js))
   :init
-  (with-eval-after-load 'js-mode
-    (bind-key "C-c C-f" #'web-beautify-js js-mode-map))
-  (with-eval-after-load 'js2-mode
-    (bind-key "C-c C-f" #'web-beautify-js js2-mode-map))
-  (with-eval-after-load 'json-mode
-    (bind-key "C-c C-f" #'web-beautify-js json-mode-map))
-  (with-eval-after-load 'web-mode
-    (bind-key "C-c C-f" #'web-beautify-html web-mode-map))
-  (with-eval-after-load 'sgml-mode
-    (bind-key "C-c C-f" #'web-beautify-html html-mode-map))
-  (with-eval-after-load 'css-mode
-    (bind-key "C-c C-f" #'web-beautify-css css-mode-map))
-  :config
-  ;; Set indent size to 2
-  (setq web-beautify-args '("-s" "2" "-f" "-")))
-
-
-
-;; JS autocompletion
-(use-package tern
-  :disabled t
-  :ensure t
-  :if (executable-find "tern")
-  :commands tern-mode
-  :diminish (tern-mode . "tern")
-  :init (add-hook 'js2-mode-hook 'tern-mode))
-
-
-;; connect tern with company
-(use-package company-tern
-  :disabled t
-  :after (company tern-mode)
-  :init
-  (add-hook 'js2-mode-hook
-            #'(lambda ()
-                (set (make-local-variable 'company-backends)
-                     '((company-tern company-files company-yasnippet))))))
+  (add-hook 'js2-mode-hook 'prettier-js-mode)
+  (add-hook 'rjsx-mode-hook 'prettier-js-mode))
 
 
 ;; REPL/dev environment
