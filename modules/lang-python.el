@@ -7,6 +7,8 @@
 ;;
 ;;; Code:
 
+(defvar *python-use-lsp* nil)
+
 (use-package python
   :mode ("\\.py\\'" . python-mode)
         ("\\.wsgi$" . python-mode)
@@ -37,6 +39,7 @@
 
 
 (use-package elpy
+  :unless *python-use-lsp*
   :ensure t
   :commands elpy-enable
   :init (with-eval-after-load 'python (elpy-enable))
@@ -58,6 +61,14 @@
                        ;; elpy-module-highlight-indentation
                        ;; elpy-module-pyvenv
                        )))
+
+
+;; install: pip install \"python-language-server[all]\"
+(use-package lsp-python
+  :if *python-use-lsp*
+  :ensure t
+  :init (add-hook 'python-mode-hook 'lsp-python-enable))
+
 
 ;; set up pyenv
 (use-package pyenv-mode
