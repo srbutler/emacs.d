@@ -4,6 +4,8 @@
 ;;
 ;;; Code:
 
+(defvar *ocaml-use-lsp* nil)
+
 ;; Ocaml major mode
 (use-package tuareg
   :ensure t
@@ -26,21 +28,28 @@
 
 
 ;; completion engine
+;; install: opam install merlin
 (use-package merlin
+  :unless *ocaml-use-lsp*
+  :after company
   :ensure t
   :defer t
   :after tuareg company
+  :defines company-backends
   :bind (:map tuareg-mode-map
-         ("C-c C-t" . merlin-type-enclosing))
+              ("C-c C-t" . merlin-type-enclosing))
+  :hook ((tuareg-mode reason-mode caml-mode) . merlin-mode)
   :init
-  (add-hook 'tuareg-mode-hook 'merlin-mode)
-  (add-hook 'reason-mode-hook 'merlin-mode)
-
   (setq merlin-completion-with-doc t)
+  (add-to-list 'company-backends 'merlin-company-backend))
 
-  :config
-  (with-eval-after-load 'company
-    (add-to-list 'company-backends 'merlin-company-backend)))
+
+;; install: npm i -g ocaml-language-server
+;; install: opam install merlin
+(use-package lsp-ocaml
+  :if *ocaml-use-lsp*
+  :ensure t
+  :hook ((tuareg-mode caml-mode reason-mode) . lsp-ocaml-enable))
 
 
 ;; error checking
@@ -98,7 +107,7 @@
   ;; change the utop command to rtop
   (with-eval-after-load 'utop
     (when (executable-find "opam")
-     (setq utop-command "opam config exec -- rtop -emacs"))))
+      (setq utop-command "opam config exec -- rtop -emacs"))))
 
 
 (provide 'lang-ocaml)
