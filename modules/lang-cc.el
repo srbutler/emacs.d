@@ -1,13 +1,15 @@
-;;; lang-c.el --- Summary:
+;;; lang-cc.el --- Summary:
 ;;
 ;;; Commentary:
 ;;
-;; Most configuration details borrowed from:
+;; Many configuration details borrowed from:
 ;; http://syamajala.github.io/c-ide.html
 ;; http://tuhdo.github.io/c-ide.html
 ;;
 ;;; Code:
 
+;; switch use of LSP versus Irony easily
+(defvar *cc-use-lsp* t)
 
 (use-package cc-mode
   :mode ("\\.h\\'" . c++-mode)  ;; headers default to C++
@@ -31,6 +33,53 @@
   :hook ((c++-mode . modern-c++-font-lock-mode)))
 
 
+;; lsp server
+;; install with `brew tap twlz0ne/homebrew-ccls && brew install ccls'
+(use-package ccls
+  :when *cc-use-lsp*
+  :ensure t
+  :hook ((c-mode   . lsp-ccls-enable)
+         (c++-mode . lsp-ccls-enable))
+  :commands projectile-project-root-files-top-down-recurring
+  :config
+  (setq ccls-executable "/usr/local/bin/ccls")
+  ;; adds irony-style detailed laels
+  (setq ccls-extra-init-params '(:completion (:detailedLabel t)))
+
+  (with-eval-after-load 'projectile
+    (setq projectile-project-root-files-top-down-recurring
+          (append '("compile_commands.json"
+                    ".ccls")
+                  projectile-project-root-files-top-down-recurring))))
+
+
+(use-package flycheck-clang-analyzer
+  :ensure t
+  :after flycheck
+  :commands flycheck-clang-analyzer-executable
+  :config
+  (progn
+    (setq flycheck-clang-analyzer-executable "clang")
+    (flycheck-clang-analyzer-setup)
+    ;; automatically sets itself up as next checker after lsp-ui so undo
+    ;; that so is instead after cppcheck
+    (delete '(warning . clang-analyzer)
+            (flycheck-checker-get 'lsp-ui 'next-checkers))
+    (flycheck-add-next-checker 'c/c++-cppcheck '(t . clang-analyzer))))
+
+
+(use-package flycheck-cstyle
+  :disabled t
+  :ensure t
+  :ensure-system-package (cstyle . "pip3 install cstyle")
+  :after lsp-ui
+  :config
+  (progn
+    (flycheck-cstyle-setup)
+    (flycheck-add-next-checker 'lsp-ui '(warning . cstyle))
+    (flycheck-add-next-checker 'cstyle '(t . c/c++-cppcheck))))
+
+
 (use-package google-c-style
   :ensure t
   :defer t
@@ -47,6 +96,7 @@
 
 
 (use-package irony
+  :unless *cc-use-lsp*
   :ensure t
   :defer t
   :diminish "irony"
@@ -64,6 +114,8 @@
 
 
 (use-package company-irony
+  :unless *cc-use-lsp*
+  :disabled t
   :ensure t
   :defer t
   :init
@@ -76,24 +128,29 @@
 
 
 (use-package company-irony-c-headers
+  :unless *cc-use-lsp*
+  :disabled t
   :ensure t
   :defer t
   :init
   (eval-after-load 'company
-  '(add-to-list 'company-backends 'company-irony-c-headers)))
+    '(add-to-list 'company-backends 'company-irony-c-headers)))
 
 
 (use-package irony-eldoc
+  :unless *cc-use-lsp*
+  :disabled t
   :ensure t
   :defer t
   :init (add-hook 'irony-mode-hook 'irony-eldoc))
 
 
 (use-package cmake-ide
+  :disabled t
   :ensure t
   :defer t
   :init (add-hook 'c-mode-common-hook 'cmake-ide-setup))
 
 
-(provide 'lang-c)
-;;; lang-c.el ends here
+(provide 'lang-cc)
+;;; lang-cc.el ends here
