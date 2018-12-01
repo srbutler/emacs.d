@@ -79,11 +79,6 @@
   :hook ((typescript-mode js2-mode rjsx-mode) . lsp-javascript-typescript-enable))
 
 
-(use-package json-mode
-  :ensure t
-  :mode ("\\.json\\'" . json-mode))
-
-
 ;; auto-formatter
 (use-package prettier-js
   :ensure t

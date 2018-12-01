@@ -20,7 +20,7 @@
   :after lsp-mode
   :hook ((lsp-mode . lsp-ui-mode))
   :bind (:map lsp-ui-mode-map
-              ;; use the peak functions instead of jumps
+              ;; use the peek functions instead of jumps
               ("M-." . lsp-ui-peek-find-definitions)
               ("M-?" . lsp-ui-peek-find-references)
               ("C-c C-l c" . lsp-capabilities)

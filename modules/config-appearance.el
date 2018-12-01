@@ -12,7 +12,7 @@
 
 ;; THEME SETTINGS -----------------------------
 
-(defvar *current-theme-name* 'default)
+
 
 ;; only load themes when opened in a window system
 (when window-system

@@ -70,4 +70,6 @@
   :config (cljr-add-keybindings-with-prefix "C-c r")
   :diminish clj-refactor-mode)
 
+
+(provide 'lang-clojure)
 ;;; lang-clojure.el ends here

@@ -1,4 +1,4 @@
-;;; config-ui.el -- Summary
+;;; config-general.el -- Summary
 ;;
 ;;; Commentary:
 ;;
@@ -12,6 +12,14 @@
         (:eval (if (buffer-file-name)
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
+
+;; setup savefiles/backups in a way that's not annoying
+(setq backup-directory-alist `(("." . "~/.emacs.d/savefile/"))
+      backup-by-copying t
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)
 
 ;; set some basic defaults
 (setq-default
@@ -27,12 +35,14 @@
  enable-local-variables          :all
  fill-column                     80
  ffap-machine-p-known            'reject       ;; stop attempts at pinging websites on autocomplete
+ gc-cons-threshold               50000000      ;; reduce the frequency of garbage collection
  help-window-select              t             ;; Focus new help windows when opened
  indent-tabs-mode                nil           ;; Stop using tabs to indent
  indicate-empty-lines            nil
  inhibit-startup-message         t
  initial-scratch-message         ";; scratch\n"
  kill-do-not-save-duplicates     t
+ large-file-warning-threshold    100000000     ;; warn when opening files bigger than 100MB
  linum-format                    " %4d "
  major-mode                      'text-mode
  mode-require-final-newline      t
@@ -59,6 +69,9 @@
 (global-visual-line-mode 0)    ;; do not wrap long lines
 (line-number-mode t)           ;; put column number in mode-line
 (size-indication-mode t)
+
+;; garbage collect when Emacs loses focus
+(add-hook 'focus-out-hook 'garbage-collect)
 
 (when window-system
   (global-hl-line-mode +1)    ;; highlight the current line
@@ -109,6 +122,11 @@
 ;; set a general key for goto-line
 (bind-key "C-c l" #'goto-line global-map)
 
+;; some better text editing commands
+(bind-key "M-c" #'capitalize-dwim global-map)
+(bind-key "M-l" #'downcase-dwim global-map)
+(bind-key "M-u" #'upcase-dwim global-map)
+
 
 ;; defines the standard backtab behavior of most editors
 (defun un-indent-by-removing-4-spaces ()
@@ -128,14 +146,11 @@
 (add-hook 'prog-mode-hook 'electric-pair-mode)
 (add-hook 'prog-mode-hook 'electric-indent-mode)
 
+;; ensure subword-mode is on for all prog modes
+(add-hook 'prog-mode-hook 'subword-mode)
 
-;; edit zsh/prezto files in sh-mode
-(defvar pretzo-files '("zlogin" "zlogout" "zpretzorc"
-                       "zprofile" "zshenv" "zshrc"))
-(mapc
- (lambda (file)
-   (add-to-list 'auto-mode-alist `(,(format "\\%s\\'" file) . sh-mode)))
- pretzo-files)
+;; we need this for later
+(defvar *current-theme-name* 'default)
 
 
 ;; revert buffers automatically when underlying files are changed externally
@@ -184,11 +199,14 @@
 (use-package crux
   :ensure t
   :demand
-  :bind (("C-c e"   . crux-eval-and-replace)
-         ("C-x 4 t" . crux-transpose-windows)
+  :bind (("C-x 4 t" . crux-transpose-windows)
          ("C-c I"   . crux-find-user-init-file)
          ("C-c S"   . crux-find-shell-init-file)
-         ("C-c n"   . crux-cleanup-buffer-or-region))
+         ("C-c n"   . crux-cleanup-buffer-or-region)
+         ("C-c r"   . crux-rename-file-and-buffer)
+         ("C-c TAB" . crux-indent-rigidly-and-copy-to-clipboard)
+         :map emacs-lisp-mode-map
+         ("C-c e"   . crux-eval-and-replace))
   :config
   ;; kills to end of line first, then whole line
   (global-set-key [remap kill-line] #'crux-smart-kill-line)
@@ -359,15 +377,15 @@
   :ensure t
   :config (setq mc/list-file (expand-file-name "mc-lists.el" *savefile-dir*))
   :bind
-   (("C-c m t" . mc/mark-all-like-this)
-    ("C-c m m" . mc/mark-all-like-this-dwim)
-    ("C-c m l" . mc/edit-lines)
-    ("C-c m e" . mc/edit-ends-of-lines)
-    ("C-c m a" . mc/edit-beginnings-of-lines)
-    ("C-c m n" . mc/mark-next-like-this)
-    ("C-c m p" . mc/mark-previous-like-this)
-    ("C-c m s" . mc/mark-sgml-tag-pair)
-    ("C-c m d" . mc/mark-all-like-this-in-defun)))
+  (("C-c m t" . mc/mark-all-like-this)
+   ("C-c m m" . mc/mark-all-like-this-dwim)
+   ("C-c m l" . mc/edit-lines)
+   ("C-c m e" . mc/edit-ends-of-lines)
+   ("C-c m a" . mc/edit-beginnings-of-lines)
+   ("C-c m n" . mc/mark-next-like-this)
+   ("C-c m p" . mc/mark-previous-like-this)
+   ("C-c m s" . mc/mark-sgml-tag-pair)
+   ("C-c m d" . mc/mark-all-like-this-in-defun)))
 
 
 ;; pandoc
@@ -446,6 +464,16 @@
         ;; keep the home clean
         savehist-file (expand-file-name "savehist" *savefile-dir*))
   (savehist-mode +1))
+
+
+;; ensure sh-mode is setup for prezto files
+(use-package sh-mode
+  :mode (("\\.?zlogin\\'" . sh-mode)
+         ("\\.?zlogout\\'" . sh-mode)
+         ("\\.?zpreztorc\\'" . sh-mode)
+         ("\\.?zprofile\\'" . sh-mode)
+         ("\\.?zshenv\\'" . sh-mode)
+         ("\\.?zshrc\\'" . sh-mode)))
 
 
 ;; get smartparens in programming modes
@@ -591,5 +619,5 @@
   :ensure t)
 
 
-(provide 'config-ui)
-;;; config-ui.el ends here
+(provide 'config-general)
+;;; config-general.el ends here
