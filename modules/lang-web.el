@@ -4,6 +4,8 @@
 ;;
 ;;; Code:
 
+(defvar *web-use-lsp* nil)
+
 (use-package web-mode
   :ensure t
   :mode (("\\.html?\\'" . web-mode)
@@ -21,10 +23,7 @@
   (web-mode-indent-style 2)
   (web-mode-style-padding 1)
   (web-mode-script-padding 1)
-  (web-mode-block-padding 0)
-
-  ;; allows linting jsx files
-  :config (flycheck-add-mode 'javascript-eslint 'web-mode))
+  (web-mode-block-padding 0))
 
 
 (use-package nxml-mode
@@ -40,6 +39,31 @@
   :config
   (add-hook 'nxml-mode-hook 'smartparens-mode)
   (add-hook 'nxml-mode-hook 'emmet-mode))
+
+
+(use-package json-mode
+  :ensure t
+  :mode ("\\.json\\'" . json-mode))
+
+
+(use-package css-mode
+  :ensure nil
+  :init (setq css-indent-offset 2))
+
+
+;; SCSS mode
+(use-package scss-mode
+  :ensure t
+  :defer t
+  :init
+  ;; Disable complilation on save
+  (setq scss-compile-at-save nil))
+
+
+;; New `less-css-mode' in Emacs 26
+(use-package less-css-mode
+  :unless (fboundp 'less-css-mode)
+  :ensure t)
 
 
 ;; emmet mode for efficient xml/html entry
@@ -68,6 +92,32 @@
   :config
   ;; Set indent size to 2
   (setq web-beautify-args '("-s" "2" "-f" "-")))
+
+
+;; CSS eldoc
+(use-package css-eldoc
+  :commands turn-on-css-eldoc
+  :hook ((css-mode scss-mode less-css-mode) . turn-on-css-eldoc))
+
+
+;; CSS, LESS, and SCSS/SASS support for lsp-mode using vscode-css-languageserver-bin
+;; install: npm i -g vscode-css-languageserver-bin
+(use-package lsp-css
+  :unless *web-use-lsp*
+  :ensure t
+  :hook ((css-mode . lsp-css-enable)
+         (less-mode . lsp-less-enable)
+         (sass-mode . lsp-sass-enable)
+         (scss-mode . lsp-scss-enable)))
+
+
+;; HTML support for lsp-mode using vscode-html-languageserver-bin
+;; install: npm i -g vscode-html-languageserver-bin
+(use-package lsp-html
+  :unless *web-use-lsp*
+  :ensure t
+  :hook ((html-mode . lsp-html-enable)
+         (web-mode . lsp-html-enable)))
 
 
 (provide 'lang-web.el)
