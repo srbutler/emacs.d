@@ -4,6 +4,8 @@
 ;;
 ;;; Code:
 
+(defvar *rust-use-lsp* nil)
+
 (use-package rust-mode
   :ensure t
   :mode ("\\.rs\\'" . rust-mode)
@@ -13,13 +15,13 @@
   (sp-local-pair 'rust-mode "'" nil :actions nil))
 
 (use-package racer
+  :unless *rust-use-lsp*
   :ensure t
-  :after rust-mode
   :bind (:map rust-mode-map
               ("M-." . racer-find-definition)
               ("M-," . pop-tag-mark)
               ("TAB" . company-indent-or-complete-common))
-  :init (add-hook 'rust-mode-hook 'racer-mode)
+  :hook (rust-mode . racer-mode)
   :custom
   (company-tooltip-align-annotations t)
   (racer-cmd "~/.cargo/bin/racer")
@@ -27,16 +29,27 @@
   :config
   (add-hook 'racer-mode-hook 'eldoc-mode))
 
+
+;; set up LSP server for Rust
+;; install: rustup component add rls-preview rust-analysis rust-src
+(use-package lsp-rust
+  :if *rust-use-lsp*
+  :ensure t
+  :hook ((rust-mode . lsp-rust-enable)))
+
+
 (use-package flycheck-rust
   :ensure t
   :defer t
   :init (add-hook 'flycheck-mode-hook 'flycheck-rust-setup))
+
 
 (use-package cargo
   :ensure t
   :defer t
   :diminish (cargo-minor-mode . "cargo")
   :init (add-hook 'rust-mode-hook 'cargo-minor-mode))
+
 
 (provide 'lang-rust)
 ;;; lang-rust.el ends here
