@@ -4,6 +4,7 @@
 ;;
 ;;; Code:
 
+(defvar *js-use-lsp* nil)
 
 ;; from https://github.com/seagle0128/.emacs.d
 ;; Improved JavaScript editing mode
@@ -22,7 +23,7 @@
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
         (setq js2-mode-show-strict-warnings nil)
-        (setq flycheck-javascript-eslint-executable "eslint"))))
+      (setq flycheck-javascript-eslint-executable "eslint"))))
 
 
 ;; for jsx
@@ -41,7 +42,7 @@
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
         (setq js2-mode-show-strict-warnings nil)
-        (setq flycheck-javascript-eslint-executable "eslint"))))
+      (setq flycheck-javascript-eslint-executable "eslint"))))
 
 
 ;; for typescript
@@ -63,12 +64,19 @@
 
 ;; for JS/TS autocompletion
 (use-package tide
+  :unless *js-use-lsp*
   :ensure t
   :defer t
-  :init
-  (add-hook 'js2-mode-hook 'tide-setup)
-  (add-hook 'rjsx-mode-hook 'tide-setup)
-  (add-hook 'typescript-mode-hook 'tide-setup))
+  :hook ((typescript-mode js2-mode rjsx-mode) . tide-setup))
+
+
+;; install: npm i -g javascript-typescript-langserver
+;; from https://github.com/seagle0128/.emacs.d
+(use-package lsp-javascript-typescript
+  :if *js-use-lsp*
+  :ensure t
+  :commands lsp-javascript-typescript-enable
+  :hook ((typescript-mode js2-mode rjsx-mode) . lsp-javascript-typescript-enable))
 
 
 (use-package json-mode
@@ -79,8 +87,10 @@
 ;; auto-formatter
 (use-package prettier-js
   :ensure t
-  :bind (:map js2-mode-map ("C-c C-f" . prettier-js)
-         :map rjsx-mode-map ("C-c C-f" . prettier-js))
+  :bind (:map js2-mode-map
+              ("C-c C-f" . prettier-js)
+         :map rjsx-mode-map
+              ("C-c C-f" . prettier-js))
   :init
   (add-hook 'js2-mode-hook 'prettier-js-mode)
   (add-hook 'rjsx-mode-hook 'prettier-js-mode))
@@ -95,5 +105,5 @@
   :hook ((js2-mode . indium-interaction-mode)))
 
 
-(provide 'lang-js.el)
+(provide 'lang-js)
 ;;; lang-js.el ends here
