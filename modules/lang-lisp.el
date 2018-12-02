@@ -12,7 +12,6 @@
          ("\\.sbclrc\\'" . lisp-mode))
   :config
   (add-hook 'lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'lisp-mode-hook 'paredit-mode)
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'lisp-mode-hook 'eldoc-mode))
 
@@ -60,15 +59,14 @@
   :ensure t
   :defer t
   :init (add-hook 'scheme-mode-hook 'geiser-mode)
+  :commands geiser-default-implementation
   :config
+  ;; default to racket
+  (setq geiser-default-implementation 'racket)
 
   ;; regular lisp defaults
   (add-hook 'geiser-mode-hook 'smartparens-strict-mode)
-  (add-hook 'geiser-mode-hook 'paredit-mode)
   (add-hook 'geiser-mode-hook 'rainbow-delimiters-mode)
-
-  ;; default to racket
-  (setq geiser-default-implementation 'racket)
 
   ;; hooks for geiser-REPL
   (add-hook 'geiser-repl-mode-hook 'smartparens-mode)

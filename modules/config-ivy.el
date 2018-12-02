@@ -16,7 +16,6 @@
 (use-package counsel
   :ensure t
   :after smex
-  :ensure-system-package (rg . "ripgrep")
   :demand
   :diminish
   :bind  (("M-x" . counsel-M-x)
@@ -40,6 +39,8 @@
    "\\.DS_Store\\|.git\\|\.*~undo-tree~\\|GPATH\\|GRTAGS\\|GTAGS\\|.*.elc")
   (counsel-grep-base-command
    "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
+  ;; (counsel-grep-base-command
+  ;;  "ag -i --noheading --nocolor --nofilename --numbers '%s' %s")
   (counsel-)
   :config (counsel-mode 1))
 
@@ -119,9 +120,9 @@
 
 
 ;; access to GNU Global tags
+;; install: brew install global
 (use-package counsel-gtags
   :ensure t
-  :ensure-system-package global
   :after counsel
   :diminish (counsel-gtags-mode . "gtags")
   :init (add-hook 'prog-mode-hook 'counsel-gtags-mode)

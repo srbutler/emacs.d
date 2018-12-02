@@ -281,7 +281,6 @@
 ;; syntax-checking
 (use-package flycheck
   :ensure t
-  :ensure-system-package (cppcheck shellcheck)
   :diminish (flycheck-mode . "flyc")
   :config
   (global-flycheck-mode)
@@ -359,11 +358,19 @@
   :ensure t
   :defer t
   :custom (magit-completing-read-function 'ivy-completing-read)
-  :bind (("C-c g l"   . magit-log-popup)
-         ("C-c g p s" . magit-push-popup)
-         ("C-c g p l" . magit-pull-and-fetch-popup)
-         ("C-c g r"   . magit-rebase-popup)
-         ("C-c g s"   . magit-status)))
+  :bind (("C-c g b" . magit-branch-popup)
+         ("C-c g B" . magit-blame-popup)
+         ("C-c g d" . magit-diff-popup)
+         ("C-c g l" . magit-log-popup)
+         ("C-c g m" . magit-merge-popup)
+         ("C-c g p" . magit-pull-and-fetch-popup)
+         ("C-c g P" . magit-push-popup)
+         ("C-c g r" . magit-rebase-popup)
+         ("C-c g R" . magit-reset-popup)
+         ("C-c g s" . magit-status)
+         ("C-c g S" . magit-stash-popup)
+         ("C-c g v" . magit-revert-popup)
+         ("C-c g x" . magit-run-popup)))
 
 
 ;; display TODOs in status buffer
@@ -391,7 +398,6 @@
 ;; pandoc
 (use-package pandoc-mode
   :ensure t
-  :ensure-system-package pandoc
   :diminish (pandoc-mode . "pandoc")
   :hook (markdown-mode org-mode TeX-mode)
   :config (pandoc-load-default-settings))
@@ -482,12 +488,10 @@
   :diminish (smartparens-mode . "sp")
   :init
   (use-package smartparens-config)
-  (sp-use-paredit-bindings)
   (add-hook 'prog-mode-hook 'smartparens-strict-mode)
   (show-smartparens-global-mode 1)
   :config
-  (setq sp-base-key-bindings 'paredit
-        sp-autoskip-closing-pair 'always
+  (setq sp-autoskip-closing-pair 'always
         sp-hybrid-kill-entire-symbol nil)
 
   (sp-local-pair '(markdown-mode gfm-mode) "*" "*"

@@ -68,10 +68,10 @@
     (flycheck-add-next-checker 'c/c++-cppcheck '(t . clang-analyzer))))
 
 
+;; install: pip3 install cstyle
 (use-package flycheck-cstyle
   :disabled t
   :ensure t
-  :ensure-system-package (cstyle . "pip3 install cstyle")
   :after lsp-ui
   :config
   (progn

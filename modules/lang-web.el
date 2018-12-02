@@ -120,5 +120,5 @@
          (web-mode . lsp-html-enable)))
 
 
-(provide 'lang-web.el)
+(provide 'lang-web)
 ;;; lang-web.el ends here

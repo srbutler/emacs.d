@@ -11,7 +11,6 @@
 (use-package js2-mode
   :ensure t
   :defines flycheck-javascript-eslint-executable
-  :ensure-system-package (eslint_d . "npm install -g eslint_d")
   :mode ("\\.js\\'"  . js2-mode)
   :interpreter ("node" . js2-mode)
   :bind (:map js2-mode-map ("M-." . nil))  ;; don't conflict with xref
@@ -30,7 +29,6 @@
 (use-package rjsx-mode
   :ensure t
   :defines flycheck-javascript-eslint-executable
-  :ensure-system-package (eslint_d . "npm install -g eslint_d")
   :mode (("\\.jsx\\'" . rjsx-mode)
          ("components\\/.*\\.js\\'" . rjsx-mode))
   :interpreter ("node" . rjsx-mode)

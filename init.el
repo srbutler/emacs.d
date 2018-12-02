@@ -17,7 +17,7 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(when (string-equal system-type "darwin")
+(when (file-exists-p "/usr/local/share/emacs/site-lisp/cask/")
   (progn
     ;; set up cask
     (use-package cask
@@ -27,11 +27,7 @@
     ;; add pallet to manage packages
     (use-package pallet
       :ensure t
-      :config (pallet-mode t))
-
-    ;; load use-package extensions
-    (use-package use-package-ensure-system-package
-      :ensure t)))
+      :config (pallet-mode t))))
 
 ;; Always load newest byte code
 (setq load-prefer-newer +1)
@@ -110,7 +106,6 @@
 (require 'lang-python)
 (require 'lang-rust)
 (require 'lang-scala)
-;; (require 'lang-web)
-(require 'lang-web-lsp)
+(require 'lang-web)
 
 ;;; init.el ends here

@@ -8,8 +8,7 @@
 (use-package clojure-mode
   :ensure t
   :init
-  ;; (add-hook 'clojure-mode-hook 'global-prettify-symbols-mode)
-  (add-hook 'clojure-mode-hook 'paredit-mode)
+  (add-hook 'clojure-mode-hook 'smartparens-mode)
   (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'clojure-mode-hook 'subword-mode))
 

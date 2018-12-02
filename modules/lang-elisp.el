@@ -30,7 +30,6 @@
   :init
   (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
   (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
   :config
@@ -51,8 +50,7 @@
   :ensure nil
   :config
   (add-hook 'ielm-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'ielm-mode-hook 'smartparens-strict-mode)
-  (add-hook 'ielm-mode-hook 'paredit-mode))
+  (add-hook 'ielm-mode-hook 'smartparens-strict-mode))
 
 
 (provide 'lang-elisp)
