@@ -57,7 +57,10 @@
 ;; for typescript
 (use-package typescript-mode
   :ensure t
-  :mode ("\\.tsx?$" . typescript-mode))
+  :mode ("\\.tsx?$" . typescript-mode)
+  :config
+  (use-package smartparens-javascript
+    :after smartparens-mode))
 
 
 ;; from https://github.com/seagle0128/.emacs.d
