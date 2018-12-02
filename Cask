@@ -136,7 +136,6 @@
 (depends-on "pandoc-mode")
 (depends-on "pcre2el")
 (depends-on "peg")
-(depends-on "persp-projectile")
 (depends-on "perspective")
 (depends-on "pkg-info")
 (depends-on "popup")
