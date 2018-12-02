@@ -25,7 +25,10 @@
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
         (setq js2-mode-show-strict-warnings nil)
-      (setq flycheck-javascript-eslint-executable "eslint"))))
+      (setq flycheck-javascript-eslint-executable "eslint")))
+
+  (use-package smartparens-javascript
+    :after smartparens-mode))
 
 
 ;; for jsx
@@ -45,7 +48,10 @@
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
         (setq js2-mode-show-strict-warnings nil)
-      (setq flycheck-javascript-eslint-executable "eslint"))))
+      (setq flycheck-javascript-eslint-executable "eslint")))
+
+  (use-package smartparens-javascript
+    :after smartparens-mode))
 
 
 ;; for typescript

@@ -29,7 +29,10 @@
   (web-mode-indent-style 2)
   (web-mode-style-padding 1)
   (web-mode-script-padding 1)
-  (web-mode-block-padding 0))
+  (web-mode-block-padding 0)
+  :config
+  (use-package smartparens-html
+    :after smartparens-mode))
 
 
 (use-package nxml-mode
