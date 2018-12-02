@@ -37,6 +37,7 @@
   :interpreter ("node" . rjsx-mode)
   :hook ((rjsx-mode . js2-imenu-extras-mode)
          (rjsx-mode . js2-highlight-unused-variables-mode))
+  :bind (:map js2-mode-map ("M-." . nil))  ;; don't conflict with xref
   :config
   (setq js2-basic-offset 2)
 
@@ -52,7 +53,10 @@
 ;; for typescript
 (use-package typescript-mode
   :ensure t
-  :mode ("\\.tsx?$" . typescript-mode))
+  :mode ("\\.tsx?$" . typescript-mode)
+  :config
+  (use-package smartparens-javascript
+    :after smartparens-mode))
 
 
 ;; from https://github.com/seagle0128/.emacs.d
