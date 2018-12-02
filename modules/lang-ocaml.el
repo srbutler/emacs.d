@@ -19,12 +19,13 @@
     (add-to-list 'completion-ignored-extensions ext))
 
   ;; for dune build files (not in melpa currently)
-  (load-file "~/.opam/4.07.0/share/emacs/site-lisp/dune.el")
+  (use-package dune
+    :if (file-exists-p "~/.opam/4.07.0/share/emacs/site-lisp/dune.el")
+    :load-path "~/.opam/4.07.0/share/emacs/site-lisp/")
 
   :config
-  ;; disable backtick/single-quote pairing
-  (sp-local-pair 'tuareg-mode "'" nil :actions nil)
-  (sp-local-pair 'tuareg-mode "`" nil :actions nil))
+  (use-package smartparens-ml
+    :after smartparens-mode))
 
 
 ;; completion engine

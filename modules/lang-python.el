@@ -10,27 +10,28 @@
 (defvar *python-use-lsp* nil)
 
 (use-package python
-  :mode ("\\.py\\'" . python-mode)
-        ("\\.wsgi$" . python-mode)
+  :mode (("\\.py\\'" . python-mode)
+         ("\\.wsgi$" . python-mode))
   :interpreter ("python" . python-mode)
   :custom
   (indent-tabs-mode nil)
   (python-indent-offset 4)
   :config
-    ;; use ipython instead of standard interpreter if found
+  (use-package smartparens-python
+    :after smartparens-mode)
+
+  ;; use ipython instead of standard interpreter if found
   (when (executable-find "ipython")
-      (setq python-shell-interpreter "ipython"
-            python-shell-interpreter-args "-i --simple-prompt"))
+    (setq python-shell-interpreter "ipython"
+          python-shell-interpreter-args "-i --simple-prompt"))
 
   ;; add smarparens to inferior-python mode
-  (add-hook 'inferior-python-mode-hook 'smartparens-mode)
+  (add-hook 'inferior-python-mode-hook 'smartparens-strict-mode)
 
   ;; set custom keywords for python-mode
   (font-lock-add-keywords
    'python-mode
-   '(
-     ;; ("[ \t]*\\<\\(from\\)\\>" 1 'font-lock-preprocessor-face)
-     ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
+   '(("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
@@ -41,11 +42,10 @@
 (use-package elpy
   :unless *python-use-lsp*
   :ensure t
+  :after python
   :commands elpy-enable
-  :init (with-eval-after-load 'python (elpy-enable))
   :bind (:map elpy-mode-map
               ("C-x C-e" . python-shell-send-defun)
-              ("C-c C-r e" . elpy-multiedit-python-symbol-at-point)
               ("C-c C-f" . elpy-format-code))
   :custom
   ;; set refactoring backend ("rope" or "jedi")
@@ -96,15 +96,14 @@
          ("\\.pxi\\'"  . cython-mode))
   :config
   (font-lock-add-keywords
-   'cython-modep
-   '(
-     ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
+   'python-mode
+   '(("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
      ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)
-     ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face)
-     )))
+     ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face))))
+
 
 (provide 'lang-python)
 ;;; lang-python.el ends here

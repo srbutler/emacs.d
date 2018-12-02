@@ -10,7 +10,10 @@
   :init
   (add-hook 'clojure-mode-hook 'smartparens-mode)
   (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'clojure-mode-hook 'subword-mode))
+  (add-hook 'clojure-mode-hook 'subword-mode)
+  :config
+  (use-package smartparens-clojure
+    :after smartparens-mode))
 
 
 ;; defines a function for better REPL interaction

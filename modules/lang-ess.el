@@ -10,7 +10,9 @@
   :mode ("\\.R$" . R-mode)
   :bind (:map ess-mode-map
               ("C-;" . (lambda () (interactive) (insert " <- "))))
-  :config (require 'smartparens-ess)
+  :config
+  (use-package smartparens-ess
+    :after smartparens-mode)
   :custom
   (ess-ask-for-ess-directory nil)
   (ess-local-process-name "R")

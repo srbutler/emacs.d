@@ -22,7 +22,10 @@
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
         (setq js2-mode-show-strict-warnings nil)
-      (setq flycheck-javascript-eslint-executable "eslint"))))
+      (setq flycheck-javascript-eslint-executable "eslint")))
+
+  (use-package smartparens-javascript
+    :after smartparens-mode))
 
 
 ;; for jsx
@@ -40,7 +43,10 @@
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
         (setq js2-mode-show-strict-warnings nil)
-      (setq flycheck-javascript-eslint-executable "eslint"))))
+      (setq flycheck-javascript-eslint-executable "eslint")))
+
+  (use-package smartparens-javascript
+    :after smartparens-mode))
 
 
 ;; for typescript
@@ -82,7 +88,7 @@
   :ensure t
   :bind (:map js2-mode-map
               ("C-c C-f" . prettier-js)
-         :map rjsx-mode-map
+              :map rjsx-mode-map
               ("C-c C-f" . prettier-js))
   :init
   (add-hook 'js2-mode-hook 'prettier-js-mode)

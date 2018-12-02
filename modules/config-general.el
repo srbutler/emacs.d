@@ -247,6 +247,10 @@
   :ensure t)
 
 
+(use-package docker-tramp
+  :ensure t)
+
+
 (use-package dockerfile-mode
   :ensure t
   :mode ("Dockerfile\\'" . dockerfile-mode))
@@ -338,7 +342,6 @@
   :mode (("\\.gpi\\'" . gnuplot-mode)
          ("\\.plt\\'" . gnuplot-mode)
          ("\\.gp\\'"  . gnuplot-mode)))
-
 
 
 ;; define a bunch of quick key combos for basic actions
@@ -486,17 +489,16 @@
 (use-package smartparens
   :ensure t
   :diminish (smartparens-mode . "sp")
+  :bind (("M-s" . sp-unwrap-sexp))
   :init
   (use-package smartparens-config)
   (add-hook 'prog-mode-hook 'smartparens-strict-mode)
   (show-smartparens-global-mode 1)
   :config
+  (use-package smartparens-text)
   (setq sp-autoskip-closing-pair 'always
         sp-hybrid-kill-entire-symbol nil)
 
-  (sp-local-pair '(markdown-mode gfm-mode) "*" "*"
-                 :unless '(sp-in-string-p)
-                 :actions '(insert wrap))
   :config
   ;; conflicts with xref
   (define-key smartparens-mode-map (kbd "M-?") nil))

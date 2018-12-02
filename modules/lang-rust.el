@@ -11,8 +11,9 @@
   :mode ("\\.rs\\'" . rust-mode)
   :bind (:map rust-mode-map ("C-c C-f" . rust-format-buffer))
   :config
-  ;; disable matching for single quotes
-  (sp-local-pair 'rust-mode "'" nil :actions nil))
+  (use-package smartparens-rust
+    :after smartparens-mode))
+
 
 (use-package racer
   :unless *rust-use-lsp*

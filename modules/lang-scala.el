@@ -9,6 +9,8 @@
   :ensure t
   :pin melpa
   :config
+  (use-package smartparens-scala
+    :after smartparens-mode)
 
   ;; better newline handling in comments
   (defun scala-mode-newline-comments ()
@@ -18,12 +20,6 @@
     (newline-and-indent)
     (scala-indent:insert-asterisk-on-multiline-comment))
   (bind-key "RET" 'scala-mode-newline-comments scala-mode-map)
-
-  ;; smartparens conditional whitespace padding
-  (sp-local-pair 'scala-mode "(" nil
-                 :post-handlers '(("||\n[i]" "RET")))
-  (sp-local-pair 'scala-mode "{" nil
-                 :post-handlers '(("||\n[i]" "RET") ("| " "SPC")))
 
   ;; skips headers, goes to go when opening a file
   (scala-mode:goto-start-of-code))
