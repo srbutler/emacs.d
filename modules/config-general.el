@@ -217,6 +217,7 @@
   ;; advice that modifies some general behavior
   ;; C-M-\ indents the whole file
   (crux-with-region-or-buffer indent-region)
+
   ;; tabify/untabify the whole buffer
   (crux-with-region-or-buffer untabify)
   (crux-with-region-or-buffer tabify))
@@ -226,20 +227,6 @@
   :ensure t
   :mode (("\\.csv\\'" . csv-mode)
          ("\\.tsv\\'" . csv-mode)))
-
-
-;; set up dash integration
-(use-package dash-at-point
-  :disabled t
-  :ensure t
-  :defer t
-  :config
-  (dolist
-      (pair
-       '('(python-mode . "python3") '(sh-mode . "bash") '(emacs-lisp-mode . "elisp")
-         '(LaTeX-mode . "latex") '(js2-mode . "javascript") '(tuareg-mode . "ocaml")
-         '(ess-mode . "r")))
-    (add-to-list 'dash-at-point-mode-alist pair)))
 
 
 ;; diminish keeps the modeline tidy

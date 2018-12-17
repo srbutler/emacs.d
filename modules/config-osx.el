@@ -11,6 +11,20 @@
   :ensure t
   :init (exec-path-from-shell-initialize))
 
+
+;; set up dash integration
+(use-package dash-at-point
+  :ensure t
+  :defer t
+  :config
+  (dolist
+      (pair
+       '('(python-mode . "python3") '(sh-mode . "bash") '(emacs-lisp-mode . "elisp")
+         '(LaTeX-mode . "latex") '(js2-mode . "javascript") '(rjsx-mode . "javascript")
+         '(tuareg-mode . "ocaml") '(ess-mode . "r")))
+    (add-to-list 'dash-at-point-mode-alist pair)))
+
+
 ;; only run the following in the railwaycat version of emacs
 (when (eq window-system 'mac)
   ;; turn on all ligatures
