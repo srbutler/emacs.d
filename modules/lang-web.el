@@ -38,8 +38,8 @@
 (use-package nxml-mode
   :ensure nil
   :mode (("\\.xml\\'" . nxml-mode)
-         ("\\.pom\\'"   . nxml-mode)
-         ("\\.xsd\\'"   . nxml-mode)
+         ("\\.pom\\'" . nxml-mode)
+         ("\\.xsd\\'" . nxml-mode)
          ("\\.bml\\'" . nxml-mode)
          ("\\.rsd\\'" . nxml-mode))
   :custom
