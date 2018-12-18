@@ -32,7 +32,10 @@
 (use-package nxml-mode
   :ensure nil
   :mode (("\\.xml\\'" . nxml-mode)
-         ("\\.pom$"   . nxml-mode))
+         ("\\.pom$"   . nxml-mode)
+         ("\\.xsd$"   . nxml-mode)
+         ("\\.bml\\'" . nxml-mode)
+         ("\\.rsd\\'" . nxml-mode))
   :custom
   (nxml-child-indent 4)
   (nxml-attribute-indent 5)
@@ -106,7 +109,7 @@
 ;; CSS, LESS, and SCSS/SASS support for lsp-mode using vscode-css-languageserver-bin
 ;; install: npm i -g vscode-css-languageserver-bin
 (use-package lsp-css
-  :unless *web-use-lsp*
+  :if *web-use-lsp*
   :ensure t
   :hook ((css-mode . lsp-css-enable)
          (less-mode . lsp-less-enable)
@@ -117,7 +120,7 @@
 ;; HTML support for lsp-mode using vscode-html-languageserver-bin
 ;; install: npm i -g vscode-html-languageserver-bin
 (use-package lsp-html
-  :unless *web-use-lsp*
+  :if *web-use-lsp*
   :ensure t
   :hook ((html-mode . lsp-html-enable)
          (web-mode . lsp-html-enable)))

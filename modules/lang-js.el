@@ -17,7 +17,7 @@
   :hook ((js2-mode . js2-imenu-extras-mode)
          (js2-mode . js2-highlight-unused-variables-mode))
   :config
-  (setq js2-basic-offset 2)
+  (setq js2-basic-offset 4)
 
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
@@ -39,7 +39,7 @@
          (rjsx-mode . js2-highlight-unused-variables-mode))
   :bind (:map js2-mode-map ("M-." . nil))  ;; don't conflict with xref
   :config
-  (setq js2-basic-offset 2)
+  (setq js2-basic-offset 4)
 
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
@@ -62,12 +62,11 @@
 ;; from https://github.com/seagle0128/.emacs.d
 (use-package js2-refactor
   :ensure t
-  :hook (js2-mode . js2-refactor-mode)
+  :after (:any js2-mode rjsx-mode typescript-mode)
+  :bind (:map js2-mode-map ("C-k" . js2r-kill))
+  :hook ((js2-mode rjsx-mode typescript-mode) . js2-refactor-mode)
   :diminish (js2-refactor-mode . "js2r")
-  :config
-  (js2r-add-keybindings-with-prefix "C-c C-r")
-  (with-eval-after-load 'js2-mode
-    (bind-key "C-k" 'js2r-kill js2-mode-map)))
+  :config (js2r-add-keybindings-with-prefix "C-c C-r"))
 
 
 ;; for JS/TS autocompletion
@@ -90,21 +89,22 @@
 ;; auto-formatter
 (use-package prettier-js
   :ensure t
-  :bind (:map js2-mode-map
-              ("C-c C-f" . prettier-js)
-              :map rjsx-mode-map
-              ("C-c C-f" . prettier-js))
+  :after (:any js2-mode rjsx-mode)
   :init
   (add-hook 'js2-mode-hook 'prettier-js-mode)
-  (add-hook 'rjsx-mode-hook 'prettier-js-mode))
+  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
+  :config
+  (with-eval-after-load 'js2-mode
+    (bind-key "C-c C-f" 'prettier-js js2-mode-map))
+  (with-eval-after-load 'rjsx-mode
+    (bind-key "C-c C-f" 'prettier-js rjsx-mode-map)))
 
 
 ;; REPL/dev environment
 (use-package indium
   :ensure t
   :after js2-mode
-  :bind (:map js2-mode-map
-              ("C-c C-l" . indium-eval-buffer))
+  :bind (:map js2-mode-map ("C-c C-l" . indium-eval-buffer))
   :hook ((js2-mode . indium-interaction-mode)))
 
 

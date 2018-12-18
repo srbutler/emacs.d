@@ -6,76 +6,88 @@
 
 
 ;; WINDOW SETTINGS ---------------------------
+
 ;; set larger frame size
 (add-to-list 'default-frame-alist '(height . 40))
 (add-to-list 'default-frame-alist '(width . 100))
 
 ;; THEME SETTINGS -----------------------------
-
-
-
 ;; only load themes when opened in a window system
-(when window-system
 
-  (use-package solarized-theme
-    :disabled t
-    :ensure t
-    :init
+(use-package material-theme
+  :when window-system
+  :ensure t
+  :init (load-theme 'material t))
+
+(use-package solarized-theme
+  :when window-system
+  :disabled t
+  :ensure t
+  :init
+  (progn
+    ;; these variables need to be preset
+    (setq solarized-distinct-doc-face t
+          solarized-distinct-fringe-background nil
+          solarized-emphasize-indicators nil
+          solarized-high-contrast-mode-line nil
+          solarized-scale-org-headlines t
+          solarized-use-variable-pitch nil
+          solarized-use-less-bold t
+          solarized-use-more-italic nil)
+
+    ;; make the mode-line underlining disappear
+    (setq x-underline-at-descent-line t)
+
+    ;; finally load the theme
+    (load-theme 'solarized-dark t))
+
+  :config
+  ;; custom font-lock setup
+  (set-face-foreground 'font-lock-preprocessor-face "#cb4b16")
+  (set-face-foreground 'font-lock-constant-face "#6c71c4")
+  (set-face-foreground 'font-lock-variable-name-face "#b58900")
+  (set-face-foreground 'font-lock-doc-face "#d33682")
+  (set-face-attribute 'font-lock-constant-face nil :bold nil)
+  (set-face-attribute 'font-lock-builtin-face nil :bold t)
+
+  ;; get rid of nasty underlining
+  (with-eval-after-load 'org-mode
+    (set-face-attribute 'org-block-begin-line nil :underline nil)
+    (set-face-attribute 'org-block-end-line nil :underline nil))
+
+  ;; make rainbow delimiters less monotonous
+  (with-eval-after-load 'rainbow-delimiters
+    (set-face-foreground 'rainbow-delimiters-depth-1-face "#cb4b16")
+    (set-face-foreground 'rainbow-delimiters-depth-6-face "#d33682"))
+
+  ;; fix info fringe for flycheck
+  (with-eval-after-load 'flycheck
+    (set-face-foreground 'flycheck-fringe-info "#268bd2"))
+
+  ;; make the indicators more readable
+  (with-eval-after-load 'git-gutter
     (progn
-      ;; these variables need to be preset
-      (setq solarized-distinct-doc-face t
-            solarized-distinct-fringe-background nil
-            solarized-emphasize-indicators nil
-            solarized-high-contrast-mode-line t
-            solarized-scale-org-headlines t
-            solarized-use-variable-pitch nil
-            solarized-use-less-bold t
-            solarized-use-more-italic nil)
+      (set-face-foreground 'git-gutter:added "#859900")
+      (set-face-foreground 'git-gutter:deleted "#dc322f")
+      (set-face-foreground 'git-gutter:modified "#b58900"))))
 
-      ;; make the mode-line underlining disappear
-      (setq x-underline-at-descent-line t)
+(use-package zenburn-theme
+  :when window-system
+  :disabled t
+  :ensure t
+  :init (load-theme 'zenburn t))
 
-      ;; finally load the theme
-      (load-theme 'solarized-dark t))
+(use-package leuven-theme
+  :when window-system
+  :disabled t
+  :ensure t
+  :init (load-theme 'leuven t))
 
-    :config
-    ;; just a variable for calling later face changes
-    (setq *current-theme-name* 'solarized-dark)
-
-    ;; general font locking
-    (set-face-foreground 'font-lock-preprocessor-face "#cb4b16")
-    (set-face-foreground 'font-lock-constant-face "#6c71c4")
-    (set-face-attribute 'font-lock-constant-face nil :bold nil)
-    (set-face-attribute 'font-lock-builtin-face nil :bold t)
-
-    ;; fix info fringe for flycheck
-    (with-eval-after-load 'flycheck
-      (set-face-foreground 'flycheck-fringe-info "#268bd2")))
-
-  (use-package zenburn-theme
-    :disabled t
-    :ensure t
-    :init (load-theme 'zenburn t)
-    :config
-    (setq *current-theme-name* 'zenburn))
-
-  (use-package material-theme
-    ;; :disabled t
-    :ensure t
-    :init (load-theme 'material t)
-    :config (setq *current-theme-name* 'material))
-
-  (use-package leuven-theme
-    :disabled t
-    :ensure t
-    :init (load-theme 'leuven t)
-    :config (setq *current-theme-name* 'leuven))
-
-  (use-package darkokai-theme
-    :disabled t
-    :ensure t
-    :init (load-theme 'darkokai t)
-    :config (setq *current-theme-name* 'darkokai)))
+(use-package darkokai-theme
+  :when window-system
+  :disabled t
+  :ensure t
+  :init (load-theme 'darkokai t))
 
 
 ;; make the mode-line nice and simple
@@ -115,6 +127,8 @@
   (setq-default line-spacing 0.06))
  ((font-existsp "InconsolataGo")
   (set-face-attribute 'default nil :height 161 :font "InconsolataGo"))
+ ((font-existsp "InconsolataGo")
+  (set-face-attribute 'default nil :height 161 :font "Inconsolata"))
  ((font-existsp "Hasklig")
   (set-face-attribute 'default nil :height 141 :font "Hasklig"))
  ((font-existsp "Fira Code")

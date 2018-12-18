@@ -14,7 +14,7 @@
                  "%b"))))
 
 ;; setup savefiles/backups in a way that's not annoying
-(setq backup-directory-alist `(("." . "~/.emacs.d/savefile/"))
+(setq backup-directory-alist `(("." . ,(expand-file-name "savefile" *savefile-dir*)))
       backup-by-copying t
       delete-old-versions t
       kept-new-versions 6
@@ -92,6 +92,12 @@
 (add-hook 'prog-mode-hook
           #'(lambda () (setq-local show-trailing-whitespace t)))
 
+;; automatic indenting
+(add-hook 'prog-mode-hook 'electric-indent-mode)
+
+;; ensure subword-mode is on for all prog modes
+(add-hook 'prog-mode-hook 'subword-mode)
+
 ;; setup `hippie-expand' expand functions
 (setq hippie-expand-try-functions-list
       '(try-expand-dabbrev
@@ -141,16 +147,6 @@
       (when (looking-at "^    ")
         (replace-match "")))))
 (bind-key "<backtab>" #'un-indent-by-removing-4-spaces global-map)
-
-;; ensure proper bracket handling happens outside of smartparens
-(add-hook 'prog-mode-hook 'electric-pair-mode)
-(add-hook 'prog-mode-hook 'electric-indent-mode)
-
-;; ensure subword-mode is on for all prog modes
-(add-hook 'prog-mode-hook 'subword-mode)
-
-;; we need this for later
-(defvar *current-theme-name* 'default)
 
 
 ;; revert buffers automatically when underlying files are changed externally
@@ -217,7 +213,6 @@
   ;; advice that modifies some general behavior
   ;; C-M-\ indents the whole file
   (crux-with-region-or-buffer indent-region)
-
   ;; tabify/untabify the whole buffer
   (crux-with-region-or-buffer untabify)
   (crux-with-region-or-buffer tabify))
@@ -243,7 +238,6 @@
   :mode ("Dockerfile\\'" . dockerfile-mode))
 
 
-
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
   :ensure nil
@@ -255,7 +249,6 @@
                       :underline t
                       :foreground (face-foreground font-lock-constant-face)
                       :weight 'bold))
-
 
 
 ;; expands the selection region progressively
@@ -289,15 +282,7 @@
 (use-package git-gutter
   :ensure t
   :init (global-git-gutter-mode t)
-  :diminish git-gutter-mode
-  :config
-  ;; change the indicator colors to something nicer
-  (when (or (eq *current-theme-name* "solarized-dark")
-            (eq *current-theme-name* "solarized-light"))
-    (progn
-      (set-face-foreground 'git-gutter:added "#859900")
-      (set-face-foreground 'git-gutter:deleted "#dc322f")
-      (set-face-foreground 'git-gutter:modified "#b58900"))))
+  :diminish git-gutter-mode)
 
 
 ;; navigate through git commit history
@@ -387,9 +372,10 @@
 
 ;; pandoc
 (use-package pandoc-mode
+  :when (executable-find "pandoc")
   :ensure t
   :diminish (pandoc-mode . "pandoc")
-  :hook (markdown-mode org-mode TeX-mode)
+  :hook (markdown-mode gfm-mode org-mode TeX-mode)
   :config (pandoc-load-default-settings))
 
 

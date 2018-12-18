@@ -23,6 +23,7 @@
               ;; use the peek functions instead of jumps
               ("M-." . lsp-ui-peek-find-definitions)
               ("M-?" . lsp-ui-peek-find-references)
+              ("C-c C-f" . lsp-format-buffer)
               ("C-c C-l c" . lsp-capabilities)
               ("C-c C-l d" . lsp-ui-doc-enable)
               ("C-c C-l h" . lsp-describe-thing-at-point)
@@ -54,7 +55,6 @@
         company-lsp-cache-candidates nil
         company-lsp-enable-recompletion t
         company-lsp-enable-snippet t))
-
 
 ;; let LSP work with imenu
 (use-package lsp-imenu

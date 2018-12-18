@@ -11,7 +11,6 @@
                 (expand-file-name ".smex-items" *savefile-dir*)))
 
 
-
 ;; testing out ivy/counsel as replacement for helm
 (use-package counsel
   :ensure t
@@ -26,7 +25,6 @@
           ("C-s" . counsel-grep-or-swiper)
           ("C-r" . counsel-grep-or-swiper)
           ("C-x l" . counsel-locate)
-          ("C-c k" . counsel-rg)
           ("C-c i" . counsel-imenu)
 
           ("C-h b" . counsel-descbinds)
@@ -37,12 +35,23 @@
   (counsel-find-file-at-point t)
   (counsel-find-file-ignore-regexp
    "\\.DS_Store\\|.git\\|\.*~undo-tree~\\|GPATH\\|GRTAGS\\|GTAGS\\|.*.elc")
-  (counsel-grep-base-command
-   "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
-  ;; (counsel-grep-base-command
-  ;;  "ag -i --noheading --nocolor --nofilename --numbers '%s' %s")
-  (counsel-)
-  :config (counsel-mode 1))
+
+  :config
+  (counsel-mode 1)
+
+  ;; rg > ag > grep, set command appropriately
+  (cond
+   ((executable-find "rg")
+    (progn
+      (bind-key "C-c k" 'counsel-rg)
+      (setq counsel-grep-base-command
+            "rg -i -M 120 --no-heading --line-number --color never '%s' %s")))
+   ((executable-find "ag")
+    (progn
+      (bind-key "C-c k" 'counsel-ag)
+      (setq counsel-grep-base-command
+            "ag -i --noheading --nocolor --nofilename --numbers '%s' %s")))
+   (t (bind-key "C-c k" 'counsel-git-grep))))
 
 
 ;; provides sorting for ivy
@@ -122,23 +131,26 @@
 ;; access to GNU Global tags
 ;; install: brew install global
 (use-package counsel-gtags
+  :when (or (executable-find "global")
+            (executable-find "gtags"))
   :ensure t
   :after counsel
   :diminish (counsel-gtags-mode . "gtags")
   :init (add-hook 'prog-mode-hook 'counsel-gtags-mode)
   :bind (:map counsel-gtags-mode-map
-         ("M-." . counsel-gtags-dwim)
-         ("C-c C-t c" . counsel-gtags-create-tags)
-         ("C-c C-t u" . counsel-gtags-update-tags)
-         ("C-c C-t d" . counsel-gtags-find-definition)
-         ("C-c C-t r" . counsel-gtags-find-reference)
-         ("C-c C-t s" . counsel-gtags-find-symbol)
-         ("C-c C-t f" . counsel-gtags-go-forward)
-         ("C-c C-t b" . counsel-gtags-go-backward)))
+              ("M-." . counsel-gtags-dwim)
+              ("C-c C-t c" . counsel-gtags-create-tags)
+              ("C-c C-t u" . counsel-gtags-update-tags)
+              ("C-c C-t d" . counsel-gtags-find-definition)
+              ("C-c C-t r" . counsel-gtags-find-reference)
+              ("C-c C-t s" . counsel-gtags-find-symbol)
+              ("C-c C-t f" . counsel-gtags-go-forward)
+              ("C-c C-t b" . counsel-gtags-go-backward)))
 
 
 ;; browse documentation
 (use-package counsel-dash
+  :disabled t
   :ensure t
   :after counsel
   :bind ("C-c d" . counsel-dash)
