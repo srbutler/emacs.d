@@ -15,6 +15,7 @@ secrets.el
 url/
 javacomp/
 network-security.data
+flycheck_*.el
 
 ## GNU Global/Gtags indexes
 GPATH

@@ -90,6 +90,11 @@
 (use-package prettier-js
   :ensure t
   :after (:any js2-mode rjsx-mode)
+  :bind (:map js2-mode-map
+              ("C-c C-f" . prettier-js)
+              :map rjsx-mode-map
+              ("C-c C-f" . prettier-js))
+  :after (:any js2-mode rjsx-mode)
   :init
   (add-hook 'js2-mode-hook 'prettier-js-mode)
   (add-hook 'rjsx-mode-hook 'prettier-js-mode)
