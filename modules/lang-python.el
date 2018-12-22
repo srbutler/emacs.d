@@ -47,11 +47,11 @@
   :bind (:map elpy-mode-map
               ("C-x C-e" . python-shell-send-defun)
               ("C-c C-f" . elpy-format-code))
-  :custom
-  ;; set refactoring backend ("rope" or "jedi")
-  (elpy-rpc-backend "jedi")
-
+  :hook (elpy-enable . python-mode)
   :config
+  ;; refactoring backend (jedi vs. rop)
+  (setq elpy-rpc-backend "jedi")
+
   ;; set up elpy modules
   (setq elpy-modules '(elpy-module-sane-defaults
                        elpy-module-company
