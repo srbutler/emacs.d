@@ -229,6 +229,12 @@
   :ensure t)
 
 
+;; native version of linum
+(use-package display-line-numbers-mode
+  :when (version<= "26.0.50" emacs-version)
+  :bind ("C-c C-d" . display-line-numbers-mode))
+
+
 (use-package docker-tramp
   :ensure t)
 
@@ -255,11 +261,6 @@
 (use-package expand-region
   :ensure t
   :bind ("C-=" . er/expand-region))
-
-
-;; https://www.masteringemacs.org/article/working-multiple-files-dired
-(use-package find-file
-  :init (setq find-ls-option '("-print0 | xargs -0 ls -ld" . "-ld")))
 
 
 ;; syntax-checking
