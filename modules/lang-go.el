@@ -1,10 +1,15 @@
 ;;; lang-go.el --- Summary:
 ;;
 ;;; Commentary:
+;;  - install: go get -u github.com/golang/lint/golint
+;;  - install: go get -u -v golang.org/x/tools/cmd/guru
+;;  - install: go get -u honnef.co/go/tools/... (megacheck)
+;;  - install: go get -u golang.org/x/tools/cmd/goimports
+;;  - install: go get -u github.com/rogpeppe/godef
 ;;
 ;;; Code:
 
-(defvar *go-use-lsp* t)
+(defvar *go-use-lsp* nil)
 
 (use-package go-mode
   :ensure t
@@ -22,7 +27,8 @@
   (add-hook 'before-save-hook 'gofmt-before-save nil t))
 
 
-;; install command: go get -u github.com/sourcegraph/go-langserver
+;; go get -u github.com/sourcegraph/go-langserver
+;; temporary version: git clone https://github.com/saibing/bingo.git && cd bingo && go build
 (use-package lsp-go
   :when *go-use-lsp*
   :ensure t
@@ -36,6 +42,7 @@
   :init (add-hook 'go-mode-hook 'go-eldoc-setup))
 
 
+;; install: go get -u github.com/mdempsky/gocode
 (use-package company-go
   :unless *go-use-lsp*
   :after company-mode
@@ -55,33 +62,22 @@
   :ensure t)
 
 
-;; install: go get -u github.com/davidrjenni/reftools/cmd/fillstruct
-(use-package go-fill-struct
-  :ensure t)
-
-
 ;; install: go get -u github.com/josharian/impl
 (use-package go-impl
-  :ensure t)
+  :ensure t
+  :bind (:map go-mode-map ("C-c C-r i" . go-impl)))
 
 
 ;; install: go get -u golang.org/x/tools/cmd/gorename
 (use-package go-rename
-  :ensure t)
-
-
-;; install: go get -u github.com/golang/lint/golint
-(use-package golint
-  :ensure t)
-
-
-(use-package govet
-  :ensure t)
+  :ensure t
+  :bind (:map go-mode-map ("C-c C-r r" . go-rename)))
 
 
 ;; install: go get -u github.com/fatih/gomodifytags
 (use-package go-tag
   :ensure t
+  :bind (:map go-mode-map ("C-c C-r t" . go-tag-add))
   :config (setq go-tag-args (list "-transform" "camelcase")))
 
 
