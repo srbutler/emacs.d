@@ -73,15 +73,12 @@
 ;; garbage collect when Emacs loses focus
 (add-hook 'focus-out-hook 'garbage-collect)
 
-(when window-system
-  (global-hl-line-mode +1)    ;; highlight the current line
-  (tool-bar-mode 0)           ;; Disable the tool bar
-  (tooltip-mode 0))           ;; Disable the tooltips
-
-;; If launching Emacs as in windowing system, show the menu. If
-;; launching in a tty/terminal window, don't display the menu.
 (if window-system
-    (menu-bar-mode t)
+    (progn
+      (menu-bar-mode t)           ;; display menu-bar in window only
+      (global-hl-line-mode +1)    ;; highlight the current line
+      (tool-bar-mode 0)           ;; Disable the tool bar
+      (tooltip-mode 0))           ;; Disable the tooltips
   (menu-bar-mode -1))
 
 ;; remove the redundant scroll-bars
