@@ -5,6 +5,7 @@
 ;;; Code:
 
 (defvar *ocaml-use-lsp* nil)
+;; install: npm i -g ocaml-language-server
 
 ;; Ocaml major mode
 (use-package tuareg
@@ -13,6 +14,8 @@
          ("\\.topml$"     . tuareg-mode)
          ("\\.ocamlinit$" . tuareg-mode))
   :init
+  (when *ocaml-use-lsp* (add-hook 'tuareg-mode-hook 'lsp))
+
   ;; Make OCaml-generated files invisible to filename completion
   (dolist
       (ext '(".cmo" ".cmx" ".cma" ".cmxa" ".cmi" ".cmxs" ".cmt" ".cmti" ".annot"))
@@ -21,11 +24,7 @@
   ;; for dune build files (not in melpa currently)
   (use-package dune
     :if (file-exists-p "~/.opam/4.07.0/share/emacs/site-lisp/dune.el")
-    :load-path "~/.opam/4.07.0/share/emacs/site-lisp/")
-
-  :config
-  (use-package smartparens-ml
-    :after smartparens-mode))
+    :load-path "~/.opam/4.07.0/share/emacs/site-lisp/"))
 
 
 ;; completion engine
@@ -43,14 +42,6 @@
   :init
   (setq merlin-completion-with-doc t)
   (add-to-list 'company-backends 'merlin-company-backend))
-
-
-;; install: npm i -g ocaml-language-server
-;; install: opam install merlin
-(use-package lsp-ocaml
-  :if *ocaml-use-lsp*
-  :ensure t
-  :hook ((tuareg-mode caml-mode reason-mode) . lsp-ocaml-enable))
 
 
 ;; error checking
@@ -104,6 +95,7 @@
 (use-package reason-mode
   :ensure t
   :mode ("\\.rei?$" . reason-mode)
+  :init (when *ocaml-use-lsp* (add-hook 'reason-mode-hook 'lsp))
   :config
   ;; change the utop command to rtop
   (with-eval-after-load 'utop

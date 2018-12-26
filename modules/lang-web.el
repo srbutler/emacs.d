@@ -5,6 +5,8 @@
 ;;; Code:
 
 (defvar *web-use-lsp* nil)
+;; install: npm install -g vscode-css-languageserver-bin
+;; install: npm install -g vscode-html-languageserver-bin
 
 (use-package web-mode
   :ensure t
@@ -16,6 +18,10 @@
          ("\\.erb\\'" . web-mode)
          ("\\.mustache\\'" . web-mode)
          ("\\.djhtml\\'" . web-mode))
+  :init
+  (when *web-use-lsp*
+    (add-hook 'web-mode-hook 'lsp)
+    (add-hook 'html-mode-hook 'lsp))
   :custom
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
@@ -23,10 +29,7 @@
   (web-mode-indent-style 2)
   (web-mode-style-padding 1)
   (web-mode-script-padding 1)
-  (web-mode-block-padding 0)
-  :config
-  (use-package smartparens-html
-    :after smartparens-mode))
+  (web-mode-block-padding 0))
 
 
 (use-package nxml-mode
@@ -54,22 +57,23 @@
 
 (use-package css-mode
   :ensure nil
-  :init (setq css-indent-offset 2))
+  :init
+  (setq css-indent-offset 2)
+  (when *web-use-lsp* (add-hook 'css-mode-hook 'lsp)))
 
 
 ;; SCSS mode
 (use-package scss-mode
   :ensure t
   :defer t
-  :init
-  ;; Disable complilation on save
-  (setq scss-compile-at-save nil))
+  :init (when *web-use-lsp* (add-hook 'css-mode-hook 'lsp)))
 
 
 ;; New `less-css-mode' in Emacs 26
 (use-package less-css-mode
   :unless (fboundp 'less-css-mode)
-  :ensure t)
+  :ensure t
+  :init (when *web-use-lsp* (add-hook 'less-css-mode-hook 'lsp)))
 
 
 ;; emmet mode for efficient xml/html entry
@@ -104,26 +108,6 @@
 (use-package css-eldoc
   :commands turn-on-css-eldoc
   :hook ((css-mode scss-mode less-css-mode) . turn-on-css-eldoc))
-
-
-;; CSS, LESS, and SCSS/SASS support for lsp-mode using vscode-css-languageserver-bin
-;; install: npm i -g vscode-css-languageserver-bin
-(use-package lsp-css
-  :if *web-use-lsp*
-  :ensure t
-  :hook ((css-mode . lsp-css-enable)
-         (less-mode . lsp-less-enable)
-         (sass-mode . lsp-sass-enable)
-         (scss-mode . lsp-scss-enable)))
-
-
-;; HTML support for lsp-mode using vscode-html-languageserver-bin
-;; install: npm i -g vscode-html-languageserver-bin
-(use-package lsp-html
-  :if *web-use-lsp*
-  :ensure t
-  :hook ((html-mode . lsp-html-enable)
-         (web-mode . lsp-html-enable)))
 
 
 (provide 'lang-web)

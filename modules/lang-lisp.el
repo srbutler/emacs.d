@@ -51,10 +51,7 @@
 (use-package scheme
   :defer t
   :mode (("\\.scm\\'" . scheme-mode)
-         ("\\.rkt\\'" . scheme-mode))
-  :config
-  (use-package smartparens-racket
-    :after smartparens-mode))
+         ("\\.rkt\\'" . scheme-mode)))
 
 
 ;; REPL and basic scheme hooks

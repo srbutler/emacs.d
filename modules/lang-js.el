@@ -5,6 +5,8 @@
 ;;; Code:
 
 (defvar *js-use-lsp* nil)
+;; install: npm i -g javascript-typescript-langserver
+
 
 ;; from https://github.com/seagle0128/.emacs.d
 ;; Improved JavaScript editing mode
@@ -16,16 +18,14 @@
   :bind (:map js2-mode-map ("M-." . nil))  ;; don't conflict with xref
   :hook ((js2-mode . js2-imenu-extras-mode)
          (js2-mode . js2-highlight-unused-variables-mode))
+  :init (when *js-use-lsp* (add-hook 'js2-mode-hook 'lsp))
   :config
   (setq js2-basic-offset 4)
 
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
         (setq js2-mode-show-strict-warnings nil)
-      (setq flycheck-javascript-eslint-executable "eslint")))
-
-  (use-package smartparens-javascript
-    :after smartparens-mode))
+      (setq flycheck-javascript-eslint-executable "eslint"))))
 
 
 ;; for jsx
@@ -38,25 +38,20 @@
   :hook ((rjsx-mode . js2-imenu-extras-mode)
          (rjsx-mode . js2-highlight-unused-variables-mode))
   :bind (:map js2-mode-map ("M-." . nil))  ;; don't conflict with xref
+  :init (when *js-use-lsp* (add-hook 'rjsx-mode-hook 'lsp))
   :config
   (setq js2-basic-offset 4)
 
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
         (setq js2-mode-show-strict-warnings nil)
-      (setq flycheck-javascript-eslint-executable "eslint")))
-
-  (use-package smartparens-javascript
-    :after smartparens-mode))
+      (setq flycheck-javascript-eslint-executable "eslint"))))
 
 
 ;; for typescript
 (use-package typescript-mode
   :ensure t
-  :mode ("\\.tsx?$" . typescript-mode)
-  :config
-  (use-package smartparens-javascript
-    :after smartparens-mode))
+  :mode ("\\.tsx?$" . typescript-mode))
 
 
 ;; from https://github.com/seagle0128/.emacs.d
@@ -75,15 +70,6 @@
   :ensure t
   :defer t
   :hook ((typescript-mode js2-mode rjsx-mode) . tide-setup))
-
-
-;; install: npm i -g javascript-typescript-langserver
-;; from https://github.com/seagle0128/.emacs.d
-(use-package lsp-javascript-typescript
-  :if *js-use-lsp*
-  :ensure t
-  :commands lsp-javascript-typescript-enable
-  :hook ((typescript-mode js2-mode rjsx-mode) . lsp-javascript-typescript-enable))
 
 
 ;; auto-formatter

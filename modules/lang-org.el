@@ -38,9 +38,6 @@
   (org-src-fontify-natively t)
   (org-src-tab-acts-natively t)
   :config
-  (use-package smartparens-org
-    :after smartparens-mode)
-
   ;; add a custom sequence of TODO states
   (setq org-todo-keywords
         '((sequence "TODO(t)" "STARTED(s)" "DELAYED(y)" "|"

@@ -1,3 +1,4 @@
+
 ;;; lang-rust.el --- Summary:
 ;;
 ;;; Commentary:
@@ -5,14 +6,13 @@
 ;;; Code:
 
 (defvar *rust-use-lsp* nil)
+;; install: rustup component add rls-preview rust-analysis rust-src
 
 (use-package rust-mode
   :ensure t
   :mode ("\\.rs\\'" . rust-mode)
   :bind (:map rust-mode-map ("C-c C-f" . rust-format-buffer))
-  :config
-  (use-package smartparens-rust
-    :after smartparens-mode))
+  :init (when *rust-use-lsp* (add-hook 'rust-mode-hook 'lsp)))
 
 
 (use-package racer
@@ -29,14 +29,6 @@
   (racer-rust-src-path "~/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src")
   :config
   (add-hook 'racer-mode-hook 'eldoc-mode))
-
-
-;; set up LSP server for Rust
-;; install: rustup component add rls-preview rust-analysis rust-src
-(use-package lsp-rust
-  :if *rust-use-lsp*
-  :ensure t
-  :hook ((rust-mode . lsp-rust-enable)))
 
 
 (use-package flycheck-rust

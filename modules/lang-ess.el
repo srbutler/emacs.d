@@ -7,12 +7,9 @@
 (use-package ess-site
   :ensure ess
   :commands R
-  :mode ("\\.R$" . R-mode)
+  :mode ("\\.[Rr]$" . R-mode)
   :bind (:map ess-mode-map
               ("C-;" . (lambda () (interactive) (insert " <- "))))
-  :config
-  (use-package smartparens-ess
-    :after smartparens-mode)
   :custom
   (ess-ask-for-ess-directory nil)
   (ess-local-process-name "R")

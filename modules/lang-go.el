@@ -10,12 +10,16 @@
 ;;; Code:
 
 (defvar *go-use-lsp* nil)
+;; install: go get -u github.com/sourcegraph/go-langserver
 
 (use-package go-mode
   :ensure t
   :bind (:map go-mode-map
               ("C-h f" . godoc-at-point)
               ("C-c C-f" . gofmt))
+  :init
+  (when *go-use-lsp* (add-hook 'go-mode-hook 'lsp))
+
   :config
   (font-lock-add-keywords
    'go-mode '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
@@ -25,15 +29,6 @@
     (when goimports
       (setq gofmt-command goimports)))
   (add-hook 'before-save-hook 'gofmt-before-save nil t))
-
-
-;; go get -u github.com/sourcegraph/go-langserver
-;; temporary version: git clone https://github.com/saibing/bingo.git && cd bingo && go build
-(use-package lsp-go
-  :when *go-use-lsp*
-  :ensure t
-  :commands lsp-go-enable
-  :hook (go-mode . lsp-go-enable))
 
 
 (use-package go-eldoc

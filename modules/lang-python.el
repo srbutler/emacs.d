@@ -8,6 +8,7 @@
 ;;; Code:
 
 (defvar *python-use-lsp* nil)
+;; install: pip install \"python-language-server[all]\"
 
 (use-package python
   :mode (("\\.py\\'" . python-mode)
@@ -16,17 +17,12 @@
   :custom
   (indent-tabs-mode nil)
   (python-indent-offset 4)
+  :init (when *python-use-lsp* (add-hook 'python-mode-hook 'lsp))
   :config
-  (use-package smartparens-python
-    :after smartparens-mode)
-
   ;; use ipython instead of standard interpreter if found
   (when (executable-find "ipython")
     (setq python-shell-interpreter "ipython"
           python-shell-interpreter-args "-i --simple-prompt"))
-
-  ;; add smarparens to inferior-python mode
-  (add-hook 'inferior-python-mode-hook 'smartparens-strict-mode)
 
   ;; set custom keywords for python-mode
   (font-lock-add-keywords
@@ -39,6 +35,7 @@
      ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face))))
 
 
+;; install: pip install -U jedi rope pyflakes yapf
 (use-package elpy
   :unless *python-use-lsp*
   :ensure t
@@ -49,25 +46,16 @@
               ("C-c C-f" . elpy-format-code))
   :hook (elpy-enable . python-mode)
   :config
-  ;; refactoring backend (jedi vs. rop)
+  ;; refactoring backend (jedi vs. rope)
   (setq elpy-rpc-backend "jedi")
 
   ;; set up elpy modules
-  (setq elpy-modules '(elpy-module-sane-defaults
-                       elpy-module-company
-                       elpy-module-eldoc
-                       elpy-module-yasnippet
-                       elpy-module-django
-                       ;; elpy-module-highlight-indentation
-                       ;; elpy-module-pyvenv
-                       )))
-
-
-;; install: pip install \"python-language-server[all]\"
-(use-package lsp-python
-  :if *python-use-lsp*
-  :ensure t
-  :init (add-hook 'python-mode-hook 'lsp-python-enable))
+  (setq elpy-modules
+        '(elpy-module-sane-defaults
+          elpy-module-company
+          elpy-module-eldoc
+          elpy-module-yasnippet
+          elpy-module-django)))
 
 
 ;; set up pyenv

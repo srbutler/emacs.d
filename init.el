@@ -75,7 +75,6 @@
 (require 'config-general)
 (require 'config-ivy)
 (require 'config-appearance)
-(require 'config-lsp)
 
 ;; load OS-specific stuff
 (cond

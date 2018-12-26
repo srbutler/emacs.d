@@ -178,6 +178,19 @@
     (define-key company-active-map (kbd "C-p") #'company-select-previous)))
 
 
+;; link lsp output with company
+(use-package company-lsp
+  :ensure t
+  :after (lsp-mode company)
+  :config
+  (push 'company-lsp company-backends)
+
+  (setq company-lsp-async t
+        company-lsp-cache-candidates nil
+        company-lsp-enable-recompletion t
+        company-lsp-enable-snippet t))
+
+
 ;; rank completions based on usage
 (use-package company-statistics
   :ensure t
@@ -326,6 +339,46 @@
   (key-chord-define-global "jk" 'avy-goto-char))
 
 
+;; make language server protocol services available
+(use-package lsp-mode
+  :ensure t
+  :commands lsp
+  :config
+  (with-eval-after-load 'counsel-gtags
+    (counsel-gtags-mode -1)))
+
+
+;; flycheck support and code previews/lenses
+(use-package lsp-ui
+  :ensure t
+  :after lsp-mode
+  :commands lsp-ui-mode
+  :hook ((lsp-mode . lsp-ui-mode))
+  :bind (:map lsp-ui-mode-map
+              ;; use the peek functions instead of jumps
+              ("M-." . lsp-ui-peek-find-definitions)
+              ("M-?" . lsp-ui-peek-find-references)
+              ("C-c C-f" . lsp-format-buffer)
+              ("C-c C-l c" . lsp-capabilities)
+              ("C-c C-l d" . lsp-ui-doc-enable)
+              ("C-c C-l h" . lsp-describe-thing-at-point)
+              ("C-c C-l r" . lsp-rename)
+              ("C-c C-l s" . lsp-ui-sideline-toggle-symbols-info)
+              :map lsp-ui-peek-mode-map
+              ("C-j" . lsp-ui-peek--goto-xref))
+  :config
+  (setq lsp-ui-sideline-delay 0.5
+        lsp-ui-sideline-ignore-duplicate t)
+
+  (defun restart-lsp-server ()
+    "Restart LSP server."
+    (interactive)
+    (lsp-restart-workspace)
+    (revert-buffer t t)
+    (message "LSP server restarted."))
+  (bind-key "C-c C-l w" 'restart-lsp-server lsp-ui-mode-map))
+
+
 ;; set up magit for git
 (use-package magit
   :ensure t
@@ -453,24 +506,25 @@
          ("\\.?zpreztorc\\'" . sh-mode)
          ("\\.?zprofile\\'" . sh-mode)
          ("\\.?zshenv\\'" . sh-mode)
-         ("\\.?zshrc\\'" . sh-mode)))
+         ("\\.?zshrc\\'" . sh-mode))
+  :init
+  ;; install: npm i -g bash-language-server
+  (when (executable-find "bash-language-server")
+    (add-hook 'shell-mode-hook #'lsp)))
 
 
 ;; get smartparens in programming modes
-(use-package smartparens
-  :ensure t
+(use-package smartparens-config
+  :ensure smartparens
   :diminish (smartparens-mode . "sp")
   :bind (("M-s" . sp-unwrap-sexp))
   :init
-  (use-package smartparens-config)
   (add-hook 'prog-mode-hook 'smartparens-strict-mode)
   (show-smartparens-global-mode 1)
   :config
-  (use-package smartparens-text)
   (setq sp-autoskip-closing-pair 'always
         sp-hybrid-kill-entire-symbol nil)
 
-  :config
   ;; conflicts with xref
   (define-key smartparens-mode-map (kbd "M-?") nil))
 

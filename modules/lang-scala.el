@@ -9,9 +9,6 @@
   :ensure t
   :pin melpa
   :config
-  (use-package smartparens-scala
-    :after smartparens-mode)
-
   ;; better newline handling in comments
   (defun scala-mode-newline-comments ()
     "Custom newline appropriate for `scala-mode'."

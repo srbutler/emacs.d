@@ -20,7 +20,7 @@
    'c++-mode '(("\\<[\\+-]?[0-9]+\\(.[0-9]+\\)?\\>" 0 'font-lock-constant-face)))
 
   ;; via https://stackoverflow.com/questions/30949847/configuring-flycheck-to-work-with-c11
-  ;; this defaults the standard to c++11, should use dir local variables in most cases
+  ;; this defaults the standard to c++14, should use dir local variables in most cases
   (with-eval-after-load 'flycheck
     (setq flycheck-gcc-language-standard "c++14")
     (setq flycheck-clang-language-standard "c++14")))
@@ -42,8 +42,12 @@
          (c++-mode . lsp-ccls-enable))
   :commands projectile-project-root-files-top-down-recurring
   :config
-  (setq ccls-executable "/usr/local/bin/ccls")
-  ;; adds irony-style detailed laels
+  (let ((ccls (executable-find "ccls")))
+    (if ccls
+        (setq ccls-executable ccls)
+      (message "Could not locate `ccls' executable!")))
+
+  ;; adds irony-style detailed labels
   (setq ccls-extra-init-params '(:completion (:detailedLabel t)))
 
   (with-eval-after-load 'projectile

@@ -20,7 +20,6 @@
   :init
   (add-hook 'haskell-mode-hook 'haskell-doc-mode)
   (add-hook 'haskell-mode-hook 'haskell-decl-scan-mode)
-  (add-hook 'haskell-mode-hook 'subword-mode)
   (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
 
   (setq haskell-process-type 'stack-ghci
@@ -31,11 +30,7 @@
         haskell-stylish-on-save t
         haskell-process-auto-import-loaded-modules t
         haskell-process-log t
-        haskell-interactive-popup-errors nil)
-
-  :config
-  (use-package smartparens-haskell
-    :after smartparens-mode))
+        haskell-interactive-popup-errors nil))
 
 
 (use-package intero
