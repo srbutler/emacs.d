@@ -29,6 +29,7 @@
 ;; slightly better font-lock for c++
 (use-package modern-cpp-font-lock
   :ensure t
+  :diminish
   :defer t
   :hook ((c++-mode . modern-c++-font-lock-mode)))
 
@@ -38,9 +39,7 @@
 (use-package ccls
   :when *cc-use-lsp*
   :ensure t
-  :hook ((c-mode   . lsp)
-         (c++-mode . lsp))
-  :commands projectile-project-root-files-top-down-recurring
+  :hook ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp)))
   :config
   (let ((ccls (executable-find "ccls")))
     (if ccls
@@ -48,13 +47,7 @@
       (message "Could not locate `ccls' executable!")))
 
   ;; adds irony-style detailed labels
-  (setq ccls-extra-init-params '(:completion (:detailedLabel t)))
-
-  (with-eval-after-load 'projectile
-    (setq projectile-project-root-files-top-down-recurring
-          (append '("compile_commands.json"
-                    ".ccls")
-                  projectile-project-root-files-top-down-recurring))))
+  (setq ccls-extra-init-params '(:completion (:detailedLabel t))))
 
 
 (use-package flycheck-clang-analyzer
