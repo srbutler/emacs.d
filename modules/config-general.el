@@ -344,6 +344,11 @@
   :ensure t
   :commands lsp
   :config
+  (setq lsp-auto-configure    t
+        lsp-enable-xref       t
+        lsp-prefer-flymake    nil
+        lsp-signature-enabled t)
+
   (with-eval-after-load 'counsel-gtags
     (counsel-gtags-mode -1)))
 
@@ -358,9 +363,9 @@
               ;; use the peek functions instead of jumps
               ("M-." . lsp-ui-peek-find-definitions)
               ("M-?" . lsp-ui-peek-find-references)
-              ("C-c C-f" . lsp-format-buffer)
               ("C-c C-l c" . lsp-capabilities)
               ("C-c C-l d" . lsp-ui-doc-enable)
+              ("C-c C-l f" . lsp-format-buffer)
               ("C-c C-l h" . lsp-describe-thing-at-point)
               ("C-c C-l r" . lsp-rename)
               ("C-c C-l s" . lsp-ui-sideline-toggle-symbols-info)

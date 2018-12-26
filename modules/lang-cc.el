@@ -38,8 +38,8 @@
 (use-package ccls
   :when *cc-use-lsp*
   :ensure t
-  :hook ((c-mode   . lsp-ccls-enable)
-         (c++-mode . lsp-ccls-enable))
+  :hook ((c-mode   . lsp)
+         (c++-mode . lsp))
   :commands projectile-project-root-files-top-down-recurring
   :config
   (let ((ccls (executable-find "ccls")))
