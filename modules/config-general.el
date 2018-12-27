@@ -327,6 +327,13 @@
          ("\\.gp\\'"  . gnuplot-mode)))
 
 
+;; adds guides to show indentation level
+(use-package highlight-indent-guides
+  :ensure t
+  :bind (:map prog-mode-map ("C-c C-i" . highlight-indent-guides-mode))
+  :config (setq highlight-indent-guides-method 'character))
+
+
 ;; define a bunch of quick key combos for basic actions
 (use-package key-chord
   :ensure t
@@ -519,11 +526,12 @@
 
 
 ;; get smartparens in programming modes
-(use-package smartparens-config
-  :ensure smartparens
+(use-package smartparens
+  :ensure t
   :diminish (smartparens-mode . "sp")
   :bind (("M-s" . sp-unwrap-sexp))
   :init
+  (use-package smartparens-config)
   (add-hook 'prog-mode-hook 'smartparens-strict-mode)
   (show-smartparens-global-mode 1)
   :config
@@ -552,7 +560,7 @@
   (global-undo-tree-mode))
 
 
-;; unfill commands
+;; unfill commandspp
 (use-package unfill
   :ensure t
   :commands (unfill-region unfill-paragraph unfill-toggle)
@@ -575,6 +583,11 @@
   :ensure t
   :diminish which-key-mode
   :init (which-key-mode 1))
+
+
+;; indicates whitespace characters
+(use-package whitespace-mode
+  :bind ("C-c C-w" . whitespace-mode))
 
 
 ;; use shift + arrow keys to switch between visible buffers
@@ -635,10 +648,9 @@
 
 (use-package yaml-mode
   :ensure t
-  :mode (("\\.yml\\'" . yaml-mode)
-         ("\\.yaml\\'" . yaml-mode))
-  :commands yaml-mode
-  :config (add-hook 'yaml-mode-hook 'subword-mode))
+  :mode ("\\.ya?ml\\'" . yaml-mode)
+  :hook ((yaml-mode . subword-mode)
+         (yaml-mode . highlight-indent-guides-mode)))
 
 
 ;; enable YASnippet globally

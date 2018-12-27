@@ -12,7 +12,6 @@
 ;; Improved JavaScript editing mode
 (use-package js2-mode
   :ensure t
-  :defines flycheck-javascript-eslint-executable
   :mode ("\\.js\\'"  . js2-mode)
   :interpreter ("node" . js2-mode)
   :bind (:map js2-mode-map ("M-." . nil))  ;; don't conflict with xref
@@ -31,7 +30,6 @@
 ;; for jsx
 (use-package rjsx-mode
   :ensure t
-  :defines flycheck-javascript-eslint-executable
   :mode (("\\.jsx\\'" . rjsx-mode)
          ("components\\/.*\\.js\\'" . rjsx-mode))
   :interpreter ("node" . rjsx-mode)

@@ -99,6 +99,7 @@
 (depends-on "helm-gtags")
 (depends-on "helm-projectile")
 (depends-on "helm-rg")
+(depends-on "highlight-indent-guides")
 (depends-on "highlight-indentation")
 (depends-on "hindent")
 (depends-on "hl-todo")
