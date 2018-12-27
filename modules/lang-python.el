@@ -19,6 +19,7 @@
   (python-indent-offset 4)
   :init (when *python-use-lsp* (add-hook 'python-mode-hook 'lsp))
   :config
+  (add-hook 'python-mode-hook 'highlight-indent-guides-mode)
   ;; use ipython instead of standard interpreter if found
   (when (executable-find "ipython")
     (setq python-shell-interpreter "ipython"

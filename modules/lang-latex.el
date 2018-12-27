@@ -12,9 +12,6 @@
   :mode ("\\.tex\\'" . latex-mode)
   :commands (latex-mode LaTeX-mode plain-tex-mode)
   :config
-  (use-package smartparens-latex
-    :after smartparens-mode)
-
   (add-hook 'LaTeX-mode-hook 'LaTeX-preview-setup)
   (add-hook 'LaTeX-mode-hook 'flyspell-mode)
   (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)

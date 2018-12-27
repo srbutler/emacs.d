@@ -12,7 +12,6 @@
 ;; Improved JavaScript editing mode
 (use-package js2-mode
   :ensure t
-  :defines flycheck-javascript-eslint-executable
   :mode ("\\.js\\'"  . js2-mode)
   :interpreter ("node" . js2-mode)
   :bind (:map js2-mode-map ("M-." . nil))  ;; don't conflict with xref
@@ -25,16 +24,12 @@
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
         (setq js2-mode-show-strict-warnings nil)
-      (setq flycheck-javascript-eslint-executable "eslint")))
-
-  (use-package smartparens-javascript
-    :after smartparens-mode))
+      (setq flycheck-javascript-eslint-executable "eslint"))))
 
 
 ;; for jsx
 (use-package rjsx-mode
   :ensure t
-  :defines flycheck-javascript-eslint-executable
   :mode (("\\.jsx\\'" . rjsx-mode)
          ("components\\/.*\\.js\\'" . rjsx-mode))
   :interpreter ("node" . rjsx-mode)
@@ -48,19 +43,13 @@
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
         (setq js2-mode-show-strict-warnings nil)
-      (setq flycheck-javascript-eslint-executable "eslint")))
-
-  (use-package smartparens-javascript
-    :after smartparens-mode))
+      (setq flycheck-javascript-eslint-executable "eslint"))))
 
 
 ;; for typescript
 (use-package typescript-mode
   :ensure t
-  :mode ("\\.tsx?$" . typescript-mode)
-  :config
-  (use-package smartparens-javascript
-    :after smartparens-mode))
+  :mode ("\\.tsx?$" . typescript-mode))
 
 
 ;; from https://github.com/seagle0128/.emacs.d

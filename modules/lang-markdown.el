@@ -18,10 +18,7 @@
   ;; some minor-mode hooks since it doesn't inherit from prog-mode
   (add-hook 'markdown-mode-hook 'wrap-region-mode)
   (add-hook 'markdown-mode-hook 'turn-off-auto-fill)
-  (add-hook 'markdown-mode-hook 'yas-minor-mode)
-  :config
-  (use-package smartparens-markdown
-    :after smartparens-mode))
+  (add-hook 'markdown-mode-hook 'yas-minor-mode))
 
 
 ;; allows editing of code blocks using major mode in other window
