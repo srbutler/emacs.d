@@ -4,31 +4,6 @@
 ;;
 ;;; Code:
 
-;; Load package managment directories
-(require 'package)
-(setq package-archives
-      '(("org"          . "https://orgmode.org/elpa/")
-        ("gnu"          . "https://elpa.gnu.org/packages/")
-        ("melpa"        . "https://melpa.org/packages/")
-        ("melpa-stable" . "https://stable.melpa.org/packages/")))
-(package-initialize)
-
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(when (file-exists-p "/usr/local/share/emacs/site-lisp/cask/")
-  (progn
-    ;; set up cask
-    (use-package cask
-      :load-path "/usr/local/share/emacs/site-lisp/cask/"
-      :config (cask-initialize))
-
-    ;; add pallet to manage packages
-    (use-package pallet
-      :ensure t
-      :config (pallet-mode t))))
-
 ;; Always load newest byte code
 (setq load-prefer-newer +1)
 
@@ -55,7 +30,7 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
-;; need this function really early so let's handle it here
+;; sometimes need different config files on different machines
 (defun load-if-exists (filename dir)
   "Load FILENAME in DIR if it exists."
   (let ((target-file (expand-file-name filename dir)))
@@ -66,11 +41,38 @@
         "File does not exist, skipping: %s"
         target-file)))))
 
-;; make adding new module files easy
-(defun load-file-list (format-string files)
-  "Load a list of FILES in the modules dir using FORMAT-STRING."
-  (dolist (f files)
-    (load-if-exists (format format-string f) *modules-dir*)))
+;; setup proxies etc. if needed
+(load-if-exists "before-init.el" *dotfiles-dir*)
+
+;; Load package managment directories
+(require 'package)
+(setq package-archives
+      '(("org"          . "https://orgmode.org/elpa/")
+        ("gnu"          . "https://elpa.gnu.org/packages/")
+        ("melpa"        . "https://melpa.org/packages/")
+        ("melpa-stable" . "https://stable.melpa.org/packages/")))
+(package-initialize)
+(package-refresh-contents)
+
+;; set up use-package
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(require 'use-package)
+(setq use-package-compute-statistics t)
+
+;; set up cask
+(use-package cask
+  :ensure t
+  :config (cask-initialize))
+
+;; for the Cask file
+(use-package cask-mode
+  :ensure t)
+
+;; add pallet to manage packages
+(use-package pallet
+  :ensure t
+  :config (pallet-mode t))
 
 (require 'config-general)
 (require 'config-ivy)

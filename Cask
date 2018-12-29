@@ -9,6 +9,7 @@
 (depends-on "bind-key")
 (depends-on "cargo")
 (depends-on "cask")
+(depends-on "cask-mode")
 (depends-on "ccls")
 (depends-on "cdlatex")
 (depends-on "cider")
