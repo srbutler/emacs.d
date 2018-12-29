@@ -4,64 +4,6 @@
 ;;
 ;;; Code:
 
-(setq url-proxy-services
-      '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-        ("http" . "proxyam-ny.bloomberg.com:81")
-        ("https" . "proxyam-ny.bloomberg.com:81")))
-
-;; get all the directory names set up
-(defvar *dotfiles-dir* (file-name-directory load-file-name)
-  "The emacs.d root directory.")
-(defvar *modules-dir* (expand-file-name "modules" *dotfiles-dir*)
-  "A directory for configuration files.")
-(defvar *vendor-dir* (expand-file-name "vendor" *dotfiles-dir*)
-  "This directory houses packages that are not yet available in ELPA (or MELPA).")
-(defvar *savefile-dir* (expand-file-name "savefile" *dotfiles-dir*)
-  "This folder stores all the automatically generated save/history-files.")
-
-;; add the needed directories to the load-path
-(add-to-list 'load-path *modules-dir*)
-(add-to-list 'load-path *vendor-dir*)
-
-;; need this function really early so let's handle it here
-(defun load-if-exists (filename dir)
-  "Load FILENAME in DIR if it exists."
-  (let ((target-file (expand-file-name filename dir)))
-    (if (file-exists-p target-file)
-        (load target-file)
-      (message
-       (format
-        "File does not exist, skipping: %s"
-        target-file)))))
-
-;; Load package managment directories
-(require 'package)
-(setq package-archives
-      '(
-        ("org"          . "http://orgmode.org/elpa/")
-        ("gnu"          . "http://elpa.gnu.org/packages/")
-        ("melpa"        . "http://melpa.org/packages/")
-        ("melpa-stable" . "http://stable.melpa.org/packages/")
-        ))
-(package-initialize)
-
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(require 'use-package)
-
-(when (file-exists-p "/usr/local/share/emacs/site-lisp/cask/")
-  (progn
-    ;; set up cask
-    (use-package cask
-      :load-path "/usr/local/share/emacs/site-lisp/cask/"
-      :config (cask-initialize))
-
-    ;; add pallet to manage packages
-    (use-package pallet
-      :ensure t
-      :config (pallet-mode t))))
-
 ;; Always load newest byte code
 (setq load-prefer-newer +1)
 
@@ -88,7 +30,7 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
-;; need this function really early so let's handle it here
+;; sometimes need different config files on different machines
 (defun load-if-exists (filename dir)
   "Load FILENAME in DIR if it exists."
   (let ((target-file (expand-file-name filename dir)))
@@ -99,11 +41,38 @@
         "File does not exist, skipping: %s"
         target-file)))))
 
-;; make adding new module files easy
-(defun load-file-list (format-string files)
-  "Load a list of FILES in the modules dir using FORMAT-STRING."
-  (dolist (f files)
-    (load-if-exists (format format-string f) *modules-dir*)))
+;; setup proxies etc. if needed
+(load-if-exists "before-init.el" *dotfiles-dir*)
+
+;; Load package managment directories
+(require 'package)
+(setq package-archives
+      '(("org"          . "https://orgmode.org/elpa/")
+        ("gnu"          . "https://elpa.gnu.org/packages/")
+        ("melpa"        . "https://melpa.org/packages/")
+        ("melpa-stable" . "https://stable.melpa.org/packages/")))
+(package-initialize)
+(package-refresh-contents)
+
+;; set up use-package
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(require 'use-package)
+(setq use-package-compute-statistics t)
+
+;; set up cask
+(use-package cask
+  :ensure t
+  :config (cask-initialize))
+
+;; for the Cask file
+(use-package cask-mode
+  :ensure t)
+
+;; add pallet to manage packages
+(use-package pallet
+  :ensure t
+  :config (pallet-mode t))
 
 (require 'config-general)
 (require 'config-ivy)
@@ -126,7 +95,7 @@
 ;; (require 'lang-clojure)
 (require 'lang-elisp)
 ;; (require 'lang-ess)
-(require 'lang-go)
+;; (require 'lang-go)
 ;; (require 'lang-haskell)
 ;; (require 'lang-java)
 (require 'lang-js)
