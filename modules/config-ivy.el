@@ -44,6 +44,7 @@
    ((executable-find "rg")
     (progn
       (bind-key "C-c k" 'counsel-rg)
+
       (setq counsel-grep-base-command
             "rg -i -M 120 --no-heading --line-number --color never '%s' %s")))
    ((executable-find "ag")

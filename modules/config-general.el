@@ -535,6 +535,7 @@
   (add-hook 'prog-mode-hook 'smartparens-strict-mode)
   (show-smartparens-global-mode 1)
   :config
+  (use-package smartparens-text)
   (setq sp-autoskip-closing-pair 'always
         sp-hybrid-kill-entire-symbol nil)
 
