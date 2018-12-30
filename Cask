@@ -3,6 +3,7 @@
 (source melpa-stable)
 (source org)
 
+(depends-on "adaptive-wrap")
 (depends-on "async")
 (depends-on "auctex")
 (depends-on "avy")

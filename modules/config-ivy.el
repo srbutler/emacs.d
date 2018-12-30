@@ -19,16 +19,14 @@
   :diminish
   :bind  (("M-x" . counsel-M-x)
           ("M-y" . counsel-yank-pop)
-          ("C-x C-f" . counsel-find-file)
-          ("C-x C-r" . counsel-recentf)
-
           ("C-s" . counsel-grep-or-swiper)
           ("C-r" . counsel-grep-or-swiper)
-          ("C-x l" . counsel-locate)
-          ("C-c i" . counsel-imenu)
-
           ("C-h b" . counsel-descbinds)
           ("C-h f" . counsel-apropos)
+          ("C-c i" . counsel-imenu)
+          ("C-x l" . counsel-locate)
+          ("C-x C-f" . counsel-find-file)
+          ("C-x C-r" . counsel-recentf)
           ("C-h C-l" . counsel-find-library)
           ("C-h SPC" . counsel-mark-ring))
   :custom
@@ -44,7 +42,6 @@
    ((executable-find "rg")
     (progn
       (bind-key "C-c k" 'counsel-rg)
-
       (setq counsel-grep-base-command
             "rg -i -M 120 --no-heading --line-number --color never '%s' %s")))
    ((executable-find "ag")
@@ -147,51 +144,6 @@
               ("C-c C-t s" . counsel-gtags-find-symbol)
               ("C-c C-t f" . counsel-gtags-go-forward)
               ("C-c C-t b" . counsel-gtags-go-backward)))
-
-
-;; browse documentation
-(use-package counsel-dash
-  :disabled t
-  :ensure t
-  :after counsel
-  :bind ("C-c d" . counsel-dash)
-  :config
-  ;; browse in emacs
-  (setq counsel-dash-browser-func 'eww-browse-url)
-
-  ;; set hooks for docsets
-  ;; TODO: write a function for this
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("Emacs_Lisp"))))
-  (add-hook 'python-mode-hook
-            (lambda () (setq-local counsel-dash-docsets
-                                   '("Python_3" "Python_2" "NumPy" "SciPy" "Pandas"))))
-  (add-hook 'ess-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("R"))))
-  (add-hook 'LaTeX-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("LaTeX"))))
-  (add-hook 'clojure-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("Clojure"))))
-  (add-hook 'java-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("Java_SE8" "Java_SE9"))))
-  (add-hook 'lisp-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("Common_Lisp"))))
-  (add-hook 'js2-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("Javascript"))))
-  (add-hook 'scala-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("Scala"))))
-  (add-hook 'haskell-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("Haskell"))))
-  (add-hook 'tuareg-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("Ocaml"))))
-  (add-hook 'rust-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("Rust"))))
-  (add-hook 'go-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("Go"))))
-  (add-hook 'c-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("C"))))
-  (add-hook 'c++-mode-hook
-            (lambda () (setq-local counsel-dash-docsets '("C++")))))
 
 
 (provide 'config-ivy)

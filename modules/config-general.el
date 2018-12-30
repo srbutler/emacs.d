@@ -240,6 +240,20 @@
          ("\\.tsv\\'" . csv-mode)))
 
 
+;; set up dash integration
+(use-package dash-at-point
+  :when (string-equal system-type "darwin")
+  :ensure t
+  :bind ("C-c d" . dash-at-point-with-docset)
+  :config
+  (dolist
+      (pair
+       '('(python-mode . "python3") '(sh-mode . "bash") '(emacs-lisp-mode . "elisp")
+         '(LaTeX-mode . "latex") '(js2-mode . "javascript") '(rjsx-mode . "javascript")
+         '(tuareg-mode . "ocaml") '(ess-mode . "r")))
+    (add-to-list 'dash-at-point-mode-alist pair)))
+
+
 ;; diminish keeps the modeline tidy
 (use-package diminish
   :ensure t)
@@ -271,6 +285,13 @@
                       :underline t
                       :foreground (face-foreground font-lock-constant-face)
                       :weight 'bold))
+
+
+;; get the PATH variable working correctly
+(use-package exec-path-from-shell
+  :when (string-equal system-type "darwin")
+  :ensure t
+  :init (exec-path-from-shell-initialize))
 
 
 ;; expands the selection region progressively
