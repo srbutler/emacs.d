@@ -11,14 +11,16 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :custom
-  (markdown-command "multimarkdown")
-  (markdown-fontify-code-blocks-natively t)
   :init
-  ;; some minor-mode hooks since it doesn't inherit from prog-mode
   (add-hook 'markdown-mode-hook 'wrap-region-mode)
-  (add-hook 'markdown-mode-hook 'turn-off-auto-fill)
-  (add-hook 'markdown-mode-hook 'yas-minor-mode))
+  (add-hook 'markdown-mode-hook 'turn-on-auto-fill)
+  (add-hook 'markdown-mode-hook 'yas-minor-mode)
+  :config
+  (setq markdown-fontify-code-blocks-natively t)
+
+  (let ((cmd "multimarkdown"))
+    (when (executable-find cmd)
+      (setq markdown-command cmd))))
 
 
 ;; allows editing of code blocks using major mode in other window
@@ -28,4 +30,4 @@
 
 
 (provide 'lang-markdown)
-;; lang-markdown.el ends here
+;;; lang-markdown.el ends here
