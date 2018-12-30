@@ -146,6 +146,12 @@
 (bind-key "<backtab>" #'un-indent-by-removing-4-spaces global-map)
 
 
+;; set up proper wrapping for text modes
+(use-package adaptive-wrap
+  :ensure t
+  :hook (visual-line-mode . adaptive-wrap-prefix-mode))
+
+
 ;; revert buffers automatically when underlying files are changed externally
 (use-package autorevert
   :diminish (auto-revert-mode . "ar")
