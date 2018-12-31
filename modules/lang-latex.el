@@ -1,8 +1,6 @@
 ;;; lang-latex.el --- Summary:
 ;;
 ;;; Commentary:
-;;  Taken from: https://github.com/Schnouki/dotfiles/, with
-;;  modifications
 ;;
 ;;; Code:
 
