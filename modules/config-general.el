@@ -265,6 +265,11 @@
   :bind ("C-c C-d" . display-line-numbers-mode))
 
 
+;; manage docker images
+(use-package docker
+  :ensure t)
+
+
 (use-package docker-tramp
   :ensure t)
 
@@ -277,7 +282,7 @@
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
   :ensure nil
-  :diminish ""
+  :delight
   :hook prog-mode
   :config
   ;; give current argument distinctive highlighting
@@ -289,7 +294,7 @@
 
 ;; get the PATH variable working correctly
 (use-package exec-path-from-shell
-  :when (string-equal system-type "darwin")
+  :when (memq window-system '(mac ns x))
   :ensure t
   :init (exec-path-from-shell-initialize))
 
@@ -630,9 +635,7 @@
 ;; define a bunch of wrapping operations in text modes
 (use-package wrap-region
   :ensure t
-  :hook ((org-mode . wrap-region-mode)
-         (markdown-mode . wrap-region-mode)
-         (text-mode . wrap-region-mode))
+  :hook ((org-mode markdown-mode text-mode) . wrap-region-mode)
   :diminish (wrap-region-mode . "wrap")
   :config
   (wrap-region-add-wrappers
