@@ -78,17 +78,11 @@
 (require 'config-ivy)
 (require 'config-appearance)
 
-;; load OS-specific stuff
-(cond
- ((string-equal system-type "darwin")
-  (load-if-exists "config-osx.el" *modules-dir*))
- ((string-equal system-type "gnu/linux")
-  (load-if-exists "config-linux.el" *modules-dir*))
- ((string-equal system-type "windows-nt")
-  (load-if-exists "config-windows.el" *modules-dir*)))
-
 ;; anything needed outside of VC goes here
 (load-if-exists "secrets.el" *dotfiles-dir*)
+
+;; anything needed locally (work, etc.) not in before-init.el
+(load-if-exists "config-local.el" *modules-dir*)
 
 ;; load language-specific config files
 (require 'lang-cc)

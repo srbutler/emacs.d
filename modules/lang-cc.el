@@ -46,6 +46,9 @@
         (setq ccls-executable ccls)
       (message "Could not locate `ccls' executable!")))
 
+  (with-eval-after-load 'projectile
+    (add-to-list 'projectile-globally-ignored-directories ".ccls-cache"))
+
   ;; adds irony-style detailed labels
   (setq ccls-extra-init-params '(:completion (:detailedLabel t))))
 

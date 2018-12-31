@@ -142,13 +142,23 @@
  ((font-existsp "Consolas")
   (set-face-attribute 'default nil :height 151 :font "Consolas")))
 
-;; setup ligatures
-(when window-system
-  ;; comment out #46 for Clojure's CIDER mode if there are problems
+
+;; Enable emoji, and stop the UI from freezing when trying to display them.
+(if (fboundp 'set-fontset-font)
+    (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
+
+
+;; setup ligature in certain situations
+(cond
+ ;; only run the following in the railwaycat version of emacs
+ ((fboundp 'mac-auto-operator-composition-mode)
+  (mac-auto-operator-composition-mode))
+
+ ;; setup general ligatures
+ ((window-system)
   (let ((alist '((33 . ".\\(?:\\(?:==\\)\\|[!=]\\)")
                  (35 . ".\\(?:[(?[_{]\\)")
                  (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
-                 ;; (42 . ".\\(?:\\(?:\\*\\*\\)\\|[*/]\\)")    ;; disabled for org-mode sanity
                  (43 . ".\\(?:\\(?:\\+\\+\\)\\|\\+\\)")
                  (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
                  (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=]\\)")
@@ -163,12 +173,10 @@
                  (94 . ".\\(?:=\\)")
                  (123 . ".\\(?:-\\)")
                  (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
-                 (126 . ".\\(?:[=@~-]\\)")
-                 )
-               ))
+                 (126 . ".\\(?:[=@~-]\\)"))))
     (dolist (char-regexp alist)
       (set-char-table-range composition-function-table (car char-regexp)
-                            `([,(cdr char-regexp) 0 font-shape-gstring])))))
+                            `([,(cdr char-regexp) 0 font-shape-gstring]))))))
 
 
 (provide 'config-appearance)
