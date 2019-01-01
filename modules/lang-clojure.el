@@ -4,38 +4,17 @@
 ;;
 ;;; Code:
 
-;; setup clojure-mode, with symbol prettification
 (use-package clojure-mode
   :ensure t
-  :init
-  (add-hook 'clojure-mode-hook 'smartparens-mode)
-  (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode))
+  :mode ("\\.boot\\'" . clojure-mode))
 
 
-;; defines a function for better REPL interaction
-(defun cider-send-and-evaluate-sexp ()
-  "Sends the s-expression located before the point or the active
-   region to the REPL and evaluates it. Then the Clojure buffer
-   is activated as if nothing happened."
-  (interactive)
-  (if (not (region-active-p))
-      (cider-insert-last-sexp-in-repl)
-    (cider-insert-in-repl
-     (buffer-substring (region-beginning) (region-end)) nil))
-  (cider-switch-to-repl-buffer)
-  (cider-repl-closing-return)
-  (cider-switch-to-last-clojure-buffer)
-  (message ""))
-
-;; CIDER (the REPL) setup
+;; CIDER setup
 (use-package cider
   :defer t
   :ensure t
   :commands (cider cider-connect cider-jack-in)
-  :bind (:map clojure-mode-map
-              ("C-c C-j" . cider-send-and-evaluate-sexp)
-              ("C-c C-z" . cider-jack-in)
-              ("C-x C-e" . cider-eval-last-sexp))
+  :bind (:map clojure-mode-map ("C-c C-z" . cider-jack-in))
   :custom
   (cider-auto-select-error-buffer t)
   (cider-repl-pop-to-buffer-on-connect t)
@@ -49,12 +28,12 @@
   (add-hook 'cider-repl-mode-hook 'superword-mode)
   (add-hook 'cider-repl-mode-hook 'company-mode)
   (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'cider-repl-mode-hook 'smartparens-mode)
   (add-hook 'cider-test-report-mode 'jcf-soft-wrap))
 
 
 ;; linter setup with flycheck
 (use-package flycheck-clojure
-  :defer t
   :ensure t
   :init (add-hook 'flycheck-mode-hook 'flycheck-clojure-setup))
 
@@ -62,10 +41,9 @@
 ;; refactoring with clj-refactor
 ;; refactoring help with C-c r h h
 (use-package clj-refactor
-  :defer t
   :ensure t
   :init (add-hook 'clojure-mode-hook 'clj-refactor-mode)
-  :config (cljr-add-keybindings-with-prefix "C-c r")
+  :config (cljr-add-keybindings-with-prefix "C-c C-r")
   :diminish clj-refactor-mode)
 
 

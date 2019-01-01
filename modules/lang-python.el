@@ -14,11 +14,10 @@
   :mode (("\\.py\\'" . python-mode)
          ("\\.wsgi$" . python-mode))
   :interpreter ("python" . python-mode)
-  :custom
-  (indent-tabs-mode nil)
-  (python-indent-offset 4)
   :init (when *python-use-lsp* (add-hook 'python-mode-hook 'lsp))
   :config
+  (setq indent-tabs-mode nil
+        python-indent-offset 4)
   (add-hook 'python-mode-hook 'highlight-indent-guides-mode)
   ;; use ipython instead of standard interpreter if found
   (when (executable-find "ipython")
@@ -45,7 +44,7 @@
   :bind (:map elpy-mode-map
               ("C-x C-e" . python-shell-send-defun)
               ("C-c C-f" . elpy-format-code))
-  :hook (elpy-enable . python-mode)
+  :hook (python-mode . elpy-mode)
   :config
   ;; refactoring backend (jedi vs. rope)
   (setq elpy-rpc-backend "jedi")
