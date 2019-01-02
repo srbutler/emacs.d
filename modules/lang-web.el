@@ -76,6 +76,14 @@
   :init (when *web-use-lsp* (add-hook 'less-css-mode-hook 'lsp)))
 
 
+;; CSS eldoc
+(use-package css-eldoc
+  :ensure t
+  :commands turn-on-css-eldoc
+  :hook ((css-mode scss-mode less-css-mode) . turn-on-css-eldoc))
+
+
+
 ;; emmet mode for efficient xml/html entry
 (use-package emmet-mode
   :ensure t
@@ -102,12 +110,6 @@
   :config
   ;; Set indent size to 2
   (setq web-beautify-args '("-s" "2" "-f" "-")))
-
-
-;; CSS eldoc
-(use-package css-eldoc
-  :commands turn-on-css-eldoc
-  :hook ((css-mode scss-mode less-css-mode) . turn-on-css-eldoc))
 
 
 (provide 'lang-web)
