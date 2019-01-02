@@ -52,7 +52,6 @@
         ("melpa"        . "https://melpa.org/packages/")
         ("melpa-stable" . "https://stable.melpa.org/packages/")))
 (package-initialize)
-(package-refresh-contents)
 
 ;; set up use-package
 (unless (package-installed-p 'use-package)

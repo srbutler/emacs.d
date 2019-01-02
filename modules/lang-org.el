@@ -9,7 +9,12 @@
   :ensure org-plus-contrib
   :bind (("C-c o l" . org-store-link)
          ("C-c o a" . org-agenda)
-         ("C-c o b" . org-iswitchb))
+         ("C-c o b" . org-iswitchb)
+         :map org-mode-map
+         ("S-<right>" . org-shiftright)
+         ("S-<left>" . org-shiftleft)
+         ("S-<up>" . org-shiftup)
+         ("S-<down>" . org-shiftdown))
   :init
   (setq org-export-backends '(ascii beamer html latex md))
   :config
@@ -39,6 +44,7 @@
 
   ;; ensure R blocks are called correctly
   (add-to-list 'org-src-lang-modes '("r" . ess-mode)))
+
 
 
 (use-package org-ref

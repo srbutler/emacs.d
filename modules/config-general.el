@@ -8,7 +8,7 @@
 ;; more useful frame title, that shows either a file or a buffer name
 ;; (if the buffer isn't visiting a file)
 (setq frame-title-format
-      '("emacs@" (:eval (system-name)) " -- "
+      '("emacs@" (:eval (system-name)) ": %* "
         (:eval (if (buffer-file-name)
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
@@ -85,15 +85,11 @@
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 
-;; show whitespace in prog-modes only
-(add-hook 'prog-mode-hook
-          #'(lambda () (setq-local show-trailing-whitespace t)))
+;; used in a few places to define keybindings easily
+(use-package bind-key)
 
-;; automatic indenting
-(add-hook 'prog-mode-hook 'electric-indent-mode)
-
-;; ensure subword-mode is on for all prog modes
-(add-hook 'prog-mode-hook 'subword-mode)
+;; remove os minimization
+(bind-key "C-z" nil global-map)
 
 ;; setup `hippie-expand' expand functions
 (setq hippie-expand-try-functions-list
@@ -107,20 +103,14 @@
         try-expand-line
         try-complete-lisp-symbol-partially
         try-complete-lisp-symbol))
-
-
-;; used in a few places to define keybindings easily
-(use-package bind-key)
-
-;; auto-indent on Enter
-;; bind to prog-mode-map for now to not break helm, etc.
-(bind-key "<return>" #'newline-and-indent prog-mode-map)
+(bind-key "M-/" #'hippie-expand global-map)
 
 ;; try and have a normal way to delete things
 (bind-key "<delete>" #'delete-region global-map)
 
-;; set an extra command to jump to other window, for convenience
+;; set an extra command to jump to other window/frame, for convenience
 (bind-key "M-o" #'other-window global-map)
+(bind-key "M-O" #'other-frame global-map)
 
 ;; set a general key for goto-line
 (bind-key "C-c l" #'goto-line global-map)
@@ -146,16 +136,116 @@
 (bind-key "<backtab>" #'un-indent-by-removing-4-spaces global-map)
 
 
-;; set up proper wrapping for text modes
-(use-package adaptive-wrap
-  :ensure t
-  :hook (visual-line-mode . adaptive-wrap-prefix-mode))
-
+;; BUILT-IN PACKAGES
 
 ;; revert buffers automatically when underlying files are changed externally
 (use-package autorevert
   :diminish (auto-revert-mode . "ar")
   :config (global-auto-revert-mode t))
+
+
+;; display certain documentation in the minibuffer
+(use-package eldoc-mode
+  :ensure nil
+  :delight
+  :hook prog-mode
+  :config
+  ;; give current argument distinctive highlighting
+  (set-face-attribute 'eldoc-highlight-function-argument nil
+                      :underline t
+                      :foreground (face-foreground font-lock-constant-face)
+                      :weight 'bold))
+
+
+(use-package prog-mode
+  ;; :bind ("<return>" . newline-and-indent)
+  :config
+  (setq-local show-trailing-whitespace t)
+  (add-hook 'prog-mode-hook 'electric-indent-mode)
+  (add-hook 'prog-mode-hook 'subword-mode))
+
+
+;; save recent files
+(use-package recentf
+  :init
+  (setq recentf-save-file (expand-file-name "recentf" *savefile-dir*)
+        recentf-max-saved-items 500
+        recentf-max-menu-items 15
+        ;; disable recentf-cleanup on Emacs start, because it can cause
+        ;; problems with remote files
+        recentf-auto-cleanup 'never)
+  (recentf-mode +1))
+
+
+;; saveplace remembers your location in a file when saving files
+(use-package saveplace
+  :init
+  (setq save-place-file (expand-file-name "saveplace" *savefile-dir*))
+  ;; activate it for all buffers
+  (setq-default save-place t))
+
+
+;; savehist keeps track of some history
+(use-package savehist
+  :init
+  (setq savehist-additional-variables '(search-ring regexp-search-ring)
+        ;; save every minute
+        savehist-autosave-interval 60
+        ;; keep the home clean
+        savehist-file (expand-file-name "savehist" *savefile-dir*))
+  (savehist-mode +1))
+
+
+;; ensure sh-mode is setup for prezto files
+(use-package sh-mode
+  :mode (("\\.?zlogin\\'" . sh-mode)
+         ("\\.?zlogout\\'" . sh-mode)
+         ("\\.?zpreztorc\\'" . sh-mode)
+         ("\\.?zprofile\\'" . sh-mode)
+         ("\\.?zshenv\\'" . sh-mode)
+         ("\\.?zshrc\\'" . sh-mode))
+  :init
+  ;; install: npm i -g bash-language-server
+  (when (executable-find "bash-language-server")
+    (add-hook 'shell-mode-hook #'lsp)))
+
+
+;; meaningful names for buffers with the same name
+(use-package uniquify
+  :ensure nil
+  :init
+  (setq uniquify-buffer-name-style 'forward
+        uniquify-separator "/"
+        uniquify-after-kill-buffer-p t
+        uniquify-ignore-buffers-re "^\\*"))
+
+
+;; indicates whitespace characters
+(use-package whitespace-mode
+  :bind ("C-c C-w" . whitespace-mode))
+
+
+;; use shift + arrow keys to switch between visible buffers
+(use-package windmove
+  :demand
+  :bind (("M-S-<left>" . windmove-left)
+         ("M-S-<right>" . windmove-right)
+         ("M-S-<down>" . windmove-down)
+         ("M-S-<up>" . windmove-up)))
+
+
+;; ensure the initial xref commands are correctly bound
+(use-package xref
+  :bind (("M-." . xref-find-definitions)
+         ("M-?" . xref-find-references)))
+
+
+;; EXTERNAL PACKAGES
+
+;; set up proper wrapping for text modes
+(use-package adaptive-wrap
+  :ensure t
+  :hook (visual-line-mode . adaptive-wrap-prefix-mode))
 
 
 ;; linked to key-chords below
@@ -279,19 +369,6 @@
   :mode ("Dockerfile\\'" . dockerfile-mode))
 
 
-;; display certain documentation in the minibuffer
-(use-package eldoc-mode
-  :ensure nil
-  :delight
-  :hook prog-mode
-  :config
-  ;; give current argument distinctive highlighting
-  (set-face-attribute 'eldoc-highlight-function-argument nil
-                      :underline t
-                      :foreground (face-foreground font-lock-constant-face)
-                      :weight 'bold))
-
-
 ;; get the PATH variable working correctly
 (use-package exec-path-from-shell
   :when (memq window-system '(mac ns x))
@@ -362,6 +439,7 @@
 ;; adds guides to show indentation level
 (use-package highlight-indent-guides
   :ensure t
+  :diminish
   :bind (:map prog-mode-map ("C-c C-i" . highlight-indent-guides-mode))
   :config (setq highlight-indent-guides-method 'character))
 
@@ -512,55 +590,9 @@
   :diminish rainbow-mode)
 
 
-;; save recent files
-(use-package recentf
-  :init
-  (setq recentf-save-file (expand-file-name "recentf" *savefile-dir*)
-        recentf-max-saved-items 500
-        recentf-max-menu-items 15
-        ;; disable recentf-cleanup on Emacs start, because it can cause
-        ;; problems with remote files
-        recentf-auto-cleanup 'never)
-  (recentf-mode +1))
-
-
-;; saveplace remembers your location in a file when saving files
-(use-package saveplace
-  :init
-  (setq save-place-file (expand-file-name "saveplace" *savefile-dir*))
-  ;; activate it for all buffers
-  (setq-default save-place t))
-
-
-;; savehist keeps track of some history
-(use-package savehist
-  :init
-  (setq savehist-additional-variables '(search-ring regexp-search-ring)
-        ;; save every minute
-        savehist-autosave-interval 60
-        ;; keep the home clean
-        savehist-file (expand-file-name "savehist" *savefile-dir*))
-  (savehist-mode +1))
-
-
-;; ensure sh-mode is setup for prezto files
-(use-package sh-mode
-  :mode (("\\.?zlogin\\'" . sh-mode)
-         ("\\.?zlogout\\'" . sh-mode)
-         ("\\.?zpreztorc\\'" . sh-mode)
-         ("\\.?zprofile\\'" . sh-mode)
-         ("\\.?zshenv\\'" . sh-mode)
-         ("\\.?zshrc\\'" . sh-mode))
-  :init
-  ;; install: npm i -g bash-language-server
-  (when (executable-find "bash-language-server")
-    (add-hook 'shell-mode-hook #'lsp)))
-
-
 ;; get smartparens in programming modes
 (use-package smartparens
   :ensure t
-  :diminish (smartparens-mode . "sp")
   :bind (("M-s" . sp-unwrap-sexp))
   :init
   (use-package smartparens-config)
@@ -601,35 +633,11 @@
          ("M-Q" . unfill-paragraph)))
 
 
-;; meaningful names for buffers with the same name
-(use-package uniquify
-  :ensure nil
-  :init
-  (setq uniquify-buffer-name-style 'forward
-        uniquify-separator "/"
-        uniquify-after-kill-buffer-p t
-        uniquify-ignore-buffers-re "^\\*"))
-
-
 ;; cause I forget things
 (use-package which-key
   :ensure t
   :diminish which-key-mode
   :init (which-key-mode 1))
-
-
-;; indicates whitespace characters
-(use-package whitespace-mode
-  :bind ("C-c C-w" . whitespace-mode))
-
-
-;; use shift + arrow keys to switch between visible buffers
-(use-package windmove
-  :demand
-  :bind (("M-S-<left>" . windmove-left)
-         ("M-S-<right>" . windmove-right)
-         ("M-S-<down>" . windmove-down)
-         ("M-S-<up>" . windmove-up)))
 
 
 ;; define a bunch of wrapping operations in text modes
@@ -670,13 +678,6 @@
   :config (ws-butler-global-mode))
 
 
-;; ensure the initial xref commands are correctly bound
-(use-package xref
-  :bind (("M-." . xref-find-definitions)
-         ("M-?" . xref-find-references)
-         ("M-/" . xref-find-references)))
-
-
 (use-package yaml-mode
   :ensure t
   :mode ("\\.ya?ml\\'" . yaml-mode)
@@ -689,8 +690,11 @@
   :ensure t
   :init (yas-global-mode)
   :bind (("C-c C-e" . yas-expand))
-  :config (add-to-list 'yas-snippet-dirs
-                       (expand-file-name "snippets/" *dotfiles-dir*)))
+  :config
+  (add-to-list 'yas-snippet-dirs (expand-file-name "snippets/" *dotfiles-dir*))
+
+  ;; add to snippets to hippie expand
+  (push 'yas-hippie-try-expand hippie-expand-try-functions-list))
 
 
 ;; a solid collection of snippets for many modes
