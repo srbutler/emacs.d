@@ -16,22 +16,45 @@
   (add-hook 'lisp-mode-hook 'eldoc-mode))
 
 
+;; SLIME replacement
+(use-package sly
+  :ensure t
+  :bind (:map lisp-mode-map ("C-c C-z" . sly))
+  :config
+  (setq inferior-lisp-program "sbcl")
+  (add-hook 'sly-mrepl-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'sly-mrepl-mode-hook 'smartparens-strict-mode))
+
+
+;; adds quickload command to sly
+(use-package sly-quicklisp
+  :ensure t)
+
+
+;; adds macro expansion to sly
+(use-package sly-macrostep
+  :ensure t)
+
+
 (use-package slime-company
+  :disabled t
   :ensure t)
 
 
 ;; common-lisp REPL
 (use-package slime
+  :disabled t
   :ensure t
-  :defer t
   :bind (:map slime-mode-map ("C-c C-s" . slime-selector))
-  :commands (slime slime-mode)
   :config
   (slime-setup '(slime-company
                  slime-fancy
                  slime-indentation
                  slime-sbcl-exts
                  slime-scratch))
+
+  (add-hook 'slime-repl-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'slime-repl-mode-hook 'smartparens-strict-mode)
 
   (setq slime-lisp-implementations
         '((ccl ("ccl"))
