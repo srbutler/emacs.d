@@ -59,6 +59,10 @@
 (require 'use-package)
 (setq use-package-compute-statistics t)
 
+;; needed for some extra fetchers
+(use-package quelpa-use-package
+  :ensure t)
+
 ;; set up cask
 (use-package cask
   :ensure t
