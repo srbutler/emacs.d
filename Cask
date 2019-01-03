@@ -173,6 +173,7 @@
 (depends-on "pyenv-mode")
 (depends-on "pythonic")
 (depends-on "pyvenv")
+(depends-on "quelpa-use-package")
 (depends-on "queue")
 (depends-on "racer")
 (depends-on "rainbow-delimiters")

@@ -24,6 +24,7 @@
 ;; set some basic defaults
 (setq-default
  abbrev-file-name                (expand-file-name "abbrev_defs" *savefile-dir*)
+ apropos-do-all                  t
  auto-save-default               t
  blink-matching-paren            t
  confirm-kill-emacs              'yes-or-no-p  ;; Confirm before exiting Emacs
@@ -46,6 +47,7 @@
  linum-format                    " %4d "
  major-mode                      'text-mode
  mode-require-final-newline      t
+ mouse-yank-at-point             t
  nsm-settings-file               (expand-file-name "network-security.data" *savefile-dir*)
  next-line-add-newlines          t             ;; adds newline for C-n at end of buffer
  require-final-newline           t
@@ -146,8 +148,7 @@
 
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
-  :ensure nil
-  :delight
+  :diminish
   :hook prog-mode
   :config
   ;; give current argument distinctive highlighting
@@ -158,9 +159,8 @@
 
 
 (use-package prog-mode
-  ;; :bind ("<return>" . newline-and-indent)
   :config
-  (setq-local show-trailing-whitespace t)
+  (add-hook 'prog-mode-hook (lambda () (setq-local show-trailing-whitespace t)))
   (add-hook 'prog-mode-hook 'electric-indent-mode)
   (add-hook 'prog-mode-hook 'subword-mode))
 
@@ -444,6 +444,11 @@
   :config (setq highlight-indent-guides-method 'character))
 
 
+;; make available for other packages for now
+(use-package hydra
+  :ensure t)
+
+
 ;; define a bunch of quick key combos for basic actions
 (use-package key-chord
   :ensure t
@@ -480,6 +485,7 @@
               ;; use the peek functions instead of jumps
               ("M-." . lsp-ui-peek-find-definitions)
               ("M-?" . lsp-ui-peek-find-references)
+              ("C-c i" . lsp-ui-imenu)
               ("C-c C-l c" . lsp-capabilities)
               ("C-c C-l d" . lsp-ui-doc-enable)
               ("C-c C-l f" . lsp-format-buffer)
@@ -632,6 +638,13 @@
   :bind (("C-M-Q" . unfill-toggle)
          ("M-Q" . unfill-paragraph)))
 
+
+;; miscellaneous collection of functions
+(use-package unpackaged
+  :quelpa (unpackaged :fetcher github :repo "alphapapa/unpackaged.el")
+  :hook (magit-diff-visit-file . (lambda ()
+                                   (when smerge-mode
+                                     (unpackaged/smerge-hydra/body)))))
 
 ;; cause I forget things
 (use-package which-key
