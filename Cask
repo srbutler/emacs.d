@@ -80,7 +80,7 @@
 (depends-on "ghc")
 (depends-on "ghub")
 (depends-on "git-commit")
-(depends-on "git-gutter")
+(depends-on "git-gutter-fringe")
 (depends-on "git-timemachine")
 (depends-on "gitattributes-mode")
 (depends-on "gitconfig-mode")

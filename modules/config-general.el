@@ -146,6 +146,13 @@
   :config (global-auto-revert-mode t))
 
 
+;; defaults for REPLs that inherit from comint-mode
+(use-package comint-mode
+  :init
+  (add-hook 'comint-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'comint-mode-hook 'smartparens-strict-mode))
+
+
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
   :diminish
@@ -352,7 +359,8 @@
 ;; native version of linum
 (use-package display-line-numbers-mode
   :when (version<= "26.0.50" emacs-version)
-  :bind ("C-c C-d" . display-line-numbers-mode))
+  :bind ("C-c C-d" . display-line-numbers-mode)
+  :init (set-face-attribute 'line-number nil :height 0.9))
 
 
 ;; manage docker images
@@ -399,10 +407,15 @@
 
 
 ;; have git indications in gutter
-(use-package git-gutter
+(use-package git-gutter-fringe
+  ;; :when window-system
   :ensure t
   :init (global-git-gutter-mode t)
-  :diminish git-gutter-mode)
+  :config
+  ;; shrink values slightly
+  (set-face-attribute 'git-gutter-fr:added nil :height 0.9)
+  (set-face-attribute 'git-gutter-fr:deleted nil :height 0.9)
+  (set-face-attribute 'git-gutter-fr:modified nil :height 0.9))
 
 
 ;; navigate through git commit history
