@@ -24,26 +24,24 @@
   :bind (:map emacs-lisp-mode-map
               ("C-c C-z" . visit-ielm)
               ("C-c C-j" . eval-print-last-sexp)
-         :map lisp-interaction-mode-map
+              :map lisp-interaction-mode-map
               ("C-c C-z" . visit-ielm)
               ("C-c C-j" . eval-print-last-sexp))
-  :init
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
-  (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
   :config
-  (setq mode-name "ELisp")
+  (defun srb/emacs-lisp-hook ()
+    (setq mode-name "ELisp")
+    (counsel-gtags-mode -1)
+    (rainbow-mode t))
+  (add-hook 'emacs-lisp-mode-hook 'srb/emacs-lisp-hook)
+
   ;; keep .elc files updated automatically
-  (add-hook 'after-save-hook
-            (lambda ()
-              (when (and
-                     (or (string-prefix-p *modules-dir* (file-truename buffer-file-name))
-                         (string-prefix-p *dotfiles-dir* (file-truename buffer-file-name)))
-                     (file-exists-p (byte-compile-dest-file buffer-file-name)))
-                (emacs-lisp-byte-compile)))
-            nil
-            t))
+  (defun srb/byte-compile-this-file ()
+    (when (and
+           (or (string-prefix-p *modules-dir* (file-truename buffer-file-name))
+               (string-prefix-p *dotfiles-dir* (file-truename buffer-file-name)))
+           (file-exists-p (byte-compile-dest-file buffer-file-name)))
+      (emacs-lisp-byte-compile)))
+  (add-hook 'after-save-hook 'srb/byte-compile-this-file nil t))
 
 
 (use-package ielm
