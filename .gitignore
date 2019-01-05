@@ -2,6 +2,7 @@
 # LSP stuff
 eclipse.jdt.ls/
 workspace/
+.lsp-session-v1
 
 savefile/
 auto-save-list/
@@ -16,6 +17,7 @@ url/
 javacomp/
 network-security.data
 flycheck_*.el
+quelpa/
 
 ## GNU Global/Gtags indexes
 GPATH
