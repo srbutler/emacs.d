@@ -61,9 +61,7 @@
 (use-package utop
   :ensure t
   :defer t
-  :init
-  (add-hook 'tuareg-mode-hook 'utop-minor-mode)
-  (add-hook 'reason-mode-hook 'utop-minor-mode)
+  :hook (tuareg-mode reason-mode)
   :config
   (when (executable-find "opam")
     (setq utop-command "opam config exec -- utop -emacs")))
@@ -73,7 +71,7 @@
 (use-package ocp-indent
   :ensure t
   :bind (:map tuareg-mode-map ("C-c C-f" . ocp-indent-buffer))
-  :init (add-hook 'tuareg-mode-hook 'ocp-setup-indent))
+  :hook (tuareg-mode . ocp-setup-indent))
 
 
 (use-package merlin-eldoc

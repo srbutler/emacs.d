@@ -146,13 +146,6 @@
   :config (global-auto-revert-mode t))
 
 
-;; defaults for REPLs that inherit from comint-mode
-(use-package comint-mode
-  :init
-  (add-hook 'comint-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'comint-mode-hook 'smartparens-strict-mode))
-
-
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
   :diminish
@@ -181,7 +174,7 @@
         ;; disable recentf-cleanup on Emacs start, because it can cause
         ;; problems with remote files
         recentf-auto-cleanup 'never)
-  (recentf-mode +1))
+  :config (recentf-mode +1))
 
 
 ;; saveplace remembers your location in a file when saving files
@@ -599,7 +592,7 @@
 ;; makes parentheses colorful
 (use-package rainbow-delimiters-mode
   :ensure rainbow-delimiters
-  :hook (prog-mode))
+  :hook (prog-mode comint-mode))
 
 
 ;; displays colors for color hex values
@@ -613,9 +606,9 @@
 (use-package smartparens
   :ensure t
   :bind (("M-s" . sp-unwrap-sexp))
+  :hook ((prog-mode comint-mode) . smartparens-strict-mode)
   :init
   (use-package smartparens-config)
-  (add-hook 'prog-mode-hook 'smartparens-strict-mode)
   (show-smartparens-global-mode 1)
   :config
   (sp-use-paredit-bindings)
@@ -651,13 +644,6 @@
   :bind (("C-M-Q" . unfill-toggle)
          ("M-Q" . unfill-paragraph)))
 
-
-;; miscellaneous collection of functions
-(use-package unpackaged
-  :quelpa (unpackaged :fetcher github :repo "alphapapa/unpackaged.el")
-  :hook (magit-diff-visit-file . (lambda ()
-                                   (when smerge-mode
-                                     (unpackaged/smerge-hydra/body)))))
 
 ;; cause I forget things
 (use-package which-key

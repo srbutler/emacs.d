@@ -8,15 +8,13 @@
 (use-package tex
   :ensure auctex
   :mode ("\\.tex\\'" . LaTeX-mode)
+  :hook ((LaTeX-mode . LaTeX-preview-setup)
+         (LaTeX-mode . flyspell-mode))
   :config
   ;; set up xelatex
   (add-to-list 'TeX-command-list
                '("xelatexmk" "latexmk -synctex=1 -shell-escape -xelatex %s"
                  TeX-run-TeX nil t :help "Process file with xelatexmk"))
-
-  (add-hook 'LaTeX-mode-hook 'LaTeX-preview-setup)
-  (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-
   (setq TeX-auto-save t
         TeX-parse-self t
         TeX-command-default "xelatexmk"
@@ -38,19 +36,19 @@
 
 (use-package auctex-latexmk
   :ensure t
-  :init (add-hook 'LaTeX-mode-hook 'auctex-latexmk-setup))
+  :hook (LaTeX-mode . auctex-latexmk-setup))
 
 
 (use-package company-auctex
   :ensure t
-  :init (add-hook 'LaTeX-mode-hook 'company-auctex-init))
+  :hook (LaTeX-mode . company-auctex-init))
 
 
 ;; integrate reftex
 (use-package reftex
   :defer t
   :diminish (reftex-mode . "ref")
-  :init (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  :hook (LaTeX-mode . turn-on-reftex)
   :config
   (setq reftex-plug-into-AUCTeX t
         reftex-enable-partial-scans t

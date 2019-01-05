@@ -8,7 +8,7 @@
 (use-package lsp-java
   :ensure t
   :after lsp
-  :config (add-hook 'java-mode-hook 'lsp))
+  :hook (java-mode . lsp))
 
 (provide 'lang-java)
 ;;; lang-java.el ends here

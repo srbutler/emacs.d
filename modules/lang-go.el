@@ -34,7 +34,7 @@
 (use-package go-eldoc
   :ensure t
   :defer t
-  :init (add-hook 'go-mode-hook 'go-eldoc-setup))
+  :hook (go-mode . go-eldoc-setup))
 
 
 ;; install: go get -u github.com/mdempsky/gocode
