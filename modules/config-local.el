@@ -9,6 +9,12 @@
   :load-path "~/.emacs.d/vendor/toolkit")
 
 
+;; major mode for comdb2 CSC2 files
+(use-package csc-mode
+  :load-path "~/.emacs.d/vendor/comdb2-emacs/"
+  :mode ("\\.csc2\\'" . csc-mode))
+
+
 ;; This uses the BbgProtocolHandler set up by the terminal
 ;; bbg: links should be supported
 (with-eval-after-load 'org-mode
