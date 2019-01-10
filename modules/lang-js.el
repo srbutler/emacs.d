@@ -74,9 +74,7 @@
 (use-package prettier-js
   :ensure t
   :after (:any js2-mode rjsx-mode)
-  :init
-  (add-hook 'js2-mode-hook 'prettier-js-mode)
-  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
+  :hook (js2-mode rjsx-mode)
   :config
   (with-eval-after-load 'js2-mode
     (bind-key "C-c C-f" 'prettier-js js2-mode-map))

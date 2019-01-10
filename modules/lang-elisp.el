@@ -46,9 +46,8 @@
 
 (use-package ielm
   :ensure nil
-  :config
-  (add-hook 'ielm-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'ielm-mode-hook 'smartparens-strict-mode))
+  :hook ((ielm-mode . rainbow-delimiters-mode)
+         (ielm-mode . smartparens-strict-mode)))
 
 
 (provide 'lang-elisp)

@@ -15,6 +15,11 @@
   :ensure t
   :commands (cider cider-connect cider-jack-in)
   :bind (:map clojure-mode-map ("C-c C-z" . cider-jack-in))
+  :hook ((cider-repl-mode . superword-mode)
+         (cider-repl-mode . company-mode)
+         (cider-repl-mode . rainbow-delimiters-mode)
+         (cider-repl-mode . smartparens-mode)
+         (cider-test-report . jcf-soft-wrap))
   :custom
   (cider-auto-select-error-buffer t)
   (cider-repl-pop-to-buffer-on-connect t)
@@ -23,26 +28,20 @@
   (cider-repl-history-size 1000)
   (cider-show-error-buffer t)
   (nrepl-hide-special-buffers t)
-  (nrepl-popup-stacktraces nil)
-  :init
-  (add-hook 'cider-repl-mode-hook 'superword-mode)
-  (add-hook 'cider-repl-mode-hook 'company-mode)
-  (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'cider-repl-mode-hook 'smartparens-mode)
-  (add-hook 'cider-test-report-mode 'jcf-soft-wrap))
+  (nrepl-popup-stacktraces nil))
 
 
 ;; linter setup with flycheck
 (use-package flycheck-clojure
   :ensure t
-  :init (add-hook 'flycheck-mode-hook 'flycheck-clojure-setup))
+  :hook (flycheck-mode . flycheck-clojure-setup))
 
 
 ;; refactoring with clj-refactor
 ;; refactoring help with C-c r h h
 (use-package clj-refactor
   :ensure t
-  :init (add-hook 'clojure-mode-hook 'clj-refactor-mode)
+  :hook clojure-mode
   :config (cljr-add-keybindings-with-prefix "C-c C-r")
   :diminish clj-refactor-mode)
 

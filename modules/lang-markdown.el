@@ -7,14 +7,12 @@
 
 (use-package markdown-mode
   :ensure t
-  :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init
-  (add-hook 'markdown-mode-hook 'wrap-region-mode)
-  (add-hook 'markdown-mode-hook 'turn-on-auto-fill)
-  (add-hook 'markdown-mode-hook 'yas-minor-mode)
+  :hook ((markdown-mode . turn-on-auto-fill)
+         (markdown-mode . wrap-region-mode)
+         (markdown-mode . yas-minor-mode))
   :config
   (setq markdown-fontify-code-blocks-natively t)
 

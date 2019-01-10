@@ -17,11 +17,10 @@
               ("C-c C-c" . haskell-compile)
               ("C-c C-z" . haskell-interactive-switch)
               ("C-c v c" . haskell-cabal-visit-file))
+  :hook ((haskell-mode . haskell-doc-mode)
+         (haskell-mode . haskell-decl-scan-mode)
+         (haskell-mode . haskell-indentation-mode))
   :init
-  (add-hook 'haskell-mode-hook 'haskell-doc-mode)
-  (add-hook 'haskell-mode-hook 'haskell-decl-scan-mode)
-  (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-
   (setq haskell-process-type 'stack-ghci
         haskell-process-suggest-add-package nil
         haskell-process-suggest-remove-import-lines t
@@ -35,19 +34,15 @@
 
 (use-package intero
   :ensure t
-  :defer t
   :diminish (intero-mode . "intero")
-  :init (add-hook 'haskell-mode-hook 'intero-mode))
+  :hook (haskell-mode . intero-mode))
 
 
 (use-package hindent
-  :if (executable-find "hindent")
+  :when (executable-find "hindent")
   :ensure t
-  :defer t
   :bind (:map haskell-mode-map ("C-c i" . hindent-reformat-buffer))
-  :init
-  (when (locate-library "hindent")
-    (add-hook 'haskell-mode-hook 'hindent-mode)))
+  :hook haskell-mode)
 
 
 (use-package company-ghci

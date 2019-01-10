@@ -118,47 +118,5 @@
   :init (add-hook 'prog-mode-hook 'helm-gtags-mode))
 
 
-;; browse documentation
-(use-package helm-dash
-  :ensure t
-  :after helm
-  :bind ("C-c d" . helm-dash)
-  :config
-  ;; browse in emacs
-  (setq helm-dash-browser-func 'eww-browse-url)
-
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("Emacs_Lisp"))))
-  (add-hook 'python-mode-hook
-            (lambda () (setq-local helm-dash-docsets
-                                   '("Python_3" "Python_2" "NumPy" "SciPy" "Pandas"))))
-  (add-hook 'ess-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("R"))))
-  (add-hook 'LaTeX-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("LaTeX"))))
-  (add-hook 'clojure-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("Clojure"))))
-  (add-hook 'java-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("Java_SE8" "Java_SE9"))))
-  (add-hook 'lisp-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("Common_Lisp"))))
-  (add-hook 'js2-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("Javascript"))))
-  (add-hook 'scala-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("Scala"))))
-  (add-hook 'haskell-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("Haskell"))))
-  (add-hook 'tuareg-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("Ocaml"))))
-  (add-hook 'rust-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("Rust"))))
-  (add-hook 'go-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("Go"))))
-  (add-hook 'c-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("C"))))
-  (add-hook 'c++-mode-hook
-            (lambda () (setq-local helm-dash-docsets '("C++")))))
-
-
 (provide 'config-helm)
 ;;; config-helm.el ends here

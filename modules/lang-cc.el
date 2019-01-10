@@ -83,9 +83,8 @@
 (use-package google-c-style
   :ensure t
   :defer t
-  :init
-  (add-hook 'c-common-mode-hook 'google-set-c-style)
-  (add-hook 'c-common-mode-hook 'google-make-newline-indent))
+  :hook ((c-common-mode-hook . google-set-c-style)
+         (c-common-mode-hook . google-make-newline-indent)))
 
 
 (use-package clang-format
@@ -100,10 +99,7 @@
   :ensure t
   :defer t
   :diminish "irony"
-  :init
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode)
+  :hook (c-mode c++-mode objc-mode)
   :config
   (define-key irony-mode-map [remap completion-at-point]
     'irony-completion-at-point-async)
@@ -117,9 +113,8 @@
   :unless *cc-use-lsp*
   :disabled t
   :ensure t
-  :defer t
-  :init
-  (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
+  :hook (irony-mode . company-irony-setup-begin-commands)
+  :config
   (eval-after-load 'company
     '(progn
        (delete 'company-semantic company-backends)
@@ -142,14 +137,14 @@
   :disabled t
   :ensure t
   :defer t
-  :init (add-hook 'irony-mode-hook 'irony-eldoc))
+  :hook (irony-mode . irony-eldoc))
 
 
 (use-package cmake-ide
   :disabled t
   :ensure t
   :defer t
-  :init (add-hook 'c-mode-common-hook 'cmake-ide-setup))
+  :hook ((c-mode c++-mode) . cmake-ide-setup))
 
 
 (provide 'lang-cc)

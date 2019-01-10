@@ -24,7 +24,7 @@
 (use-package ensime
   :ensure t
   :pin melpa
-  :init (add-hook 'scala-mode-hook 'ensime-mode))
+  :hook (scala-mode . ensime-mode))
 
 (use-package sbt-mode
   :ensure t

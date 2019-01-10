@@ -13,8 +13,13 @@
 (use-package python
   :mode (("\\.py\\'" . python-mode)
          ("\\.wsgi$" . python-mode))
-  :interpreter ("python" . python-mode)
-  :init (when *python-use-lsp* (add-hook 'python-mode-hook 'lsp))
+  :init
+  (when *python-use-lsp*
+    (add-hook 'python-mode-hook 'lsp))
+
+  (add-hook 'python-mode-hook (lambda ()
+                                (setq tab-width 4)
+                                (setq fill-column 88)))
   :config
   (setq indent-tabs-mode nil
         python-indent-offset 4)
@@ -23,6 +28,21 @@
   (when (executable-find "ipython")
     (setq python-shell-interpreter "ipython"
           python-shell-interpreter-args "-i --simple-prompt"))
+
+  ;; inferior python shell setup
+  (defun srb/inferior-python-config ()
+    (indent-tabs-mode t)
+    (counsel-gtags-mode -1)
+    (rainbow-delimiters-mode t)
+    (smartparens-strict-mode t))
+  (add-hook 'inferior-python-mode-hook 'srb/inferior-python-config)
+
+  (defun send-input-and-indent()
+    (interactive)
+    (comint-send-input)
+    (indent-for-tab-command))
+  (bind-key "<enter>" 'send-input-and-indent inferior-python-mode-map)
+  (bind-key "C-j" 'send-input-and-indent inferior-python-mode-map)
 
   ;; set custom keywords for python-mode
   (font-lock-add-keywords
@@ -35,8 +55,55 @@
      ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face))))
 
 
+;; major mode for requirements.txt
+(use-package pip-requirements
+  :ensure t)
+
+
+(use-package anaconda-mode
+  :ensure t
+  :hook ((python-mode . anaconda-mode)
+         (python-mode . anaconda-eldoc-mode))
+  :init
+  (setq anaconda-mode-installation-directory
+           (expand-file-name "anaconda-mode" *savefile-dir*)))
+
+
+(use-package company-anaconda
+  :ensure t
+  :config
+  (eval-after-load 'company
+    '(add-to-list 'company-backends '(company-anaconda :with company-capf))))
+
+
+;; no config deterministic formatting
+(use-package blacken
+  :ensure t
+  :hook (python-mode . blacken-mode))
+
+
+;; sort imports
+(use-package py-isort
+  :ensure t)
+
+
+;; yapf code formatting
+(use-package yapify
+  :disabled t
+  :ensure t
+  :bind ("C-c C-r f" . yapfify-buffer))
+
+
+;; pytest intgration
+(use-package python-pytest
+  :ensure t
+  :after projectile
+  :bind ("C-c C-t" . python-pytest-popup))
+
+
 ;; install: pip install -U jedi rope pyflakes yapf
 (use-package elpy
+  :disabled t
   :unless *python-use-lsp*
   :ensure t
   :after python
@@ -60,9 +127,9 @@
 
 ;; set up pyenv
 (use-package pyenv-mode
+  :when (executable-find "pyenv")
   :ensure t
-  :defer t
-  :init (add-hook 'python-mode-hook 'pyenv-mode)
+  :hook python-mode
   :config
   (define-key pyenv-mode-map (kbd "C-c C-s") nil)
 

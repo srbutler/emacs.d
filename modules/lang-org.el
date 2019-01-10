@@ -62,7 +62,7 @@
 (use-package org-bullets
   :ensure t
   :defer t
-  :init (add-hook 'org-mode-hook 'org-bullets-mode))
+  :hook (org-mode . org-bullets-mode))
 
 
 (provide 'lang-org)
