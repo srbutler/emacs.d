@@ -462,6 +462,11 @@
   :ensure t)
 
 
+;; for ini config files
+(use-package ini-mode
+  :ensure t)
+
+
 ;; define a bunch of quick key combos for basic actions
 (use-package key-chord
   :ensure t

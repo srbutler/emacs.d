@@ -116,6 +116,7 @@
 (depends-on "idle-highlight-mode")
 (depends-on "indium")
 (depends-on "inflections")
+(depends-on "ini-mode")
 (depends-on "intero")
 (depends-on "irony")
 (depends-on "irony-eldoc")
