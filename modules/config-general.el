@@ -70,27 +70,17 @@
 (delete-selection-mode)        ;; Replace region when inserting text
 (display-time-mode)            ;; Enable time in the mode-line
 (fset 'yes-or-no-p 'y-or-n-p)  ;; shorten yes-or-no to y-or-n
+(global-hl-line-mode +1)       ;; highlight the current line
 (global-visual-line-mode 0)    ;; do not wrap long lines
 (line-number-mode t)           ;; put column number in mode-line
-(size-indication-mode t)
+(menu-bar-mode t)              ;; display menu-bar in window only
+(size-indication-mode t)       ;; display buffer size in mode-line
+(scroll-bar-mode -1)           ;; remove the redundant scroll-bars
+(tool-bar-mode 0)              ;; Disable the tool bar
+(tooltip-mode 0)               ;; Disable the tooltips
 
 ;; garbage collect when Emacs loses focus
 (add-hook 'focus-out-hook 'garbage-collect)
-
-(if window-system
-    (progn
-      (menu-bar-mode t)           ;; display menu-bar in window only
-      (global-hl-line-mode +1)    ;; highlight the current line
-      (tool-bar-mode 0)           ;; Disable the tool bar
-      (tooltip-mode 0))           ;; Disable the tooltips
-  (menu-bar-mode -1))
-
-;; remove the redundant scroll-bars
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
-
-
-;;;; BINDINGS
 
 ;; used in a few places to define keybindings easily
 (use-package bind-key)
@@ -220,9 +210,7 @@
 (use-package savehist
   :init
   (setq savehist-additional-variables '(search-ring regexp-search-ring)
-        ;; save every minute
         savehist-autosave-interval 60
-        ;; keep the home clean
         savehist-file (expand-file-name "savehist" *savefile-dir*))
   (savehist-mode +1))
 
@@ -648,7 +636,7 @@
 ;; makes parentheses colorful
 (use-package rainbow-delimiters-mode
   :ensure rainbow-delimiters
-  :hook (prog-mode comint-mode))
+  :hook (prog-mode comint))
 
 
 ;; displays colors for color hex values
