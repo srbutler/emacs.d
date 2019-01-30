@@ -450,6 +450,12 @@
   :config (setq highlight-indent-guides-method 'character))
 
 
+;; highlight TODO/FIXME/etc. comments
+(use-package hl-todo
+  :ensure t
+  :config (global-hl-todo-mode))
+
+
 ;; make available for other packages for now
 (use-package hydra
   :ensure t)
