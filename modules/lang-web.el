@@ -40,8 +40,8 @@
          ("\\.bml\\'" . nxml-mode)
          ("\\.rsd\\'" . nxml-mode))
   :custom
-  (nxml-child-indent 4)
-  (nxml-attribute-indent 5)
+  (nxml-child-indent 2)
+  (nxml-attribute-indent 2)
   (nxml-auto-insert-xml-declaration-flag nil)
   (nxml-bind-meta-tab-to-complete-flag t)
   (nxml-slash-auto-complete-flag t)
