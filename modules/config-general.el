@@ -146,13 +146,6 @@
   :config (global-auto-revert-mode t))
 
 
-;; defaults for REPLs that inherit from comint-mode
-(use-package comint-mode
-  :init
-  (add-hook 'comint-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'comint-mode-hook 'smartparens-strict-mode))
-
-
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
   :diminish
@@ -455,6 +448,12 @@
   :diminish
   :bind (:map prog-mode-map ("C-c C-i" . highlight-indent-guides-mode))
   :config (setq highlight-indent-guides-method 'character))
+
+
+;; highlight TODO/FIXME/etc. comments
+(use-package hl-todo
+  :ensure t
+  :config (global-hl-todo-mode))
 
 
 ;; make available for other packages for now
