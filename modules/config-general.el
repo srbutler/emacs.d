@@ -376,6 +376,15 @@
   :ensure t)
 
 
+;; native version of linum
+(use-package display-line-numbers-mode
+  :when (version<= "26.0.50" emacs-version)
+  :bind ("C-c C-d" . display-line-numbers-mode)
+  :init
+  (set-face-attribute 'line-number nil :height 0.9)
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode))
+
+
 ;; manage docker images
 (use-package docker
   :ensure t)
@@ -633,17 +642,17 @@
         (expand-file-name "projectile-bookmarks.eld" *savefile-dir*)))
 
 
-;; makes parentheses colorful
-(use-package rainbow-delimiters-mode
-  :ensure rainbow-delimiters
-  :hook (prog-mode comint))
-
-
 ;; displays colors for color hex values
 (use-package rainbow-mode
   :ensure t
-  :hook (emacs-lisp-mode css-mode conf-xdefaults-mode)
+  :hook (emacs-lisp-mode css-mode conf-colon-mode conf-space-mode)
   :diminish rainbow-mode)
+
+
+;; make parentheses colorful
+(use-package rainbow-delimiters-mode
+  :ensure rainbow-delimiters
+  :hook (prog-mode comint-mode))
 
 
 ;; get smartparens in programming modes

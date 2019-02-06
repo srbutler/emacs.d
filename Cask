@@ -160,6 +160,7 @@
 (depends-on "multiple-cursors")
 (depends-on "nodejs-repl")
 (depends-on "noflet")
+(depends-on "nord-theme")
 (depends-on "ocp-indent")
 (depends-on "olivetti")
 (depends-on "org-bullets")
