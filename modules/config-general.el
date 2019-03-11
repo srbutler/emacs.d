@@ -566,6 +566,12 @@
    ("C-c m d" . mc/mark-all-like-this-in-defun)))
 
 
+;; provides a simple centered mode for prose writing
+(use-package olivetti
+  :ensure t
+  :config (setq olivetti-body-width 88))
+
+
 ;; pandoc
 (use-package pandoc-mode
   :when (executable-find "pandoc")

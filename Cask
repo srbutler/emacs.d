@@ -160,6 +160,7 @@
 (depends-on "nodejs-repl")
 (depends-on "noflet")
 (depends-on "ocp-indent")
+(depends-on "olivetti")
 (depends-on "org-bullets")
 (depends-on "org-plus-contrib")
 (depends-on "org-ref")
