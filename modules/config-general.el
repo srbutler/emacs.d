@@ -146,6 +146,15 @@
   :config (global-auto-revert-mode t))
 
 
+;; C-native version of linum
+(use-package display-line-numbers-mode
+  :when (version<= "26.0.50" emacs-version)
+  :bind ("C-c C-d" . display-line-numbers-mode)
+  :init (set-face-attribute 'line-number nil :height 0.9)
+  :config (global-display-line-numbers-mode))
+
+
+
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
   :diminish
@@ -241,6 +250,10 @@
 
 
 ;; EXTERNAL PACKAGES
+
+;; jump windows quickly, linked to key-chords below
+(use-package ace-window
+  :ensure t)
 
 ;; set up proper wrapping for text modes
 (use-package adaptive-wrap
@@ -347,13 +360,6 @@
 ;; diminish keeps the modeline tidy
 (use-package diminish
   :ensure t)
-
-
-;; native version of linum
-(use-package display-line-numbers-mode
-  :when (version<= "26.0.50" emacs-version)
-  :bind ("C-c C-d" . display-line-numbers-mode)
-  :init (set-face-attribute 'line-number nil :height 0.9))
 
 
 ;; manage docker images
@@ -469,13 +475,14 @@
 ;; define a bunch of quick key combos for basic actions
 (use-package key-chord
   :ensure t
-  :after avy
+  :after (avy ace-window)
   :init (key-chord-mode +1)
   :config
   ;; quick avy calls
   (key-chord-define-global "jj" 'avy-goto-word-1)
+  (key-chord-define-global "jk" 'avy-goto-char)
   (key-chord-define-global "jl" 'avy-goto-line)
-  (key-chord-define-global "jk" 'avy-goto-char))
+  (key-chord-define-global "kk" 'ace-window))
 
 
 ;; make language server protocol services available
