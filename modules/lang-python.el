@@ -57,7 +57,11 @@
 
 ;; major mode for requirements.txt
 (use-package pip-requirements
-  :ensure t)
+  :ensure t
+  :config
+  ;; if a local pip
+  (if (boundp '*pip-repo-url*)
+      (setq pip-requirements-index-url *pip-repo-url*)))
 
 
 (use-package anaconda-mode
