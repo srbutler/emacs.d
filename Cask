@@ -3,6 +3,7 @@
 (source melpa-stable)
 (source org)
 
+(depends-on "ace-window")
 (depends-on "adaptive-wrap")
 (depends-on "anaconda-mode")
 (depends-on "async")
@@ -116,6 +117,7 @@
 (depends-on "idle-highlight-mode")
 (depends-on "indium")
 (depends-on "inflections")
+(depends-on "ini-mode")
 (depends-on "intero")
 (depends-on "irony")
 (depends-on "irony-eldoc")
@@ -159,6 +161,7 @@
 (depends-on "nodejs-repl")
 (depends-on "noflet")
 (depends-on "ocp-indent")
+(depends-on "olivetti")
 (depends-on "org-bullets")
 (depends-on "org-plus-contrib")
 (depends-on "org-ref")
