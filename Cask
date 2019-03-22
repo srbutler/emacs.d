@@ -9,7 +9,6 @@
 (depends-on "async")
 (depends-on "auctex")
 (depends-on "auctex-latexmk")
-(depends-on "auto-indent-mode")
 (depends-on "avy")
 (depends-on "bind-key")
 (depends-on "blacken")

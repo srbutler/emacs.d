@@ -46,7 +46,6 @@
   (add-to-list 'org-src-lang-modes '("r" . ess-mode)))
 
 
-
 (use-package org-ref
   :when (file-exists-p "~/Dropbox/Bib/references.bib")
   :ensure t
