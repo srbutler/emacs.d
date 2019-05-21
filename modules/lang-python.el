@@ -65,6 +65,7 @@
 
 
 (use-package anaconda-mode
+  :disabled t
   :ensure t
   :hook ((python-mode . anaconda-mode)
          (python-mode . anaconda-eldoc-mode))
@@ -74,6 +75,7 @@
 
 
 (use-package company-anaconda
+  :disabled t
   :ensure t
   :config
   (eval-after-load 'company
@@ -107,7 +109,7 @@
 
 ;; install: pip install -U jedi rope pyflakes yapf
 (use-package elpy
-  :disabled t
+  ;; :disabled t
   :unless *python-use-lsp*
   :ensure t
   :after python

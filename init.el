@@ -56,6 +56,7 @@
 ;; set up use-package
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
+(setq use-package-enable-imenu-support t)
 (require 'use-package)
 (setq use-package-compute-statistics t)
 
@@ -80,26 +81,27 @@
 ;; anything needed outside of VC goes here
 (load-if-exists "secrets.el" *dotfiles-dir*)
 
+;; load language-specific config files
+(require 'lang-cc)
+;; (require 'lang-clojure)
+(require 'lang-elisp)
+;; (require 'lang-ess)
+;; (require 'lang-go)
+;; (require 'lang-haskell)
+;; (require 'lang-java)
+(require 'lang-js)
+(require 'lang-latex)
+;; (require 'lang-lisp)
+(require 'lang-markdown)
+;; (require 'lang-ocaml)
+(require 'lang-org)
+(require 'lang-python)
+;; (require 'lang-rust)
+;; (require 'lang-scala)
+(require 'lang-web)
+
 ;; anything needed locally (work, etc.) not in before-init.el
 (load-if-exists "config-local.el" *modules-dir*)
 
-;; load language-specific config files
-(require 'lang-cc)
-(require 'lang-clojure)
-(require 'lang-elisp)
-(require 'lang-ess)
-(require 'lang-go)
-(require 'lang-haskell)
-(require 'lang-java)
-(require 'lang-js)
-(require 'lang-latex)
-(require 'lang-lisp)
-(require 'lang-markdown)
-(require 'lang-ocaml)
-(require 'lang-org)
-(require 'lang-python)
-(require 'lang-rust)
-(require 'lang-scala)
-(require 'lang-web)
 
 ;;; init.el ends here

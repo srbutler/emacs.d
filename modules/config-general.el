@@ -5,6 +5,8 @@
 ;;; Code:
 
 
+;;;; SETTINGS
+
 ;; more useful frame title, that shows either a file or a buffer name
 ;; (if the buffer isn't visiting a file)
 (setq frame-title-format
@@ -87,6 +89,9 @@
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 
+
+;;;; BINDINGS
+
 ;; used in a few places to define keybindings easily
 (use-package bind-key)
 
@@ -123,6 +128,8 @@
 (bind-key "M-u" #'upcase-dwim global-map)
 
 
+;;;; FUNCTIONS
+
 ;; defines the standard backtab behavior of most editors
 (defun un-indent-by-removing-4-spaces ()
   "Remove 4 spaces from beginning of of line."
@@ -138,7 +145,23 @@
 (bind-key "<backtab>" #'un-indent-by-removing-4-spaces global-map)
 
 
-;; BUILT-IN PACKAGES
+;; this is surprisingly useful
+(defun srb-insert-buffer-name ()
+  "Insert the buffer name into the buffer at the current editing point."
+  (interactive "*")
+  (insert (buffer-name)))
+(global-set-key (kbd "<f12>") 'srb-insert-buffer-name)
+
+
+(defun imenu-elisp-sections ()
+  "Define imenu section headers with ';;;;'."
+  (setq imenu-prev-index-position-function nil)
+  (add-to-list 'imenu-generic-expression
+               '("Sections" "^;;;; \\(.+\\)$" 1) t))
+(add-hook 'emacs-lisp-mode-hook 'imenu-elisp-sections)
+
+
+;;;; BUILT-IN PACKAGES
 
 ;; revert buffers automatically when underlying files are changed externally
 (use-package autorevert
@@ -151,8 +174,7 @@
   :when (version<= "26.0.50" emacs-version)
   :bind ("C-c C-d" . display-line-numbers-mode)
   :init (set-face-attribute 'line-number nil :height 0.9)
-  :config (global-display-line-numbers-mode))
-
+  :config (setq global-display-line-numbers-mode t))
 
 
 ;; display certain documentation in the minibuffer
@@ -249,7 +271,11 @@
          ("M-?" . xref-find-references)))
 
 
-;; EXTERNAL PACKAGES
+;;;; EXTERNAL PACKAGES
+
+;; jump windows quickly, linked to key-chords below
+(use-package ace-window
+  :ensure t)
 
 ;; jump windows quickly, linked to key-chords below
 (use-package ace-window
@@ -380,7 +406,7 @@
 (use-package exec-path-from-shell
   :when (memq window-system '(mac ns x))
   :ensure t
-  :init (exec-path-from-shell-initialize))
+  :config (exec-path-from-shell-initialize))
 
 
 ;; expands the selection region progressively
@@ -446,6 +472,12 @@
   :mode (("\\.gpi\\'" . gnuplot-mode)
          ("\\.plt\\'" . gnuplot-mode)
          ("\\.gp\\'"  . gnuplot-mode)))
+
+
+;; for Jenkinsfiles
+(use-package groovy-mode
+  :ensure t
+  :mode ("Jenkinsfile" . groovy-mode))
 
 
 ;; adds guides to show indentation level
