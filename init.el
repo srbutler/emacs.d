@@ -56,6 +56,7 @@
 ;; set up use-package
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
+(setq use-package-enable-imenu-support t)
 (require 'use-package)
 (setq use-package-compute-statistics t)
 

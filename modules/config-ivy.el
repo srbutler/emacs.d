@@ -130,6 +130,7 @@
 ;; access to GNU Global tags
 ;; install: brew install global
 (use-package counsel-gtags
+  :disabled
   :when (or (executable-find "global")
             (executable-find "gtags"))
   :ensure t

@@ -127,7 +127,7 @@
   (setq-default line-spacing 0.06))
  ((font-existsp "InconsolataGo")
   (set-face-attribute 'default nil :height 161 :font "InconsolataGo"))
- ((font-existsp "InconsolataGo")
+ ((font-existsp "Inconsolata")
   (set-face-attribute 'default nil :height 161 :font "Inconsolata"))
  ((font-existsp "Hasklig")
   (set-face-attribute 'default nil :height 141 :font "Hasklig"))

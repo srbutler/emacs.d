@@ -19,7 +19,22 @@
          (js2-mode . js2-highlight-unused-variables-mode))
   :init (when *js-use-lsp* (add-hook 'js2-mode-hook 'lsp))
   :config
-  (setq js2-basic-offset 4)
+
+  (setq js2-basic-offset 2
+        js-switch-indent-offset 2)  ;; indent switch/case separately
+
+  (defun srb-toggle-js-offset ()
+    "Switch Javascript indentation between 2 and 4 spaces."
+    (interactive)
+    (cond
+     ((eq js2-basic-offset 2)
+      (setq js2-basic-offset 4
+            js-switch-indent-offset 4))
+     ((eq js2-basic-offset 4)
+      (setq js2-basic-offset 2
+            js-switch-indent-offset 2))
+     (t (setq js2-basic-offset 2
+              js-switch-indent-offset 2))))
 
   (with-eval-after-load 'flycheck
     (if (executable-find "eslint")
@@ -46,41 +61,11 @@
       (setq flycheck-javascript-eslint-executable "eslint"))))
 
 
-;; for typescript
-(use-package typescript-mode
+;; for XREF when LSP is not being used
+(use-package xref-js2
+  :when (not *js-use-lsp*)
   :ensure t
-  :mode ("\\.tsx?$" . typescript-mode))
-
-
-;; from https://github.com/seagle0128/.emacs.d
-(use-package js2-refactor
-  :ensure t
-  :after (:any js2-mode rjsx-mode typescript-mode)
-  :bind (:map js2-mode-map ("C-k" . js2r-kill))
-  :hook ((js2-mode rjsx-mode typescript-mode) . js2-refactor-mode)
-  :diminish (js2-refactor-mode . "js2r")
-  :config (js2r-add-keybindings-with-prefix "C-c C-r"))
-
-
-;; for JS/TS autocompletion
-(use-package tide
-  :unless *js-use-lsp*
-  :ensure t
-  :defer t
-  :hook ((typescript-mode js2-mode rjsx-mode) . tide-setup))
-
-
-;; auto-formatter
-(use-package prettier-js
-  :ensure t
-  :after (:any js2-mode rjsx-mode)
-  :hook (js2-mode rjsx-mode)
-  :config
-  (with-eval-after-load 'js2-mode
-    (bind-key "C-c C-f" 'prettier-js js2-mode-map))
-  (with-eval-after-load 'rjsx-mode
-    (bind-key "C-c C-f" 'prettier-js rjsx-mode-map)))
-
+  :init (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))
 
 ;; REPL/dev environment
 (use-package indium

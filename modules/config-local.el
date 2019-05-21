@@ -15,6 +15,12 @@
   :mode ("\\.csc2\\'" . csc-mode))
 
 
+(use-package lark-mode
+  :load-path "~/.emacs.d/vendor/lark-mode/"
+  :mode (("\\.lark\\'" . lark-mode)
+         ("\\.ebnf\\'" . lark-mode)))
+
+
 ;; This uses the BbgProtocolHandler set up by the terminal
 ;; bbg: links should be supported
 (with-eval-after-load 'org-mode
