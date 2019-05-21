@@ -159,6 +159,10 @@
   :config (global-auto-revert-mode t))
 
 
+(use-package conf-mode
+ :mode ("zathurarc\\'" . conf-space-mode))
+
+
 ;; C-native version of linum
 (use-package display-line-numbers-mode
   :when (version<= "26.0.50" emacs-version)
