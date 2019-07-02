@@ -16,7 +16,8 @@
                  "%b"))))
 
 ;; setup savefiles/backups in a way that's not annoying
-(setq backup-directory-alist `(("." . ,(expand-file-name "savefile" *savefile-dir*)))
+(setq auto-save-file-name-transforms `((".*" . ,(expand-file-name "savefile" *savefile-dir*)))
+      backup-directory-alist `((".*" . ,(expand-file-name "savefile" *savefile-dir*)))
       backup-by-copying t
       delete-old-versions t
       kept-new-versions 6
@@ -174,7 +175,7 @@
   :when (version<= "26.0.50" emacs-version)
   :bind ("C-c C-d" . display-line-numbers-mode)
   :init (set-face-attribute 'line-number nil :height 0.9)
-  :config (setq global-display-line-numbers-mode t))
+  :config (global-display-line-numbers-mode))
 
 
 ;; display certain documentation in the minibuffer
@@ -401,6 +402,7 @@
 ;; get the PATH variable working correctly
 (use-package exec-path-from-shell
   :when (memq window-system '(mac ns x))
+  :demand t
   :ensure t
   :config (exec-path-from-shell-initialize))
 
@@ -685,7 +687,7 @@
   (undo-tree-auto-save-history t)
   (undo-tree-visualizer-diff t)
   :config
-  (setq undo-tree-history-directory-alist `(("." . ,*savefile-dir*)))
+  (setq undo-tree-history-directory-alist `((".*" . ,*savefile-dir*)))
   (global-undo-tree-mode))
 
 
