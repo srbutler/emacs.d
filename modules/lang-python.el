@@ -85,7 +85,8 @@
 ;; no config deterministic formatting
 (use-package blacken
   :ensure t
-  :hook (python-mode . blacken-mode))
+  :hook (python-mode . blacken-mode)
+  :config (setq blacken-executable "/usr/local/bin/black"))
 
 
 ;; sort imports
