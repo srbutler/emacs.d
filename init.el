@@ -76,7 +76,18 @@
 
 (require 'config-general)
 (require 'config-ivy)
-(require 'config-appearance)
+
+;; this is needed to correctly load window-dependent code when starting as a
+;; daemon
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                (when (eq (length (frame-list)) 2)
+                  (progn
+                    (with-selected-frame frame
+                      (require 'config-appearance))
+                    ))))
+  (require 'config-appearance))
 
 ;; anything needed outside of VC goes here
 (load-if-exists "secrets.el" *dotfiles-dir*)
