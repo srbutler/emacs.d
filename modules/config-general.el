@@ -16,8 +16,8 @@
                  "%b"))))
 
 ;; setup savefiles/backups in a way that's not annoying
-(setq auto-save-file-name-transforms `((".*" . ,*savefile-dir*))
-      backup-directory-alist `((".*" . ,*savefile-dir*))
+(setq auto-save-file-name-transforms `((".*" . ,(expand-file-name "savefile" *savefile-dir*)))
+      backup-directory-alist `((".*" . ,(expand-file-name "savefile" *savefile-dir*)))
       backup-by-copying t
       delete-old-versions t
       kept-new-versions 6
@@ -173,9 +173,9 @@
 ;; C-native version of linum
 (use-package display-line-numbers-mode
   :when (version<= "26.0.50" emacs-version)
-  :init (set-face-attribute 'line-number nil :height 0.9)
   :bind ("C-c C-d" . display-line-numbers-mode)
-  :config (global-display-line-numbers-mode t))
+  :init (set-face-attribute 'line-number nil :height 0.9)
+  :config (global-display-line-numbers-mode))
 
 
 ;; display certain documentation in the minibuffer
@@ -687,10 +687,11 @@
 (use-package undo-tree
   :ensure t
   :diminish undo-tree-mode
+  :custom
+  (undo-tree-auto-save-history t)
+  (undo-tree-visualizer-diff t)
   :config
-  (setq undo-tree-history-directory-alist `((".*" . ,*savefile-dir*))
-        undo-tree-auto-save-history t
-        undo-tree-visualizer-diff t)
+  (setq undo-tree-history-directory-alist `((".*" . ,*savefile-dir*)))
   (global-undo-tree-mode))
 
 
