@@ -121,7 +121,7 @@
 ;;;; FUNCTIONS
 
 ;; defines the standard backtab behavior of most editors
-(defun un-indent-by-removing-4-spaces ()
+(defun srb/un-indent-by-removing-4-spaces ()
   "Remove 4 spaces from beginning of of line."
   (interactive)
   (save-excursion
@@ -132,23 +132,23 @@
         (untabify (match-beginning 0) (match-end 0)))
       (when (looking-at "^    ")
         (replace-match "")))))
-(bind-key "<backtab>" #'un-indent-by-removing-4-spaces global-map)
+(bind-key "<backtab>" 'srb/un-indent-by-removing-4-spaces global-map)
 
 
 ;; this is surprisingly useful
-(defun srb-insert-buffer-name ()
+(defun srb/insert-buffer-name ()
   "Insert the buffer name into the buffer at the current editing point."
   (interactive "*")
   (insert (buffer-name)))
-(global-set-key (kbd "<f12>") 'srb-insert-buffer-name)
+(global-set-key (kbd "<f12>") 'srb/insert-buffer-name)
 
 
-(defun imenu-elisp-sections ()
+(defun srb/imenu-elisp-sections ()
   "Define imenu section headers with ';;;;'."
   (setq imenu-prev-index-position-function nil)
   (add-to-list 'imenu-generic-expression
                '("Sections" "^;;;; \\(.+\\)$" 1) t))
-(add-hook 'emacs-lisp-mode-hook 'imenu-elisp-sections)
+(add-hook 'emacs-lisp-mode-hook 'srb/imenu-elisp-sections)
 
 
 ;;;; BUILT-IN PACKAGES
@@ -160,7 +160,8 @@
 
 
 (use-package conf-mode
- :mode ("zathurarc\\'" . conf-space-mode))
+  :mode (("zathurarc\\'" . conf-space-mode)
+         ("XCompose\\'"  . conf-colon-mode)))
 
 
 ;; C-native version of linum
@@ -168,7 +169,7 @@
   :when (version<= "26.0.50" emacs-version)
   :bind ("C-c C-d" . display-line-numbers-mode)
   :init (set-face-attribute 'line-number nil :height 0.9)
-  :config (setq global-display-line-numbers-mode t))
+  :config (global-display-line-numbers-mode))
 
 
 ;; display certain documentation in the minibuffer
@@ -699,7 +700,12 @@
   :ensure t
   :commands (unfill-region unfill-paragraph unfill-toggle)
   :bind (("C-M-Q" . unfill-toggle)
-         ("M-Q" . unfill-paragraph)))
+         ("M-Q" . unfill-paragraph))
+  :config
+  (defun srb/unfill-buffer ()
+    "Unfill all paragraphs in a buffer"
+    (interactive)
+    (unfill-region (point-min) (point-max))))
 
 
 ;; cause I forget things
