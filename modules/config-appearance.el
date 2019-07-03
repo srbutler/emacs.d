@@ -15,6 +15,7 @@
 ;; only load themes when opened in a window system
 
 (use-package material-theme
+  :disabled t
   :ensure t
   :init (load-theme 'material t))
 
@@ -74,6 +75,11 @@
   :ensure t
   :init (load-theme 'zenburn t))
 
+(use-package nord-theme
+  ;; :disabled t
+  :ensure t
+  :init (load-theme 'nord t))
+
 (use-package leuven-theme
   :disabled t
   :ensure t
@@ -112,10 +118,10 @@
 (cond
  ((eq window-system nil) nil)
  ((font-existsp "IosevkaX")
-  (set-face-attribute 'default nil :height 141 :font "IosevkaX" :weight 'light)
+  (set-face-attribute 'default nil :height 151 :font "IosevkaX" :weight 'light)
   (setq-default line-spacing 0.06))
  ((font-existsp "Iosevka")
-  (set-face-attribute 'default nil :height 141 :font "Iosevka" :weight 'light)
+  (set-face-attribute 'default nil :height 151 :font "Iosevka" :weight 'light)
   (setq-default line-spacing 0.06))
  ((font-existsp "PragmataPro")
   (set-face-attribute 'default nil :height 151 :font "PragmataPro")
