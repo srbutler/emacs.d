@@ -16,7 +16,8 @@
                  "%b"))))
 
 ;; setup savefiles/backups in a way that's not annoying
-(setq backup-directory-alist `(("." . ,(expand-file-name "savefile" *savefile-dir*)))
+(setq auto-save-file-name-transforms `((".*" ,*savefile-dir* t))
+      backup-directory-alist `((".*" . ,*savefile-dir*))
       backup-by-copying t
       delete-old-versions t
       kept-new-versions 6
@@ -81,6 +82,8 @@
 
 ;; garbage collect when Emacs loses focus
 (add-hook 'focus-out-hook 'garbage-collect)
+
+;;;; BINDINGS
 
 ;; used in a few places to define keybindings easily
 (use-package bind-key)
@@ -169,7 +172,7 @@
   :when (version<= "26.0.50" emacs-version)
   :bind ("C-c C-d" . display-line-numbers-mode)
   :init (set-face-attribute 'line-number nil :height 0.9)
-  :config (global-display-line-numbers-mode))
+  :config (global-display-line-numbers-mode t))
 
 
 ;; display certain documentation in the minibuffer
@@ -687,11 +690,10 @@
 (use-package undo-tree
   :ensure t
   :diminish undo-tree-mode
-  :custom
-  (undo-tree-auto-save-history t)
-  (undo-tree-visualizer-diff t)
   :config
-  (setq undo-tree-history-directory-alist `(("." . ,*savefile-dir*)))
+  (setq undo-tree-history-directory-alist `((".*" . ,*savefile-dir*))
+        undo-tree-auto-save-history t
+        undo-tree-visualizer-diff t)
   (global-undo-tree-mode))
 
 
