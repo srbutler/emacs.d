@@ -1,4 +1,7 @@
 
+pyim/
+transient/
+
 # LSP stuff
 eclipse.jdt.ls/
 workspace/
