@@ -1,0 +1,3 @@
+[submodule "vendor/toolkit"]
+	path = vendor/toolkit
+	url = bbgithub:emacs/toolkit
