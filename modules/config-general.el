@@ -24,6 +24,12 @@
       kept-old-versions 2
       version-control t)
 
+;; set init GC frequency
+(setq gc-cons-threshold (* 100 1000 1000))
+;; increase frequency after init
+(add-hook 'after-init-hook (lambda ()
+                             (setq gc-cons-threshold (* 8 1000 1000))))
+
 ;; set some basic defaults
 (setq-default
  abbrev-file-name                (expand-file-name "abbrev_defs" *savefile-dir*)
@@ -39,7 +45,6 @@
  enable-local-variables          :all
  fill-column                     80
  ffap-machine-p-known            'reject       ;; stop attempts at pinging websites on autocomplete
- gc-cons-threshold               50000000      ;; reduce the frequency of garbage collection
  help-window-select              t             ;; Focus new help windows when opened
  indent-tabs-mode                nil           ;; Stop using tabs to indent
  indicate-empty-lines            nil
@@ -91,14 +96,6 @@
   (scroll-bar-mode -1))
 
 
-;;;; BINDINGS
-
-;; used in a few places to define keybindings easily
-(use-package bind-key)
-
-;; remove os minimization
-(bind-key "C-z" nil global-map)
-
 ;; setup `hippie-expand' expand functions
 (setq hippie-expand-try-functions-list
       '(try-expand-dabbrev
@@ -111,22 +108,6 @@
         try-expand-line
         try-complete-lisp-symbol-partially
         try-complete-lisp-symbol))
-(bind-key "M-/" #'hippie-expand global-map)
-
-;; try and have a normal way to delete things
-(bind-key "<delete>" #'delete-region global-map)
-
-;; set an extra command to jump to other window/frame, for convenience
-(bind-key "M-o" #'other-window global-map)
-(bind-key "M-O" #'other-frame global-map)
-
-;; set a general key for goto-line
-(bind-key "C-c l" #'goto-line global-map)
-
-;; some better text editing commands
-(bind-key "M-c" #'capitalize-dwim global-map)
-(bind-key "M-l" #'downcase-dwim global-map)
-(bind-key "M-u" #'upcase-dwim global-map)
 
 
 ;;;; FUNCTIONS
@@ -143,7 +124,6 @@
         (untabify (match-beginning 0) (match-end 0)))
       (when (looking-at "^    ")
         (replace-match "")))))
-(bind-key "<backtab>" #'un-indent-by-removing-4-spaces global-map)
 
 
 ;; this is surprisingly useful
@@ -151,7 +131,6 @@
   "Insert the buffer name into the buffer at the current editing point."
   (interactive "*")
   (insert (buffer-name)))
-(global-set-key (kbd "<f12>") 'srb-insert-buffer-name)
 
 
 (defun imenu-elisp-sections ()
@@ -160,6 +139,25 @@
   (add-to-list 'imenu-generic-expression
                '("Sections" "^;;;; \\(.+\\)$" 1) t))
 (add-hook 'emacs-lisp-mode-hook 'imenu-elisp-sections)
+
+
+;;;; BINDINGS
+
+;; used in a few places to define keybindings easily
+(use-package bind-key
+  :bind (("C-z"      . nil)                ;; remove os minimization
+         ("M-/"      . hippie-expand)      ;; try to complete a symbol
+         ("<delete>" . delete-region)      ;; try and have a normal way to delete things
+         ("C-c l"    . goto-line)          ;; go to line by number
+         ("M-o"      . other-window)       ;; jump to other window
+         ("M-O"      . other-frame)        ;; jump to other frame
+         ("M-c"      . capitalize-dwim)    ;; capitalize the word-at-point or region
+         ("M-l"      . downcase-dwim)      ;; lowercase the word-at-point or region
+         ("M-u"      . upcase-dwim)        ;; uppercase the word-at-point or region
+
+         ;; custom functions
+         ("<f12>"     . srb-insert-buffer-name)
+         ("<backtab>" . un-indent-by-removing-4-spaces)))
 
 
 ;;;; BUILT-IN PACKAGES
@@ -194,7 +192,10 @@
   :config
   (add-hook 'prog-mode-hook (lambda () (setq-local show-trailing-whitespace t)))
   (add-hook 'prog-mode-hook 'electric-indent-mode)
-  (add-hook 'prog-mode-hook 'subword-mode))
+  (add-hook 'prog-mode-hook 'subword-mode)
+
+  ;; anything with a shebang line gets made executable by default
+  (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p))
 
 
 ;; save recent files
