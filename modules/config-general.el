@@ -275,13 +275,11 @@
 
 ;;;; EXTERNAL PACKAGES
 
-;; jump windows quickly, linked to key-chords below
-(use-package ace-window
-  :ensure t)
 
 ;; jump windows quickly, linked to key-chords below
 (use-package ace-window
   :ensure t)
+
 
 ;; set up proper wrapping for text modes
 (use-package adaptive-wrap
