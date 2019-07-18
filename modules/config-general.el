@@ -26,44 +26,48 @@
 
 ;; set some basic defaults
 (setq-default
- abbrev-file-name                (expand-file-name "abbrev_defs" *savefile-dir*)
- apropos-do-all                  t
- auto-save-default               t
- blink-matching-paren            t
- confirm-kill-emacs              'yes-or-no-p  ;; Confirm before exiting Emacs
- delete-active-region            t
- delete-by-moving-to-trash       t
- disabled-command-function       nil           ;; don't prompt for some disabled functions
- display-time-24hr-format        nil
- display-time-format             "%H:%M"       ;; Format the time string
- enable-local-variables          :all
- fill-column                     80
- ffap-machine-p-known            'reject       ;; stop attempts at pinging websites on autocomplete
- gc-cons-threshold               50000000      ;; reduce the frequency of garbage collection
- help-window-select              t             ;; Focus new help windows when opened
- indent-tabs-mode                nil           ;; Stop using tabs to indent
- indicate-empty-lines            nil
- inhibit-startup-message         t
- initial-scratch-message         ";; scratch\n"
- kill-do-not-save-duplicates     t
- large-file-warning-threshold    100000000     ;; warn when opening files bigger than 100MB
- linum-format                    " %4d "
- major-mode                      'text-mode
- mode-require-final-newline      t
- mouse-yank-at-point             t
- nsm-settings-file               (expand-file-name "network-security.data" *savefile-dir*)
- next-line-add-newlines          t             ;; adds newline for C-n at end of buffer
- require-final-newline           t
- ring-bell-function              'ignore
- scroll-preserve-screen-position t
- sentence-end-double-space       nil
- tab-always-indent               'complete     ;; smart tab behavior - indent or complete
- tab-width                       4
- truncate-lines                  t
- vc-follow-symlinks              t
- visible-bell                    t
- window-combination-resize       t             ;; Resize windows proportionally
- x-stretch-cursor                t             ;; stretch cursor for tab characters.
+ abbrev-file-name                    (expand-file-name "abbrev_defs" *savefile-dir*)
+ apropos-do-all                      t
+ auto-save-default                   t
+ blink-matching-paren                t
+ confirm-kill-emacs                  'yes-or-no-p  ;; Confirm before exiting Emacs
+ delete-active-region                t
+ delete-by-moving-to-trash           t
+ disabled-command-function           nil        ;; don't prompt for some disabled functions
+ display-time-24hr-format            nil
+ display-time-format                 "%H:%M"    ;; Format the time string
+ enable-local-variables              :all
+ fill-column                         80
+ ffap-machine-p-known                'reject    ;; stop attempts at pinging websites on autocomplete
+ garbage-collection-messages         t          ;; helps to identify when GC is thrashing
+ gc-cons-threshold                   50000000   ;; reduce the frequency of garbage collection
+ help-window-select                  t          ;; Focus new help windows when opened
+ indent-tabs-mode                    nil        ;; Stop using tabs to indent
+ indicate-empty-lines                nil
+ inhibit-startup-message             t
+ initial-scratch-message             ";; scratch\n"
+ kill-do-not-save-duplicates         t
+ large-file-warning-threshold        100000000  ;; warn when opening files bigger than 100MB
+ linum-format                        " %4d "
+ major-mode                          'text-mode
+ max-lisp-eval-depth                 2000       ;; increases recursion limit
+ mode-require-final-newline          t
+ mouse-yank-at-point                 t
+ nsm-settings-file                   (expand-file-name "network-security.data" *savefile-dir*)
+ next-line-add-newlines              t          ;; adds newline for C-n at end of buffer
+ require-final-newline               t
+ ring-bell-function                  'ignore
+ save-interprogram-paste-before-kill t          ;; preserve paste to system ring
+ scroll-preserve-screen-position     t
+ sentence-end-double-space           nil
+ tab-always-indent                   'complete  ;; smart tab behavior - indent or complete
+ tab-width                           4
+ truncate-lines                      t
+ vc-follow-symlinks                  t
+ visible-bell                        t
+ use-dialog-box                      nil        ;; always display things in mode-line
+ window-combination-resize           t          ;; Resize windows proportionally
+ x-stretch-cursor                    t          ;; stretch cursor for tab characters.
  )
 
 (blink-cursor-mode 0)          ;; get rid of the blinking cursor
@@ -75,6 +79,7 @@
 (global-visual-line-mode 0)    ;; do not wrap long lines
 (line-number-mode t)           ;; put column number in mode-line
 (menu-bar-mode t)              ;; display menu-bar in window only
+(prefer-coding-system 'utf-8)  ;; unicode everywhere
 (size-indication-mode t)       ;; display buffer size in mode-line
 (scroll-bar-mode -1)           ;; remove the redundant scroll-bars
 (tool-bar-mode 0)              ;; Disable the tool bar
@@ -168,9 +173,10 @@
 
 
 ;; C-native version of linum
-(use-package display-line-numbers-mode
+(use-package display-line-numbers
   :when (version<= "26.0.50" emacs-version)
-  :bind ("C-c C-d" . display-line-numbers-mode)
+  :demand t
+  :bind ("C-c C-l" . display-line-numbers-mode)
   :init (set-face-attribute 'line-number nil :height 0.9)
   :config (global-display-line-numbers-mode t))
 
@@ -225,7 +231,8 @@
 
 ;; ensure sh-mode is setup for prezto files
 (use-package sh-mode
-  :mode (("\\.?zlogin\\'" . sh-mode)
+  :mode (("\\.?profile\\'" . sh-mode)
+         ("\\.?zlogin\\'" . sh-mode)
          ("\\.?zlogout\\'" . sh-mode)
          ("\\.?zpreztorc\\'" . sh-mode)
          ("\\.?zprofile\\'" . sh-mode)
@@ -382,6 +389,10 @@
 ;; diminish keeps the modeline tidy
 (use-package diminish
   :ensure t)
+
+
+;; for some reason this has to be done manually
+(diminish 'eldoc-mode)
 
 
 ;; native version of linum
@@ -572,7 +583,6 @@
 (use-package magit
   :ensure t
   :defer t
-  :custom (magit-completing-read-function 'ivy-completing-read)
   :bind (("C-c g b" . magit-branch-popup)
          ("C-c g B" . magit-blame-popup)
          ("C-c g d" . magit-diff-popup)
@@ -585,7 +595,16 @@
          ("C-c g s" . magit-status)
          ("C-c g S" . magit-stash-popup)
          ("C-c g v" . magit-revert-popup)
-         ("C-c g x" . magit-run-popup)))
+         ("C-c g x" . magit-run-popup))
+  :config
+  (magit-auto-revert-mode t)
+  (setq magit-completing-read-function 'ivy-completing-read
+        magit-diff-refine-hunk t
+        magit-remote-set-if-missing t)
+
+  ;; from https://github.com/patrickt/emacs/blob/master/init.el
+  (advice-add 'magit-refresh :before #'maybe-unset-buffer-modified)
+  (advice-add 'magit-commit  :before #'maybe-unset-buffer-modified))
 
 
 ;; display TODOs in status buffer
