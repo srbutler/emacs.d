@@ -5,13 +5,13 @@
 ;;; Code:
 
 
-;; WINDOW SETTINGS ---------------------------
+;;;; WINDOW SETTINGS
 
 ;; set larger frame size
 (add-to-list 'default-frame-alist '(height . 40))
 (add-to-list 'default-frame-alist '(width . 100))
 
-;; THEME SETTINGS -----------------------------
+;;;; THEMES
 ;; only load themes when opened in a window system
 
 (use-package material-theme
@@ -91,19 +91,23 @@
   :init (load-theme 'darkokai t))
 
 
+;;;; MODE LINE
 ;; make the mode-line nice and simple
 ;; needs to be loaded after the theme
 (use-package smart-mode-line
   :ensure t
+  :commands sml/apply-theme
   :init
   (setq sml/no-confirm-load-theme t)
   (line-number-mode t)
   (column-number-mode t)
   (size-indication-mode t)
-  :config (sml/setup))
+  :config
+  (sml/setup)
+  (sml/apply-theme "respectful"))
 
 
-;; FONT SETTINGS ------------------------------
+;;;; FONTS
 
 ;; check if a font exists
 (defun font-existsp (font)
@@ -118,10 +122,10 @@
 (cond
  ((eq window-system nil) nil)
  ((font-existsp "IosevkaX")
-  (set-face-attribute 'default nil :height 151 :font "IosevkaX" :weight 'light)
+  (set-face-attribute 'default nil :height 141 :font "IosevkaX" :weight 'light)
   (setq-default line-spacing 0.06))
  ((font-existsp "Iosevka")
-  (set-face-attribute 'default nil :height 151 :font "Iosevka" :weight 'light)
+  (set-face-attribute 'default nil :height 141 :font "Iosevka" :weight 'light)
   (setq-default line-spacing 0.06))
  ((font-existsp "PragmataPro")
   (set-face-attribute 'default nil :height 151 :font "PragmataPro")
