@@ -36,7 +36,7 @@
  display-time-24hr-format        nil
  display-time-format             "%H:%M"       ;; Format the time string
  enable-local-variables          :all
- fill-column                     80
+ fill-column                     120
  ffap-machine-p-known            'reject       ;; stop attempts at pinging websites on autocomplete
  gc-cons-threshold               50000000      ;; reduce the frequency of garbage collection
  help-window-select              t             ;; Focus new help windows when opened
