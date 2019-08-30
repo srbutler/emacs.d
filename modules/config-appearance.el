@@ -78,7 +78,10 @@
 (use-package nord-theme
   ;; :disabled t
   :ensure t
-  :init (load-theme 'nord t))
+  :init (load-theme 'nord t)
+  :config
+  (with-eval-after-load 'persp-mode
+    (set-face-foreground 'persp-selected-face "#5E81AC")))
 
 (use-package leuven-theme
   :disabled t
@@ -96,6 +99,7 @@
 ;; needs to be loaded after the theme
 (use-package smart-mode-line
   :ensure t
+  :demand t
   :commands sml/apply-theme
   :init
   (setq sml/no-confirm-load-theme t)
@@ -160,7 +164,9 @@
   (mac-auto-operator-composition-mode))
 
  ;; setup general ligatures
- ((window-system)
+ )
+
+(when window-system
   (let ((alist '((33 . ".\\(?:\\(?:==\\)\\|[!=]\\)")
                  (35 . ".\\(?:[(?[_{]\\)")
                  (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
@@ -181,7 +187,7 @@
                  (126 . ".\\(?:[=@~-]\\)"))))
     (dolist (char-regexp alist)
       (set-char-table-range composition-function-table (car char-regexp)
-                            `([,(cdr char-regexp) 0 font-shape-gstring]))))))
+                            `([,(cdr char-regexp) 0 font-shape-gstring])))))
 
 
 (provide 'config-appearance)

@@ -48,7 +48,8 @@
 (require 'package)
 (setq package-archives
       '(("org"          . "https://orgmode.org/elpa/")
-        ("gnu"          . "https://elpa.gnu.org/packages/")
+;;      ("gnu"          . "https://elpa.gnu.org/packages/")
+        ("gnu"          . "http://mirrors.163.com/elpa/gnu/")
         ("melpa"        . "https://melpa.org/packages/")
         ("melpa-stable" . "https://stable.melpa.org/packages/")))
 (package-initialize)
@@ -58,7 +59,7 @@
   (package-install 'use-package))
 (setq use-package-enable-imenu-support t)
 (require 'use-package)
-(setq use-package-always-ensure t
+(setq use-package-always-ensure nil
       use-package-compute-statistics t
       use-package-verbose t)
 
@@ -96,21 +97,21 @@
 
 ;; load language-specific config files
 (require 'lang-cc)
-;; (require 'lang-clojure)
+(require 'lang-clojure)
 (require 'lang-elisp)
-;; (require 'lang-ess)
-;; (require 'lang-go)
-;; (require 'lang-haskell)
-;; (require 'lang-java)
+(require 'lang-ess)
+(require 'lang-go)
+(require 'lang-haskell)
+(require 'lang-java)
 (require 'lang-js)
 (require 'lang-latex)
-;; (require 'lang-lisp)
+(require 'lang-lisp)
 (require 'lang-markdown)
-;; (require 'lang-ocaml)
+(require 'lang-ocaml)
 (require 'lang-org)
 (require 'lang-python)
-;; (require 'lang-rust)
-;; (require 'lang-scala)
+(require 'lang-rust)
+(require 'lang-scala)
 (require 'lang-web)
 
 ;; anything needed locally (work, etc.) not in before-init.el

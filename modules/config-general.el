@@ -169,7 +169,9 @@
 
 (use-package conf-mode
   :mode (("zathurarc\\'" . conf-space-mode)
-         ("XCompose\\'"  . conf-colon-mode)))
+         ("XCompose\\'"  . conf-colon-mode)
+         ("dunstrc\\'"   . conf-toml-mode))
+  :hook (conf-mode . rainbow-mode))
 
 
 ;; C-native version of linum
@@ -395,15 +397,6 @@
 (diminish 'eldoc-mode)
 
 
-;; native version of linum
-(use-package display-line-numbers-mode
-  :when (version<= "26.0.50" emacs-version)
-  :bind ("C-c C-d" . display-line-numbers-mode)
-  :init
-  (set-face-attribute 'line-number nil :height 0.9)
-  (add-hook 'prog-mode-hook 'display-line-numbers-mode))
-
-
 ;; manage docker images
 (use-package docker
   :ensure t)
@@ -450,6 +443,7 @@
 ;; have git indications in gutter
 (use-package git-gutter-fringe
   ;; :when window-system
+  :diminish
   :ensure t
   :init (global-git-gutter-mode t)
   :config
@@ -583,19 +577,19 @@
 (use-package magit
   :ensure t
   :defer t
-  :bind (("C-c g b" . magit-branch-popup)
-         ("C-c g B" . magit-blame-popup)
-         ("C-c g d" . magit-diff-popup)
-         ("C-c g l" . magit-log-popup)
-         ("C-c g m" . magit-merge-popup)
-         ("C-c g p" . magit-pull-and-fetch-popup)
-         ("C-c g P" . magit-push-popup)
-         ("C-c g r" . magit-rebase-popup)
-         ("C-c g R" . magit-reset-popup)
+  :bind (("C-c g b" . magit-branch)
+         ("C-c g B" . magit-blame)
+         ("C-c g d" . magit-diff)
+         ("C-c g l" . magit-log)
+         ("C-c g m" . magit-merge)
+         ("C-c g p" . magit-pull)
+         ("C-c g P" . magit-push)
+         ("C-c g r" . magit-rebase)
+         ("C-c g R" . magit-reset)
          ("C-c g s" . magit-status)
-         ("C-c g S" . magit-stash-popup)
-         ("C-c g v" . magit-revert-popup)
-         ("C-c g x" . magit-run-popup))
+         ("C-c g S" . magit-stash)
+         ("C-c g v" . magit-revert)
+         ("C-c g x" . magit-run))
   :config
   (magit-auto-revert-mode t)
   (setq magit-completing-read-function 'ivy-completing-read

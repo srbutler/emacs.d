@@ -14,7 +14,7 @@
 (use-package pyim
   :ensure t
   :demand t
-  :diminish
+  :diminish (pyim-isearch-mode . "pyim")
   :config
   (setq pyim-dcache-directory
         (expand-file-name "pyim/dcache/" *savefile-dir*))
@@ -25,7 +25,7 @@
     :config (pyim-basedict-enable))
 
   (setq default-input-method "pyim")
-n
+
   ;; 我使用全拼
   (setq pyim-default-scheme 'quanpin)
 
