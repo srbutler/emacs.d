@@ -23,7 +23,7 @@
   (setq js2-basic-offset 2
         js-switch-indent-offset 2)  ;; indent switch/case separately
 
-  (defun srb-toggle-js-offset ()
+  (defun srb/toggle-js-offset ()
     "Switch Javascript indentation between 2 and 4 spaces."
     (interactive)
     (cond

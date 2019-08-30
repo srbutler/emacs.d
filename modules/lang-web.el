@@ -57,6 +57,7 @@
 
 (use-package css-mode
   :ensure nil
+  :mode ("\\.rasi\\'" . css-mode)
   :init
   (setq css-indent-offset 2)
   (when *web-use-lsp* (add-hook 'css-mode-hook 'lsp)))

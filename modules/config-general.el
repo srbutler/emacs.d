@@ -16,7 +16,8 @@
                  "%b"))))
 
 ;; setup savefiles/backups in a way that's not annoying
-(setq backup-directory-alist `(("." . ,(expand-file-name "savefile" *savefile-dir*)))
+(setq auto-save-file-name-transforms `((".*" ,*savefile-dir* t))
+      backup-directory-alist `((".*" . ,*savefile-dir*))
       backup-by-copying t
       delete-old-versions t
       kept-new-versions 6
@@ -25,44 +26,48 @@
 
 ;; set some basic defaults
 (setq-default
- abbrev-file-name                (expand-file-name "abbrev_defs" *savefile-dir*)
- apropos-do-all                  t
- auto-save-default               t
- blink-matching-paren            t
- confirm-kill-emacs              'yes-or-no-p  ;; Confirm before exiting Emacs
- delete-active-region            t
- delete-by-moving-to-trash       t
- disabled-command-function       nil           ;; don't prompt for some disabled functions
- display-time-24hr-format        nil
- display-time-format             "%H:%M"       ;; Format the time string
- enable-local-variables          :all
- fill-column                     120
- ffap-machine-p-known            'reject       ;; stop attempts at pinging websites on autocomplete
- gc-cons-threshold               50000000      ;; reduce the frequency of garbage collection
- help-window-select              t             ;; Focus new help windows when opened
- indent-tabs-mode                nil           ;; Stop using tabs to indent
- indicate-empty-lines            nil
- inhibit-startup-message         t
- initial-scratch-message         ";; scratch\n"
- kill-do-not-save-duplicates     t
- large-file-warning-threshold    100000000     ;; warn when opening files bigger than 100MB
- linum-format                    " %4d "
- major-mode                      'text-mode
- mode-require-final-newline      t
- mouse-yank-at-point             t
- nsm-settings-file               (expand-file-name "network-security.data" *savefile-dir*)
- next-line-add-newlines          t             ;; adds newline for C-n at end of buffer
- require-final-newline           t
- ring-bell-function              'ignore
- scroll-preserve-screen-position t
- sentence-end-double-space       nil
- tab-always-indent               'complete     ;; smart tab behavior - indent or complete
- tab-width                       4
- truncate-lines                  t
- vc-follow-symlinks              t
- visible-bell                    t
- window-combination-resize       t             ;; Resize windows proportionally
- x-stretch-cursor                t             ;; stretch cursor for tab characters.
+ abbrev-file-name                    (expand-file-name "abbrev_defs" *savefile-dir*)
+ apropos-do-all                      t
+ auto-save-default                   t
+ blink-matching-paren                t
+ confirm-kill-emacs                  'yes-or-no-p  ;; Confirm before exiting Emacs
+ delete-active-region                t
+ delete-by-moving-to-trash           t
+ disabled-command-function           nil        ;; don't prompt for some disabled functions
+ display-time-24hr-format            nil
+ display-time-format                 "%H:%M"    ;; Format the time string
+ enable-local-variables              :all
+ fill-column                         80
+ ffap-machine-p-known                'reject    ;; stop attempts at pinging websites on autocomplete
+ garbage-collection-messages         t          ;; helps to identify when GC is thrashing
+ gc-cons-threshold                   50000000   ;; reduce the frequency of garbage collection
+ help-window-select                  t          ;; Focus new help windows when opened
+ indent-tabs-mode                    nil        ;; Stop using tabs to indent
+ indicate-empty-lines                nil
+ inhibit-startup-message             t
+ initial-scratch-message             ";; scratch\n"
+ kill-do-not-save-duplicates         t
+ large-file-warning-threshold        100000000  ;; warn when opening files bigger than 100MB
+ linum-format                        " %4d "
+ major-mode                          'text-mode
+ max-lisp-eval-depth                 2000       ;; increases recursion limit
+ mode-require-final-newline          t
+ mouse-yank-at-point                 t
+ nsm-settings-file                   (expand-file-name "network-security.data" *savefile-dir*)
+ next-line-add-newlines              t          ;; adds newline for C-n at end of buffer
+ require-final-newline               t
+ ring-bell-function                  'ignore
+ save-interprogram-paste-before-kill t          ;; preserve paste to system ring
+ scroll-preserve-screen-position     t
+ sentence-end-double-space           nil
+ tab-always-indent                   'complete  ;; smart tab behavior - indent or complete
+ tab-width                           4
+ truncate-lines                      t
+ vc-follow-symlinks                  t
+ visible-bell                        t
+ use-dialog-box                      nil        ;; always display things in mode-line
+ window-combination-resize           t          ;; Resize windows proportionally
+ x-stretch-cursor                    t          ;; stretch cursor for tab characters.
  )
 
 (blink-cursor-mode 0)          ;; get rid of the blinking cursor
@@ -70,25 +75,18 @@
 (delete-selection-mode)        ;; Replace region when inserting text
 (display-time-mode)            ;; Enable time in the mode-line
 (fset 'yes-or-no-p 'y-or-n-p)  ;; shorten yes-or-no to y-or-n
+(global-hl-line-mode +1)       ;; highlight the current line
 (global-visual-line-mode 0)    ;; do not wrap long lines
 (line-number-mode t)           ;; put column number in mode-line
-(size-indication-mode t)
+(menu-bar-mode t)              ;; display menu-bar in window only
+(prefer-coding-system 'utf-8)  ;; unicode everywhere
+(size-indication-mode t)       ;; display buffer size in mode-line
+(scroll-bar-mode -1)           ;; remove the redundant scroll-bars
+(tool-bar-mode 0)              ;; Disable the tool bar
+(tooltip-mode 0)               ;; Disable the tooltips
 
 ;; garbage collect when Emacs loses focus
 (add-hook 'focus-out-hook 'garbage-collect)
-
-(if window-system
-    (progn
-      (menu-bar-mode t)           ;; display menu-bar in window only
-      (global-hl-line-mode +1)    ;; highlight the current line
-      (tool-bar-mode 0)           ;; Disable the tool bar
-      (tooltip-mode 0))           ;; Disable the tooltips
-  (menu-bar-mode -1))
-
-;; remove the redundant scroll-bars
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
-
 
 ;;;; BINDINGS
 
@@ -131,7 +129,7 @@
 ;;;; FUNCTIONS
 
 ;; defines the standard backtab behavior of most editors
-(defun un-indent-by-removing-4-spaces ()
+(defun srb/un-indent-by-removing-4-spaces ()
   "Remove 4 spaces from beginning of of line."
   (interactive)
   (save-excursion
@@ -142,23 +140,23 @@
         (untabify (match-beginning 0) (match-end 0)))
       (when (looking-at "^    ")
         (replace-match "")))))
-(bind-key "<backtab>" #'un-indent-by-removing-4-spaces global-map)
+(bind-key "<backtab>" 'srb/un-indent-by-removing-4-spaces global-map)
 
 
 ;; this is surprisingly useful
-(defun srb-insert-buffer-name ()
+(defun srb/insert-buffer-name ()
   "Insert the buffer name into the buffer at the current editing point."
   (interactive "*")
   (insert (buffer-name)))
-(global-set-key (kbd "<f12>") 'srb-insert-buffer-name)
+(global-set-key (kbd "<f12>") 'srb/insert-buffer-name)
 
 
-(defun imenu-elisp-sections ()
+(defun srb/imenu-elisp-sections ()
   "Define imenu section headers with ';;;;'."
   (setq imenu-prev-index-position-function nil)
   (add-to-list 'imenu-generic-expression
                '("Sections" "^;;;; \\(.+\\)$" 1) t))
-(add-hook 'emacs-lisp-mode-hook 'imenu-elisp-sections)
+(add-hook 'emacs-lisp-mode-hook 'srb/imenu-elisp-sections)
 
 
 ;;;; BUILT-IN PACKAGES
@@ -169,12 +167,18 @@
   :config (global-auto-revert-mode t))
 
 
+(use-package conf-mode
+  :mode (("zathurarc\\'" . conf-space-mode)
+         ("XCompose\\'"  . conf-colon-mode)))
+
+
 ;; C-native version of linum
-(use-package display-line-numbers-mode
+(use-package display-line-numbers
   :when (version<= "26.0.50" emacs-version)
-  :bind ("C-c C-d" . display-line-numbers-mode)
+  :demand t
+  :bind ("C-c C-l" . display-line-numbers-mode)
   :init (set-face-attribute 'line-number nil :height 0.9)
-  :config (setq global-display-line-numbers-mode t))
+  :config (global-display-line-numbers-mode t))
 
 
 ;; display certain documentation in the minibuffer
@@ -220,16 +224,15 @@
 (use-package savehist
   :init
   (setq savehist-additional-variables '(search-ring regexp-search-ring)
-        ;; save every minute
         savehist-autosave-interval 60
-        ;; keep the home clean
         savehist-file (expand-file-name "savehist" *savefile-dir*))
   (savehist-mode +1))
 
 
 ;; ensure sh-mode is setup for prezto files
 (use-package sh-mode
-  :mode (("\\.?zlogin\\'" . sh-mode)
+  :mode (("\\.?profile\\'" . sh-mode)
+         ("\\.?zlogin\\'" . sh-mode)
          ("\\.?zlogout\\'" . sh-mode)
          ("\\.?zpreztorc\\'" . sh-mode)
          ("\\.?zprofile\\'" . sh-mode)
@@ -386,6 +389,10 @@
 ;; diminish keeps the modeline tidy
 (use-package diminish
   :ensure t)
+
+
+;; for some reason this has to be done manually
+(diminish 'eldoc-mode)
 
 
 ;; manage docker images
@@ -567,20 +574,28 @@
 (use-package magit
   :ensure t
   :defer t
-  :custom (magit-completing-read-function 'ivy-completing-read)
-  :bind (("C-c g b" . magit-branch-popup)
-         ("C-c g B" . magit-blame-popup)
-         ("C-c g d" . magit-diff-popup)
-         ("C-c g l" . magit-log-popup)
-         ("C-c g m" . magit-merge-popup)
-         ("C-c g p" . magit-pull-and-fetch-popup)
-         ("C-c g P" . magit-push-popup)
-         ("C-c g r" . magit-rebase-popup)
-         ("C-c g R" . magit-reset-popup)
+  :bind (("C-c g b" . magit-branch)
+         ("C-c g B" . magit-blame)
+         ("C-c g d" . magit-diff)
+         ("C-c g l" . magit-log)
+         ("C-c g m" . magit-merge)
+         ("C-c g p" . magit-pull)
+         ("C-c g P" . magit-push)
+         ("C-c g r" . magit-rebase)
+         ("C-c g R" . magit-reset)
          ("C-c g s" . magit-status)
-         ("C-c g S" . magit-stash-popup)
-         ("C-c g v" . magit-revert-popup)
-         ("C-c g x" . magit-run-popup)))
+         ("C-c g S" . magit-stash)
+         ("C-c g v" . magit-revert)
+         ("C-c g x" . magit-run))
+  :config
+  (magit-auto-revert-mode t)
+  (setq magit-completing-read-function 'ivy-completing-read
+        magit-diff-refine-hunk t
+        magit-remote-set-if-missing t)
+
+  ;; from https://github.com/patrickt/emacs/blob/master/init.el
+  (advice-add 'magit-refresh :before #'maybe-unset-buffer-modified)
+  (advice-add 'magit-commit  :before #'maybe-unset-buffer-modified))
 
 
 ;; display TODOs in status buffer
@@ -645,17 +660,17 @@
         (expand-file-name "projectile-bookmarks.eld" *savefile-dir*)))
 
 
-;; makes parentheses colorful
-(use-package rainbow-delimiters-mode
-  :ensure rainbow-delimiters
-  :hook (prog-mode comint-mode))
-
-
 ;; displays colors for color hex values
 (use-package rainbow-mode
   :ensure t
-  :hook (emacs-lisp-mode css-mode conf-xdefaults-mode)
+  :hook (emacs-lisp-mode css-mode conf-mode conf-colon-mode conf-space-mode)
   :diminish rainbow-mode)
+
+
+;; make parentheses colorful
+(use-package rainbow-delimiters-mode
+  :ensure rainbow-delimiters
+  :hook (prog-mode comint-mode))
 
 
 ;; get smartparens in programming modes
@@ -685,11 +700,10 @@
 (use-package undo-tree
   :ensure t
   :diminish undo-tree-mode
-  :custom
-  (undo-tree-auto-save-history t)
-  (undo-tree-visualizer-diff t)
   :config
-  (setq undo-tree-history-directory-alist `(("." . ,*savefile-dir*)))
+  (setq undo-tree-history-directory-alist `((".*" . ,*savefile-dir*))
+        undo-tree-auto-save-history t
+        undo-tree-visualizer-diff t)
   (global-undo-tree-mode))
 
 
@@ -698,7 +712,12 @@
   :ensure t
   :commands (unfill-region unfill-paragraph unfill-toggle)
   :bind (("C-M-Q" . unfill-toggle)
-         ("M-Q" . unfill-paragraph)))
+         ("M-Q" . unfill-paragraph))
+  :config
+  (defun srb/unfill-buffer ()
+    "Unfill all paragraphs in a buffer"
+    (interactive)
+    (unfill-region (point-min) (point-max))))
 
 
 ;; cause I forget things
