@@ -35,6 +35,7 @@
  abbrev-file-name                (expand-file-name "abbrev_defs" *savefile-dir*)
  apropos-do-all                  t
  auto-save-default               t
+ auto-window-vscroll             nil           ;; disabled to reduce lag when scrolling
  blink-matching-paren            t
  confirm-kill-emacs              'yes-or-no-p  ;; Confirm before exiting Emacs
  delete-active-region            t
@@ -169,7 +170,8 @@
 
 
 ;; C-native version of linum
-(use-package display-line-numbers-mode
+(use-package display-line-numbers
+  :demand t
   :when (version<= "26.0.50" emacs-version)
   :bind ("C-c C-d" . display-line-numbers-mode)
   :init (set-face-attribute 'line-number nil :height 0.9)
@@ -220,6 +222,7 @@
 
 ;; savehist keeps track of some history
 (use-package savehist
+  :disabled  ;; testing to see if this improves performance
   :init
   (setq savehist-additional-variables '(search-ring regexp-search-ring)
         ;; save every minute
@@ -436,6 +439,7 @@
 (use-package git-gutter-fringe
   ;; :when window-system
   :ensure t
+  :diminish
   :init (global-git-gutter-mode t)
   :config
   ;; shrink values slightly
@@ -459,7 +463,8 @@
 ;; major mode for .gitconfig files
 (use-package gitconfig-mode
   :ensure t
-  :defer t)
+  :mode (("\\git/config\\'"       . gitconfig-mode)
+         ("\\git/config_local\\'" . gitconfig-mode)))
 
 
 ;; major mode for .gitignore files
@@ -569,19 +574,19 @@
   :ensure t
   :defer t
   :custom (magit-completing-read-function 'ivy-completing-read)
-  :bind (("C-c g b" . magit-branch-popup)
-         ("C-c g B" . magit-blame-popup)
-         ("C-c g d" . magit-diff-popup)
-         ("C-c g l" . magit-log-popup)
-         ("C-c g m" . magit-merge-popup)
-         ("C-c g p" . magit-pull-and-fetch-popup)
-         ("C-c g P" . magit-push-popup)
-         ("C-c g r" . magit-rebase-popup)
-         ("C-c g R" . magit-reset-popup)
+  :bind (("C-c g b" . magit-branch)
+         ("C-c g B" . magit-blame)
+         ("C-c g d" . magit-diff)
+         ("C-c g l" . magit-log)
+         ("C-c g m" . magit-merge)
+         ("C-c g p" . magit-pull)
+         ("C-c g P" . magit-push)
+         ("C-c g r" . magit-rebase)
+         ("C-c g R" . magit-reset)
          ("C-c g s" . magit-status)
-         ("C-c g S" . magit-stash-popup)
-         ("C-c g v" . magit-revert-popup)
-         ("C-c g x" . magit-run-popup)))
+         ("C-c g S" . magit-stash)
+         ("C-c g v" . magit-revert)
+         ("C-c g x" . magit-run)))
 
 
 ;; display TODOs in status buffer
@@ -677,7 +682,9 @@
 
 
 ;; better line-by-line scrolling, especially in terminals
+;; DISABLED for now due to jittery scrolling
 (use-package smooth-scrolling
+  :disabled t
   :ensure t
   :config (smooth-scrolling-mode 1))
 

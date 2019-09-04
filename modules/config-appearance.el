@@ -11,10 +11,19 @@
 (add-to-list 'default-frame-alist '(height . 40))
 (add-to-list 'default-frame-alist '(width . 100))
 
+(when window-system
+  (add-to-list 'default-frame-alist
+               '(ns-transparent-titlebar . t))
+
+  ;; or light, depending on theme
+  (add-to-list 'default-frame-alist
+               '(ns-appearance . dark)))
+
 ;; THEME SETTINGS -----------------------------
 ;; only load themes when opened in a window system
 
 (use-package material-theme
+  :disabled t
   :when window-system
   :ensure t
   :init (load-theme 'material t))
@@ -89,6 +98,11 @@
   :ensure t
   :init (load-theme 'darkokai t))
 
+(use-package nord-theme
+  :when window-system
+  :ensure t
+  :init (load-theme 'nord t))
+
 
 ;; make the mode-line nice and simple
 ;; needs to be loaded after the theme
@@ -116,11 +130,11 @@
 ;; set default font--first one found is selected
 (cond
  ((eq window-system nil) nil)
- ((font-existsp "IosevkaX")
-  (set-face-attribute 'default nil :height 151 :font "IosevkaX" :weight 'light)
-  (setq-default line-spacing 0.06))
  ((font-existsp "Iosevka")
   (set-face-attribute 'default nil :height 151 :font "Iosevka" :weight 'light)
+  (setq-default line-spacing 0.06))
+ ((font-existsp "IosevkaX")
+  (set-face-attribute 'default nil :height 151 :font "IosevkaX" :weight 'light)
   (setq-default line-spacing 0.06))
  ((font-existsp "PragmataPro")
   (set-face-attribute 'default nil :height 151 :font "PragmataPro")

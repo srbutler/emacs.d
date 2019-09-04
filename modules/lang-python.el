@@ -57,6 +57,7 @@
 
 ;; major mode for requirements.txt
 (use-package pip-requirements
+  :disabled t  ;; seems to cause some freezes
   :ensure t
   :config
   ;; if a local pip
