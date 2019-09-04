@@ -32,44 +32,47 @@
 
 ;; set some basic defaults
 (setq-default
- abbrev-file-name                (expand-file-name "abbrev_defs" *savefile-dir*)
- apropos-do-all                  t
- auto-save-default               t
- auto-window-vscroll             nil           ;; disabled to reduce lag when scrolling
- blink-matching-paren            t
- confirm-kill-emacs              'yes-or-no-p  ;; Confirm before exiting Emacs
- delete-active-region            t
- delete-by-moving-to-trash       t
- disabled-command-function       nil           ;; don't prompt for some disabled functions
- display-time-24hr-format        nil
- display-time-format             "%H:%M"       ;; Format the time string
- enable-local-variables          :all
- fill-column                     80
- ffap-machine-p-known            'reject       ;; stop attempts at pinging websites on autocomplete
- help-window-select              t             ;; Focus new help windows when opened
- indent-tabs-mode                nil           ;; Stop using tabs to indent
- indicate-empty-lines            nil
- inhibit-startup-message         t
- initial-scratch-message         ";; scratch\n"
- kill-do-not-save-duplicates     t
- large-file-warning-threshold    100000000     ;; warn when opening files bigger than 100MB
- linum-format                    " %4d "
- major-mode                      'text-mode
- mode-require-final-newline      t
- mouse-yank-at-point             t
- nsm-settings-file               (expand-file-name "network-security.data" *savefile-dir*)
- next-line-add-newlines          t             ;; adds newline for C-n at end of buffer
- require-final-newline           t
- ring-bell-function              'ignore
- scroll-preserve-screen-position t
- sentence-end-double-space       nil
- tab-always-indent               'complete     ;; smart tab behavior - indent or complete
- tab-width                       4
- truncate-lines                  t
- vc-follow-symlinks              t
- visible-bell                    t
- window-combination-resize       t             ;; Resize windows proportionally
- x-stretch-cursor                t             ;; stretch cursor for tab characters.
+ abbrev-file-name                    (expand-file-name "abbrev_defs" *savefile-dir*)
+ apropos-do-all                      t
+ auto-save-default                   t
+ blink-matching-paren                t
+ confirm-kill-emacs                  'yes-or-no-p  ;; Confirm before exiting Emacs
+ delete-active-region                t
+ delete-by-moving-to-trash           t
+ disabled-command-function           nil        ;; don't prompt for some disabled functions
+ display-time-24hr-format            nil
+ display-time-format                 "%H:%M"    ;; Format the time string
+ enable-local-variables              :all
+ fill-column                         80
+ ffap-machine-p-known                'reject    ;; stop attempts at pinging websites on autocomplete
+ garbage-collection-messages         t          ;; helps to identify when GC is thrashing
+ help-window-select                  t          ;; Focus new help windows when opened
+ indent-tabs-mode                    nil        ;; Stop using tabs to indent
+ indicate-empty-lines                nil
+ inhibit-startup-message             t
+ initial-scratch-message             ";; scratch\n"
+ kill-do-not-save-duplicates         t
+ large-file-warning-threshold        100000000  ;; warn when opening files bigger than 100MB
+ linum-format                        " %4d "
+ major-mode                          'text-mode
+ max-lisp-eval-depth                 2000       ;; increases recursion limit
+ mode-require-final-newline          t
+ mouse-yank-at-point                 t
+ nsm-settings-file                   (expand-file-name "network-security.data" *savefile-dir*)
+ next-line-add-newlines              t          ;; adds newline for C-n at end of buffer
+ require-final-newline               t
+ ring-bell-function                  'ignore
+ save-interprogram-paste-before-kill t          ;; preserve paste to system ring
+ scroll-preserve-screen-position     t
+ sentence-end-double-space           nil
+ tab-always-indent                   'complete  ;; smart tab behavior - indent or complete
+ tab-width                           4
+ truncate-lines                      t
+ vc-follow-symlinks                  t
+ visible-bell                        t
+ use-dialog-box                      nil        ;; always display things in mode-line
+ window-combination-resize           t          ;; Resize windows proportionally
+ x-stretch-cursor                    t          ;; stretch cursor for tab characters.
  )
 
 (blink-cursor-mode 0)          ;; get rid of the blinking cursor
@@ -77,25 +80,18 @@
 (delete-selection-mode)        ;; Replace region when inserting text
 (display-time-mode)            ;; Enable time in the mode-line
 (fset 'yes-or-no-p 'y-or-n-p)  ;; shorten yes-or-no to y-or-n
+(global-hl-line-mode +1)       ;; highlight the current line
 (global-visual-line-mode 0)    ;; do not wrap long lines
 (line-number-mode t)           ;; put column number in mode-line
-(size-indication-mode t)
+(menu-bar-mode t)              ;; display menu-bar in window only
+(prefer-coding-system 'utf-8)  ;; unicode everywhere
+(size-indication-mode t)       ;; display buffer size in mode-line
+(scroll-bar-mode -1)           ;; remove the redundant scroll-bars
+(tool-bar-mode 0)              ;; Disable the tool bar
+(tooltip-mode 0)               ;; Disable the tooltips
 
 ;; garbage collect when Emacs loses focus
 (add-hook 'focus-out-hook 'garbage-collect)
-
-(if window-system
-    (progn
-      (menu-bar-mode t)           ;; display menu-bar in window only
-      (global-hl-line-mode +1)    ;; highlight the current line
-      (tool-bar-mode 0)           ;; Disable the tool bar
-      (tooltip-mode 0))           ;; Disable the tooltips
-  (menu-bar-mode -1))
-
-;; remove the redundant scroll-bars
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
-
 
 ;; setup `hippie-expand' expand functions
 (setq hippie-expand-try-functions-list
@@ -110,11 +106,10 @@
         try-complete-lisp-symbol-partially
         try-complete-lisp-symbol))
 
-
 ;;;; FUNCTIONS
 
 ;; defines the standard backtab behavior of most editors
-(defun un-indent-by-removing-4-spaces ()
+(defun srb/un-indent-by-removing-4-spaces ()
   "Remove 4 spaces from beginning of of line."
   (interactive)
   (save-excursion
@@ -128,18 +123,18 @@
 
 
 ;; this is surprisingly useful
-(defun srb-insert-buffer-name ()
+(defun srb/insert-buffer-name ()
   "Insert the buffer name into the buffer at the current editing point."
   (interactive "*")
   (insert (buffer-name)))
 
 
-(defun imenu-elisp-sections ()
+(defun srb/imenu-elisp-sections ()
   "Define imenu section headers with ';;;;'."
   (setq imenu-prev-index-position-function nil)
   (add-to-list 'imenu-generic-expression
                '("Sections" "^;;;; \\(.+\\)$" 1) t))
-(add-hook 'emacs-lisp-mode-hook 'imenu-elisp-sections)
+(add-hook 'emacs-lisp-mode-hook 'srb/imenu-elisp-sections)
 
 
 ;;;; BINDINGS
@@ -157,8 +152,8 @@
          ("M-u"      . upcase-dwim)        ;; uppercase the word-at-point or region
 
          ;; custom functions
-         ("<f12>"     . srb-insert-buffer-name)
-         ("<backtab>" . un-indent-by-removing-4-spaces)))
+         ("<f12>"     . srb/insert-buffer-name)
+         ("<backtab>" . srb/un-indent-by-removing-4-spaces)))
 
 
 ;;;; BUILT-IN PACKAGES
@@ -169,11 +164,18 @@
   :config (global-auto-revert-mode t))
 
 
+(use-package conf-mode
+  :mode (("zathurarc\\'" . conf-space-mode)
+         ("XCompose\\'"  . conf-colon-mode)
+         ("dunstrc\\'"   . conf-toml-mode))
+  :hook (conf-mode . rainbow-mode))
+
+
 ;; C-native version of linum
 (use-package display-line-numbers
-  :demand t
   :when (version<= "26.0.50" emacs-version)
-  :bind ("C-c C-d" . display-line-numbers-mode)
+  :demand t
+  :bind ("C-c C-l" . display-line-numbers-mode)
   :init (set-face-attribute 'line-number nil :height 0.9)
   :config (global-display-line-numbers-mode t))
 
@@ -222,19 +224,17 @@
 
 ;; savehist keeps track of some history
 (use-package savehist
-  :disabled  ;; testing to see if this improves performance
   :init
   (setq savehist-additional-variables '(search-ring regexp-search-ring)
-        ;; save every minute
         savehist-autosave-interval 60
-        ;; keep the home clean
         savehist-file (expand-file-name "savehist" *savefile-dir*))
   (savehist-mode +1))
 
 
 ;; ensure sh-mode is setup for prezto files
 (use-package sh-mode
-  :mode (("\\.?zlogin\\'" . sh-mode)
+  :mode (("\\.?profile\\'" . sh-mode)
+         ("\\.?zlogin\\'" . sh-mode)
          ("\\.?zlogout\\'" . sh-mode)
          ("\\.?zpreztorc\\'" . sh-mode)
          ("\\.?zprofile\\'" . sh-mode)
@@ -278,11 +278,13 @@
 
 ;;;; EXTERNAL PACKAGES
 
-
 ;; jump windows quickly, linked to key-chords below
 (use-package ace-window
   :ensure t)
 
+;; jump windows quickly, linked to key-chords below
+(use-package ace-window
+  :ensure t)
 
 ;; set up proper wrapping for text modes
 (use-package adaptive-wrap
@@ -391,6 +393,10 @@
   :ensure t)
 
 
+;; for some reason this has to be done manually
+(diminish 'eldoc-mode)
+
+
 ;; manage docker images
 (use-package docker
   :ensure t)
@@ -408,7 +414,6 @@
 ;; get the PATH variable working correctly
 (use-package exec-path-from-shell
   :when (memq window-system '(mac ns x))
-  :demand t
   :ensure t
   :config (exec-path-from-shell-initialize))
 
@@ -438,8 +443,8 @@
 ;; have git indications in gutter
 (use-package git-gutter-fringe
   ;; :when window-system
-  :ensure t
   :diminish
+  :ensure t
   :init (global-git-gutter-mode t)
   :config
   ;; shrink values slightly
@@ -463,8 +468,7 @@
 ;; major mode for .gitconfig files
 (use-package gitconfig-mode
   :ensure t
-  :mode (("\\git/config\\'"       . gitconfig-mode)
-         ("\\git/config_local\\'" . gitconfig-mode)))
+  :defer t)
 
 
 ;; major mode for .gitignore files
@@ -573,7 +577,6 @@
 (use-package magit
   :ensure t
   :defer t
-  :custom (magit-completing-read-function 'ivy-completing-read)
   :bind (("C-c g b" . magit-branch)
          ("C-c g B" . magit-blame)
          ("C-c g d" . magit-diff)
@@ -586,7 +589,16 @@
          ("C-c g s" . magit-status)
          ("C-c g S" . magit-stash)
          ("C-c g v" . magit-revert)
-         ("C-c g x" . magit-run)))
+         ("C-c g x" . magit-run))
+  :config
+  (magit-auto-revert-mode t)
+  (setq magit-completing-read-function 'ivy-completing-read
+        magit-diff-refine-hunk t
+        magit-remote-set-if-missing t)
+
+  ;; from https://github.com/patrickt/emacs/blob/master/init.el
+  (advice-add 'magit-refresh :before #'maybe-unset-buffer-modified)
+  (advice-add 'magit-commit  :before #'maybe-unset-buffer-modified))
 
 
 ;; display TODOs in status buffer
@@ -651,17 +663,17 @@
         (expand-file-name "projectile-bookmarks.eld" *savefile-dir*)))
 
 
-;; makes parentheses colorful
-(use-package rainbow-delimiters-mode
-  :ensure rainbow-delimiters
-  :hook (prog-mode comint-mode))
-
-
 ;; displays colors for color hex values
 (use-package rainbow-mode
   :ensure t
-  :hook (emacs-lisp-mode css-mode conf-xdefaults-mode)
+  :hook (emacs-lisp-mode css-mode conf-colon-mode conf-space-mode)
   :diminish rainbow-mode)
+
+
+;; make parentheses colorful
+(use-package rainbow-delimiters-mode
+  :ensure rainbow-delimiters
+  :hook (prog-mode comint-mode))
 
 
 ;; get smartparens in programming modes
@@ -682,7 +694,6 @@
 
 
 ;; better line-by-line scrolling, especially in terminals
-;; DISABLED for now due to jittery scrolling
 (use-package smooth-scrolling
   :disabled t
   :ensure t
@@ -705,7 +716,12 @@
   :ensure t
   :commands (unfill-region unfill-paragraph unfill-toggle)
   :bind (("C-M-Q" . unfill-toggle)
-         ("M-Q" . unfill-paragraph)))
+         ("M-Q" . unfill-paragraph))
+  :config
+  (defun srb/unfill-buffer ()
+    "Unfill all paragraphs in a buffer"
+    (interactive)
+    (unfill-region (point-min) (point-max))))
 
 
 ;; cause I forget things

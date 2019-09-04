@@ -23,7 +23,7 @@
   :config
   (setq indent-tabs-mode nil
         python-indent-offset 4)
-  (add-hook 'python-mode-hook 'highlight-indent-guides-mode)
+
   ;; use ipython instead of standard interpreter if found
   (when (executable-find "ipython")
     (setq python-shell-interpreter "ipython"
@@ -93,13 +93,6 @@
 ;; sort imports
 (use-package py-isort
   :ensure t)
-
-
-;; yapf code formatting
-(use-package yapify
-  :disabled t
-  :ensure t
-  :bind ("C-c C-r f" . yapfify-buffer))
 
 
 ;; pytest intgration

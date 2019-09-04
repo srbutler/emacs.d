@@ -5,31 +5,21 @@
 ;;; Code:
 
 
-;; WINDOW SETTINGS ---------------------------
+;;;; WINDOW SETTINGS
 
 ;; set larger frame size
 (add-to-list 'default-frame-alist '(height . 40))
 (add-to-list 'default-frame-alist '(width . 100))
 
-(when window-system
-  (add-to-list 'default-frame-alist
-               '(ns-transparent-titlebar . t))
-
-  ;; or light, depending on theme
-  (add-to-list 'default-frame-alist
-               '(ns-appearance . dark)))
-
-;; THEME SETTINGS -----------------------------
+;;;; THEMES
 ;; only load themes when opened in a window system
 
 (use-package material-theme
   :disabled t
-  :when window-system
   :ensure t
   :init (load-theme 'material t))
 
 (use-package solarized-theme
-  :when window-system
   :disabled t
   :ensure t
   :init
@@ -81,42 +71,47 @@
       (set-face-foreground 'git-gutter:modified "#b58900"))))
 
 (use-package zenburn-theme
-  :when window-system
   :disabled t
   :ensure t
   :init (load-theme 'zenburn t))
 
+(use-package nord-theme
+  ;; :disabled t
+  :ensure t
+  :init (load-theme 'nord t)
+  :config
+  (with-eval-after-load 'persp-mode
+    (set-face-foreground 'persp-selected-face "#5E81AC")))
+
 (use-package leuven-theme
-  :when window-system
   :disabled t
   :ensure t
   :init (load-theme 'leuven t))
 
 (use-package darkokai-theme
-  :when window-system
   :disabled t
   :ensure t
   :init (load-theme 'darkokai t))
 
-(use-package nord-theme
-  :when window-system
-  :ensure t
-  :init (load-theme 'nord t))
 
-
+;;;; MODE LINE
 ;; make the mode-line nice and simple
 ;; needs to be loaded after the theme
 (use-package smart-mode-line
   :ensure t
+  :demand t
+  :commands sml/apply-theme
   :init
   (setq sml/no-confirm-load-theme t)
   (line-number-mode t)
   (column-number-mode t)
   (size-indication-mode t)
-  :config (sml/setup))
+  :config
+  (sml/setup)
+  (sml/apply-theme "respectful"))
 
 
-;; FONT SETTINGS ------------------------------
+;;;; FONTS
 
 ;; check if a font exists
 (defun font-existsp (font)
@@ -130,11 +125,11 @@
 ;; set default font--first one found is selected
 (cond
  ((eq window-system nil) nil)
- ((font-existsp "Iosevka")
-  (set-face-attribute 'default nil :height 151 :font "Iosevka" :weight 'light)
-  (setq-default line-spacing 0.06))
  ((font-existsp "IosevkaX")
-  (set-face-attribute 'default nil :height 151 :font "IosevkaX" :weight 'light)
+  (set-face-attribute 'default nil :height 141 :font "IosevkaX" :weight 'light)
+  (setq-default line-spacing 0.06))
+ ((font-existsp "Iosevka")
+  (set-face-attribute 'default nil :height 141 :font "Iosevka" :weight 'light)
   (setq-default line-spacing 0.06))
  ((font-existsp "PragmataPro")
   (set-face-attribute 'default nil :height 151 :font "PragmataPro")
@@ -169,7 +164,9 @@
   (mac-auto-operator-composition-mode))
 
  ;; setup general ligatures
- ((window-system)
+ )
+
+(when window-system
   (let ((alist '((33 . ".\\(?:\\(?:==\\)\\|[!=]\\)")
                  (35 . ".\\(?:[(?[_{]\\)")
                  (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
@@ -190,7 +187,7 @@
                  (126 . ".\\(?:[=@~-]\\)"))))
     (dolist (char-regexp alist)
       (set-char-table-range composition-function-table (car char-regexp)
-                            `([,(cdr char-regexp) 0 font-shape-gstring]))))))
+                            `([,(cdr char-regexp) 0 font-shape-gstring])))))
 
 
 (provide 'config-appearance)
