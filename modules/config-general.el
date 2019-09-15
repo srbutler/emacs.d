@@ -170,7 +170,8 @@
 (use-package conf-mode
   :mode (("zathurarc\\'" . conf-space-mode)
          ("XCompose\\'"  . conf-colon-mode)
-         ("dunstrc\\'"   . conf-toml-mode))
+         ("dunstrc\\'"   . conf-toml-mode)
+         ("sxhkdrc\\'"   . conf-space-mode))
   :hook (conf-mode . rainbow-mode))
 
 
