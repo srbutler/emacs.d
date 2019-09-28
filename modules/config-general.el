@@ -595,11 +595,7 @@
   (magit-auto-revert-mode t)
   (setq magit-completing-read-function 'ivy-completing-read
         magit-diff-refine-hunk t
-        magit-remote-set-if-missing t)
-
-  ;; from https://github.com/patrickt/emacs/blob/master/init.el
-  (advice-add 'magit-refresh :before #'maybe-unset-buffer-modified)
-  (advice-add 'magit-commit  :before #'maybe-unset-buffer-modified))
+        magit-remote-set-if-missing t))
 
 
 ;; display TODOs in status buffer
@@ -667,7 +663,7 @@
 ;; displays colors for color hex values
 (use-package rainbow-mode
   :ensure t
-  :hook (emacs-lisp-mode css-mode conf-colon-mode conf-space-mode)
+  :hook (emacs-lisp-mode css-mode conf-colon-mode conf-space-mode sh-mode)
   :diminish rainbow-mode)
 
 
