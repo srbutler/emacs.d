@@ -96,7 +96,7 @@
 
 (use-package irony
   :disabled t
-  :unless *cc-use-lsp*
+  ;; :unless *cc-use-lsp*
   :ensure t
   :defer t
   :diminish "irony"

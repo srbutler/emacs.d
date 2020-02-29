@@ -98,6 +98,7 @@
 ;; make the mode-line nice and simple
 ;; needs to be loaded after the theme
 (use-package smart-mode-line
+  :disabled t
   :ensure t
   :demand t
   :commands sml/apply-theme
@@ -109,6 +110,22 @@
   :config
   (sml/setup)
   (sml/apply-theme "respectful"))
+
+
+;; create a menu for minor-modes
+(use-package minions
+  :ensure t)
+
+;; a fancy modeline
+(use-package doom-modeline
+  :ensure t
+  :after minions
+  :demand t
+  :config
+  (setq doom-modeline-buffer-file-name-style 'truncate-upto-root
+        doom-modeline-height 25
+        doom-modeline-major-mode-color-icon t)
+  )
 
 
 ;;;; FONTS
@@ -127,40 +144,29 @@
  ((eq window-system nil) nil)
  ((font-existsp "IosevkaX")
   (set-face-attribute 'default nil :height 141 :font "IosevkaX" :weight 'light)
-  (set-face-attribute 'mode-line nil :height 121)
   (setq-default line-spacing 0.06))
  ((font-existsp "Iosevka")
   (set-face-attribute 'default nil :height 141 :font "Iosevka" :weight 'light)
-  (set-face-attribute 'mode-line nil :height 121)
   (setq-default line-spacing 0.06))
  ((font-existsp "PragmataPro")
   (set-face-attribute 'default nil :height 151 :font "PragmataPro")
-  (set-face-attribute 'mode-line nil :height 131)
   (setq-default line-spacing 0.06))
  ((font-existsp "InconsolataGo")
-  (set-face-attribute 'default nil :height 161 :font "InconsolataGo")
-  (set-face-attribute 'mode-line nil :height 141))
+  (set-face-attribute 'default nil :height 161 :font "InconsolataGo"))
  ((font-existsp "Inconsolata")
-  (set-face-attribute 'default nil :height 161 :font "Inconsolata")
-  (set-face-attribute 'mode-line nil :height 141))
+  (set-face-attribute 'default nil :height 161 :font "Inconsolata"))
  ((font-existsp "Hasklig")
-  (set-face-attribute 'default nil :height 141 :font "Hasklig")
-  (set-face-attribute 'mode-line nil :height 121))
+  (set-face-attribute 'default nil :height 141 :font "Hasklig"))
  ((font-existsp "Fira Code")
-  (set-face-attribute 'default nil :height 141 :font "Fira Code")
-  (set-face-attribute 'mode-line nil :height 121))
+  (set-face-attribute 'default nil :height 141 :font "Fira Code"))
  ((font-existsp "Source Code Pro")
-  (set-face-attribute 'default nil :height 141 :font "Source Code Pro")
-  (set-face-attribute 'mode-line nil :height 121))
+  (set-face-attribute 'default nil :height 141 :font "Source Code Pro"))
  ((font-existsp "Monaco")
-  (set-face-attribute 'default nil :height 131 :font "Monaco")
-  (set-face-attribute 'mode-line nil :height 111))
+  (set-face-attribute 'default nil :height 131 :font "Monaco"))
  ((font-existsp "Menlo")
-  (set-face-attribute 'default nil :height 141 :font "Menlo")
-  (set-face-attribute 'mode-line nil :height 121))
+  (set-face-attribute 'default nil :height 141 :font "Menlo"))
  ((font-existsp "Consolas")
-  (set-face-attribute 'default nil :height 151 :font "Consolas")
-  (set-face-attribute 'mode-line nil :height 131)))
+  (set-face-attribute 'default nil :height 151 :font "Consolas")))
 
 
 ;; Enable emoji, and stop the UI from freezing when trying to display them.
