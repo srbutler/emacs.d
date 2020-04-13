@@ -7,15 +7,15 @@
 ;;
 ;;; Code:
 
-(defvar *python-use-lsp* nil)
+(defvar *python-use-lsp* t)
 ;; install: pip install \"python-language-server[all]\"
 
 (use-package python
   :mode (("\\.py\\'" . python-mode)
          ("\\.wsgi$" . python-mode))
   :init
-  (when *python-use-lsp*
-    (add-hook 'python-mode-hook 'lsp))
+  ;; (when *python-use-lsp*
+  ;;   (add-hook 'python-mode-hook 'lsp))
 
   (add-hook 'python-mode-hook (lambda ()
                                 (setq tab-width 4)
@@ -51,8 +51,7 @@
      ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
-     ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\|L\\)?\\>" 0 'font-lock-constant-face)
-     ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face))))
+     ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\|L\\)?\\>" 0 'font-lock-constant-face))))
 
 
 ;; major mode for requirements.txt
@@ -101,6 +100,17 @@
   :after projectile
   :bind ("C-c C-t" . python-pytest-popup))
 
+
+;; microsoft LSP server
+(use-package lsp-python-ms
+  :when *python-use-lsp*
+  :ensure t
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-python-ms)
+                          (lsp)))
+  :config
+  (setq lsp-python-ms-executable
+        (expand-file-name "lsp/lsp-python-ms/Microsoft.Python.LanguageServer" *dotfiles-dir*)))
 
 ;; install: pip install -U jedi rope pyflakes yapf
 (use-package elpy

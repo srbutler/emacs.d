@@ -16,7 +16,8 @@
                  "%b"))))
 
 ;; setup savefiles/backups in a way that's not annoying
-(setq auto-save-file-name-transforms `((".*" ,*savefile-dir* t))
+(setq auto-save-default t
+      auto-save-file-name-transforms `((".*" ,*savefile-dir* t))
       backup-directory-alist `((".*" . ,*savefile-dir*))
       backup-by-copying t
       delete-old-versions t
@@ -34,7 +35,6 @@
 (setq-default
  abbrev-file-name                    (expand-file-name "abbrev_defs" *savefile-dir*)
  apropos-do-all                      t
- auto-save-default                   t
  blink-matching-paren                t
  confirm-kill-emacs                  'yes-or-no-p  ;; Confirm before exiting Emacs
  delete-active-region                t
@@ -67,6 +67,7 @@
  sentence-end-double-space           nil
  tab-always-indent                   'complete  ;; smart tab behavior - indent or complete
  tab-width                           4
+ tramp-default-method                "ssh"
  truncate-lines                      t
  vc-follow-symlinks                  t
  visible-bell                        t
@@ -147,9 +148,9 @@
          ("C-c l"    . goto-line)          ;; go to line by number
          ("M-o"      . other-window)       ;; jump to other window
          ("M-O"      . other-frame)        ;; jump to other frame
-         ("M-c"      . capitalize-dwim)    ;; capitalize the word-at-point or region
-         ("M-l"      . downcase-dwim)      ;; lowercase the word-at-point or region
-         ("M-u"      . upcase-dwim)        ;; uppercase the word-at-point or region
+         ;; ("M-c"      . capitalize-dwim)    ;; capitalize the word-at-point or region
+         ;; ("M-l"      . downcase-dwim)      ;; lowercase the word-at-point or region
+         ;; ("M-u"      . upcase-dwim)        ;; uppercase the word-at-point or region
 
          ;; custom functions
          ("<f12>"     . srb/insert-buffer-name)
@@ -178,6 +179,13 @@
   :bind ("C-c C-l" . display-line-numbers-mode)
   :init (set-face-attribute 'line-number nil :height 0.9)
   :config (global-display-line-numbers-mode t))
+
+
+(use-package ediff
+  :defer
+  :config
+  (setq ediff-split-window-function 'split-window-vertically
+        ediff-window-setup-function 'ediff-setup-windows-plain))
 
 
 ;; display certain documentation in the minibuffer
@@ -594,11 +602,7 @@
   (magit-auto-revert-mode t)
   (setq magit-completing-read-function 'ivy-completing-read
         magit-diff-refine-hunk t
-        magit-remote-set-if-missing t)
-
-  ;; from https://github.com/patrickt/emacs/blob/master/init.el
-  (advice-add 'magit-refresh :before #'maybe-unset-buffer-modified)
-  (advice-add 'magit-commit  :before #'maybe-unset-buffer-modified))
+        magit-remote-set-if-missing t))
 
 
 ;; display TODOs in status buffer
@@ -635,7 +639,14 @@
   :ensure t
   :diminish (pandoc-mode . "pandoc")
   :hook (markdown-mode gfm-mode org-mode TeX-mode)
-  :config (pandoc-load-default-settings))
+  :config
+  (pandoc-load-default-settings)
+
+  (defun srb/pandoc-run-and-show-output-buffer ()
+    (interactive)
+    (progn
+      (pandoc-run-pandoc)
+      (pandoc-view-output-buffer))))
 
 
 ;; minor-mode and utility for regex conversion (perl <--> elisp)

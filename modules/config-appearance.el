@@ -161,10 +161,7 @@
 (cond
  ;; only run the following in the railwaycat version of emacs
  ((fboundp 'mac-auto-operator-composition-mode)
-  (mac-auto-operator-composition-mode))
-
- ;; setup general ligatures
- )
+  (mac-auto-operator-composition-mode)))
 
 (when window-system
   (let ((alist '((33 . ".\\(?:\\(?:==\\)\\|[!=]\\)")

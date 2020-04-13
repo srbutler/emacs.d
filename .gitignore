@@ -1,4 +1,6 @@
 transient/
+elpy/
+lsp/
 
 # LSP stuff
 eclipse.jdt.ls/
