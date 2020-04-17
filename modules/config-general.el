@@ -24,77 +24,77 @@
       kept-old-versions 2
       version-control t)
 
+;; set init GC frequency
+(setq gc-cons-threshold (* 100 1000 1000))
+;; increase frequency after init
+(add-hook 'after-init-hook (lambda ()
+                             (setq gc-cons-threshold (* 8 1000 1000))))
+
 ;; set some basic defaults
 (setq-default
- abbrev-file-name                    (expand-file-name "abbrev_defs" *savefile-dir*)
- apropos-do-all                      t
- auto-save-default                   t
- blink-matching-paren                t
- confirm-kill-emacs                  'yes-or-no-p  ;; Confirm before exiting Emacs
- delete-active-region                t
- delete-by-moving-to-trash           t
- disabled-command-function           nil        ;; don't prompt for some disabled functions
- display-time-24hr-format            nil
- display-time-format                 "%H:%M"    ;; Format the time string
- enable-local-variables              :all
- fill-column                         80
- ffap-machine-p-known                'reject    ;; stop attempts at pinging websites on autocomplete
- garbage-collection-messages         t          ;; helps to identify when GC is thrashing
- gc-cons-threshold                   50000000   ;; reduce the frequency of garbage collection
- help-window-select                  t          ;; Focus new help windows when opened
- indent-tabs-mode                    nil        ;; Stop using tabs to indent
- indicate-empty-lines                nil
- inhibit-startup-message             t
- initial-scratch-message             ";; scratch\n"
- kill-do-not-save-duplicates         t
- large-file-warning-threshold        100000000  ;; warn when opening files bigger than 100MB
- linum-format                        " %4d "
- major-mode                          'text-mode
- max-lisp-eval-depth                 2000       ;; increases recursion limit
- mode-require-final-newline          t
- mouse-yank-at-point                 t
- nsm-settings-file                   (expand-file-name "network-security.data" *savefile-dir*)
- next-line-add-newlines              t          ;; adds newline for C-n at end of buffer
- require-final-newline               t
- ring-bell-function                  'ignore
- save-interprogram-paste-before-kill t          ;; preserve paste to system ring
- scroll-preserve-screen-position     t
- sentence-end-double-space           nil
- tab-always-indent                   'complete  ;; smart tab behavior - indent or complete
- tab-width                           4
- truncate-lines                      t
- vc-follow-symlinks                  t
- visible-bell                        t
- use-dialog-box                      nil        ;; always display things in mode-line
- window-combination-resize           t          ;; Resize windows proportionally
- x-stretch-cursor                    t          ;; stretch cursor for tab characters.
+ abbrev-file-name                (expand-file-name "abbrev_defs" *savefile-dir*)
+ apropos-do-all                  t
+ auto-save-default               t
+ blink-matching-paren            t
+ confirm-kill-emacs              'yes-or-no-p  ;; Confirm before exiting Emacs
+ delete-active-region            t
+ delete-by-moving-to-trash       t
+ disabled-command-function       nil           ;; don't prompt for some disabled functions
+ display-time-24hr-format        nil
+ display-time-format             "%H:%M"       ;; Format the time string
+ enable-local-variables          :all
+ fill-column                     80
+ ffap-machine-p-known            'reject       ;; stop attempts at pinging websites on autocomplete
+ help-window-select              t             ;; Focus new help windows when opened
+ indent-tabs-mode                nil           ;; Stop using tabs to indent
+ indicate-empty-lines            nil
+ inhibit-startup-message         t
+ initial-scratch-message         ";; scratch\n"
+ kill-do-not-save-duplicates     t
+ large-file-warning-threshold    100000000     ;; warn when opening files bigger than 100MB
+ linum-format                    " %4d "
+ major-mode                      'text-mode
+ mode-require-final-newline      t
+ mouse-yank-at-point             t
+ nsm-settings-file               (expand-file-name "network-security.data" *savefile-dir*)
+ next-line-add-newlines          t             ;; adds newline for C-n at end of buffer
+ require-final-newline           t
+ ring-bell-function              'ignore
+ scroll-preserve-screen-position t
+ sentence-end-double-space       nil
+ tab-always-indent               'complete     ;; smart tab behavior - indent or complete
+ tab-width                       4
+ truncate-lines                  t
+ vc-follow-symlinks              t
+ visible-bell                    t
+ window-combination-resize       t             ;; Resize windows proportionally
+ x-stretch-cursor                t             ;; stretch cursor for tab characters.
  )
 
 (blink-cursor-mode 0)          ;; get rid of the blinking cursor
 (column-number-mode t)         ;; put column number in mode-line
 (delete-selection-mode)        ;; Replace region when inserting text
-(display-time-mode)            ;; Enable time in the mode-line
+;; (display-time-mode)            ;; Enable time in the mode-line
 (fset 'yes-or-no-p 'y-or-n-p)  ;; shorten yes-or-no to y-or-n
-(global-hl-line-mode +1)       ;; highlight the current line
 (global-visual-line-mode 0)    ;; do not wrap long lines
 (line-number-mode t)           ;; put column number in mode-line
-(menu-bar-mode t)              ;; display menu-bar in window only
-(prefer-coding-system 'utf-8)  ;; unicode everywhere
-(size-indication-mode t)       ;; display buffer size in mode-line
-(scroll-bar-mode -1)           ;; remove the redundant scroll-bars
-(tool-bar-mode 0)              ;; Disable the tool bar
-(tooltip-mode 0)               ;; Disable the tooltips
+(size-indication-mode t)
 
 ;; garbage collect when Emacs loses focus
-(add-hook 'focus-out-hook 'garbage-collect)
+;; (add-hook 'focus-out-hook 'garbage-collect)
 
-;;;; BINDINGS
+(if window-system
+    (progn
+      (menu-bar-mode t)           ;; display menu-bar in window only
+      (global-hl-line-mode +1)    ;; highlight the current line
+      (tool-bar-mode 0)           ;; Disable the tool bar
+      (tooltip-mode 0))           ;; Disable the tooltips
+  (menu-bar-mode -1))
 
-;; used in a few places to define keybindings easily
-(use-package bind-key)
+;; remove the redundant scroll-bars
+(when (fboundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
 
-;; remove os minimization
-(bind-key "C-z" nil global-map)
 
 ;; setup `hippie-expand' expand functions
 (setq hippie-expand-try-functions-list
@@ -108,23 +108,6 @@
         try-expand-line
         try-complete-lisp-symbol-partially
         try-complete-lisp-symbol))
-(bind-key "M-/" #'hippie-expand global-map)
-
-;; try and have a normal way to delete things
-(bind-key "<delete>" #'delete-region global-map)
-
-;; set an extra command to jump to other window/frame, for convenience
-(bind-key "M-o" #'other-window global-map)
-(bind-key "M-O" #'other-frame global-map)
-
-;; set a general key for goto-line
-(bind-key "C-c l" #'goto-line global-map)
-
-;; some better text editing commands
-(bind-key "M-c" #'capitalize-dwim global-map)
-(bind-key "M-l" #'downcase-dwim global-map)
-(bind-key "M-u" #'upcase-dwim global-map)
-
 
 ;;;; FUNCTIONS
 
@@ -140,7 +123,6 @@
         (untabify (match-beginning 0) (match-end 0)))
       (when (looking-at "^    ")
         (replace-match "")))))
-(bind-key "<backtab>" 'srb/un-indent-by-removing-4-spaces global-map)
 
 
 ;; this is surprisingly useful
@@ -148,7 +130,6 @@
   "Insert the buffer name into the buffer at the current editing point."
   (interactive "*")
   (insert (buffer-name)))
-(global-set-key (kbd "<f12>") 'srb/insert-buffer-name)
 
 
 (defun srb/imenu-elisp-sections ()
@@ -157,6 +138,24 @@
   (add-to-list 'imenu-generic-expression
                '("Sections" "^;;;; \\(.+\\)$" 1) t))
 (add-hook 'emacs-lisp-mode-hook 'srb/imenu-elisp-sections)
+
+
+;;;; BINDINGS
+
+;; used in a few places to define keybindings easily
+(use-package bind-key
+  :bind (("C-z"      . nil)                ;; remove os minimization
+         ("M-/"      . hippie-expand)      ;; try to complete a symbol
+         ("<delete>" . delete-region)      ;; try and have a normal way to delete things
+         ("C-c l"    . goto-line)          ;; go to line by number
+         ("M-o"      . other-window)       ;; jump to other window
+         ("M-O"      . other-frame)        ;; jump to other frame
+         ("M-c"      . capitalize-dwim)    ;; capitalize the word-at-point or region
+         ("M-l"      . downcase-dwim)      ;; lowercase the word-at-point or region
+         ("M-u"      . upcase-dwim)        ;; uppercase the word-at-point or region
+
+         ;; custom functions
+         ("<backtab>" . srb/un-indent-by-removing-4-spaces)))
 
 
 ;;;; BUILT-IN PACKAGES
@@ -602,6 +601,11 @@
 (use-package magit-todos
   :ensure t
   :hook (magit-mode . magit-todos-mode))
+
+
+;; meson build scripts
+(use-package meson-mode
+  :ensure t)
 
 
 ;; edit with multiple cursors
