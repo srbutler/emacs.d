@@ -7,15 +7,15 @@
 ;;
 ;;; Code:
 
-(defvar *python-use-lsp* nil)
+(defvar *python-use-lsp* t)
 ;; install: pip install \"python-language-server[all]\"
 
 (use-package python
   :mode (("\\.py\\'" . python-mode)
          ("\\.wsgi$" . python-mode))
   :init
-  (when *python-use-lsp*
-    (add-hook 'python-mode-hook 'lsp))
+  ;; (when *python-use-lsp*
+  ;;   (add-hook 'python-mode-hook 'lsp))
 
   (add-hook 'python-mode-hook (lambda ()
                                 (setq tab-width 4)
@@ -85,7 +85,8 @@
 ;; no config deterministic formatting
 (use-package blacken
   :ensure t
-  :hook (python-mode . blacken-mode))
+  :hook (python-mode . blacken-mode)
+  :config (setq blacken-executable "$HOME/.local/bin/black"))
 
 
 ;; sort imports
@@ -100,9 +101,17 @@
   :bind ("C-c C-t" . python-pytest-popup))
 
 
+(use-package lsp-python-ms
+  :if *python-use-lsp*
+  :ensure t
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-python-ms)
+                         (lsp))))
+
+
 ;; install: pip install -U jedi rope pyflakes yapf
 (use-package elpy
-  ;; :disabled t
+  :disabled t
   :unless *python-use-lsp*
   :ensure t
   :after python
@@ -121,11 +130,22 @@
           elpy-module-company
           elpy-module-eldoc
           elpy-module-yasnippet
-          elpy-module-django)))
+          elpy-module-django))
+
+  ;; fallback to rgrep if goto-def fails
+  (defun elpy-goto-definition-or-rgrep ()
+    "Go to the definition of the symbol at point, if found. Otherwise, run `elpy-rgrep-symbol'."
+    (interactive)
+    (ring-insert find-tag-marker-ring (point-marker))
+    (condition-case nil (elpy-goto-definition)
+      (error (elpy-rgrep-symbol
+              (concat "\\(def\\|class\\)\s" (thing-at-point 'symbol) "(")))))
+  (bind-key "M-." 'elpy-goto-definition-or-rgrep elpy-mode-map))
 
 
 ;; set up pyenv
 (use-package pyenv-mode
+  :disabled t
   :when (executable-find "pyenv")
   :ensure t
   :hook python-mode
