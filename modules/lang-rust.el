@@ -1,4 +1,3 @@
-
 ;;; lang-rust.el --- Summary:
 ;;
 ;;; Commentary:
