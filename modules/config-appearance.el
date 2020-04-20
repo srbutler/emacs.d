@@ -1,4 +1,5 @@
 ;;; config-appearance.el -- Summary
+
 ;;
 ;;; Commentary:
 ;;
@@ -76,22 +77,39 @@
   :init (load-theme 'zenburn t))
 
 (use-package nord-theme
-  ;; :disabled t
+  :disabled t
   :ensure t
   :init (load-theme 'nord t)
   :config
   (with-eval-after-load 'persp-mode
     (set-face-foreground 'persp-selected-face "#5E81AC")))
 
-(use-package leuven-theme
+(use-package modus-operandi-theme
   :disabled t
   :ensure t
-  :init (load-theme 'leuven t))
+  :config
+  (setq modus-operandi-theme-visible-fringes t
+        modus-operandi-theme-distinct-org-blocks t
+        modus-operandi-theme-subtle-diffs t))
 
-(use-package darkokai-theme
+(use-package modus-vivendi-theme
   :disabled t
   :ensure t
-  :init (load-theme 'darkokai t))
+  :config
+  (setq modus-vivendi-theme-visible-fringes t
+        modus-vivendi-theme-distinct-org-blocks t
+        modus-vivendi-theme-subtle-diffs t))
+
+
+(use-package base16-theme
+  :ensure t
+  :config
+  (set-face-foreground 'persp-selected-face "#81a2be")
+  (setq base16-distinct-fringe-background t
+        base16-highlight-mode-line t
+        base16-theme-256-color-source 'base16-shell)
+
+  (load-theme 'base16-tomorrow-night t))
 
 
 ;;;; MODE LINE
@@ -114,7 +132,9 @@
 
 ;; create a menu for minor-modes
 (use-package minions
-  :ensure t)
+  :ensure t
+  :config (minions-mode 1))
+
 
 ;; a fancy modeline
 (use-package doom-modeline
@@ -122,11 +142,22 @@
   :after minions
   :demand t
   :config
-  (setq doom-modeline-buffer-file-name-style 'truncate-upto-root
-        doom-modeline-height 25
-        doom-modeline-major-mode-color-icon t)
-  )
-
+  (setq doom-modeline-buffer-file-name-style 'relative-from-project
+        doom-modeline-height 24
+        doom-modeline-bar-width 3
+        doom-modeline-project-detection 'projectile
+        doom-modeline-icon (display-graphic-p)
+        doom-modeline-major-mode-icon t
+        doom-modeline-major-mode-color-icon t
+        doom-modeline-buffer-state-icon t
+        doom-modeline-buffer-modification-icon t
+        doom-modeline-minor-modes t
+        doom-modeline-enable-word-count nil
+        doom-modeline-persp-name t
+        doom-modeline-display-default-persp-name nil
+        doom-modeline-lsp t
+        doom-modeline-env-version t)
+  (doom-modeline-mode t))
 
 ;;;; FONTS
 
@@ -142,11 +173,10 @@
 ;; set default font--first one found is selected
 (cond
  ((eq window-system nil) nil)
- ((font-existsp "IosevkaX")
-  (set-face-attribute 'default nil :height 141 :font "IosevkaX" :weight 'light)
-  (setq-default line-spacing 0.06))
  ((font-existsp "Iosevka")
-  (set-face-attribute 'default nil :height 141 :font "Iosevka" :weight 'light)
+  (progn
+    (set-face-attribute 'default nil :height 131 :font "Iosevka" :weight 'regular)
+    (set-face-attribute 'mode-line nil :height 121 :family "Iosevka" :weight 'regular))
   (setq-default line-spacing 0.06))
  ((font-existsp "PragmataPro")
   (set-face-attribute 'default nil :height 151 :font "PragmataPro")
@@ -167,11 +197,6 @@
   (set-face-attribute 'default nil :height 141 :font "Menlo"))
  ((font-existsp "Consolas")
   (set-face-attribute 'default nil :height 151 :font "Consolas")))
-
-
-;; Enable emoji, and stop the UI from freezing when trying to display them.
-(if (fboundp 'set-fontset-font)
-    (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
 
 (provide 'config-appearance)
