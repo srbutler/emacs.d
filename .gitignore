@@ -1,6 +1,7 @@
-
+elpy/
 pyim/
 transient/
+.cache/
 
 # LSP stuff
 eclipse.jdt.ls/
