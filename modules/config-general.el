@@ -74,27 +74,22 @@
 (blink-cursor-mode 0)          ;; get rid of the blinking cursor
 (column-number-mode t)         ;; put column number in mode-line
 (delete-selection-mode)        ;; Replace region when inserting text
-;; (display-time-mode)            ;; Enable time in the mode-line
 (fset 'yes-or-no-p 'y-or-n-p)  ;; shorten yes-or-no to y-or-n
+(global-hl-line-mode +1)    ;; highlight the current line
 (global-visual-line-mode 0)    ;; do not wrap long lines
 (line-number-mode t)           ;; put column number in mode-line
+(menu-bar-mode t)           ;; display menu-bar in window only
 (size-indication-mode t)
+(tool-bar-mode 0)           ;; Disable the tool bar
+(tooltip-mode 0)
+;; (display-time-mode)            ;; Enable time in the mode-line
 
 ;; garbage collect when Emacs loses focus
 ;; (add-hook 'focus-out-hook 'garbage-collect)
 
-(if window-system
-    (progn
-      (menu-bar-mode t)           ;; display menu-bar in window only
-      (global-hl-line-mode +1)    ;; highlight the current line
-      (tool-bar-mode 0)           ;; Disable the tool bar
-      (tooltip-mode 0))           ;; Disable the tooltips
-  (menu-bar-mode -1))
-
 ;; remove the redundant scroll-bars
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
-
 
 ;; setup `hippie-expand' expand functions
 (setq hippie-expand-try-functions-list
@@ -179,8 +174,12 @@
   :when (version<= "26.0.50" emacs-version)
   :demand t
   :bind ("C-c C-l" . display-line-numbers-mode)
-  :init (set-face-attribute 'line-number nil :height 0.9)
-  :config (global-display-line-numbers-mode t))
+  :init
+  (set-face-attribute 'line-number nil :height 0.9)
+  (set-face-attribute 'line-number-current-line nil :height 0.9)
+  :config
+  (setq display-line-numbers-grow-only t)
+  (global-display-line-numbers-mode t))
 
 
 ;; display certain documentation in the minibuffer
@@ -532,10 +531,9 @@
   :ensure t
   :commands lsp
   :config
-  (setq lsp-auto-configure    t
-        lsp-enable-xref       t
-        lsp-prefer-flymake    nil
-        lsp-signature-enabled t)
+  (setq lsp-auto-configure     t
+        lsp-enable-xref        t
+        lsp-diagnostic-package 'flycheck)
 
   (with-eval-after-load 'counsel-gtags
     (counsel-gtags-mode -1)))
@@ -580,6 +578,7 @@
   :bind (("C-c g b" . magit-branch)
          ("C-c g B" . magit-blame)
          ("C-c g d" . magit-diff)
+         ("C-c g f" . magit-fetch-all)
          ("C-c g l" . magit-log)
          ("C-c g m" . magit-merge)
          ("C-c g p" . magit-pull)
@@ -591,7 +590,7 @@
          ("C-c g v" . magit-revert)
          ("C-c g x" . magit-run))
   :config
-  (magit-auto-revert-mode t)
+  ;; (magit-auto-revert-mode t)
   (setq magit-completing-read-function 'ivy-completing-read
         magit-diff-refine-hunk t
         magit-remote-set-if-missing t))
@@ -759,6 +758,7 @@
      ("**" "**" "b"   markdown-mode)  ;; bolden
      ("*" "*"   "i"   markdown-mode)  ;; italics
      ("`" "`"   "c"   markdown-mode)  ;; code
+     ("~~" "~~" "s"   markdown-mode)  ;; strikethrough
      )))
 
 
