@@ -2,6 +2,7 @@ elpy/
 pyim/
 transient/
 .cache/
+.dap-breakpoints
 
 # LSP stuff
 eclipse.jdt.ls/

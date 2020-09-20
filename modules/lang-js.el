@@ -72,7 +72,8 @@
   :ensure t
   :after js2-mode
   :bind (:map js2-mode-map ("C-c C-l" . indium-eval-buffer))
-  :hook ((js2-mode . indium-interaction-mode)))
+  :hook ((js2-mode . indium-interaction-mode))
+  :config (setq indium-chrome-data-dir *savefile-dir*))
 
 
 (provide 'lang-js)

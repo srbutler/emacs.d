@@ -10,7 +10,27 @@
 
 ;; set larger frame size
 (add-to-list 'default-frame-alist '(height . 40))
-(add-to-list 'default-frame-alist '(width . 100))
+(add-to-list 'default-frame-alist '(width . 108))
+
+;; set dark theme on frame (if applicable)
+(defun srb/set-frame-dark-theme (&optional frame)
+  "Force the created FRAME to have a dark variant GTK theme."
+  (interactive)
+  (unless frame
+    (setq frame (selected-frame)))
+  (with-selected-frame frame
+    (let ((frame-name (if (framep frame)
+                          (cdr (assq 'name (frame-parameters frame)))
+                        (error "Function `srb/set-frame-dark-theme': Argument not a frame: `%s'" frame))))
+      (call-process-shell-command (concat "xprop -f _GTK_THEME_VARIANT 8u -set _GTK_THEME_VARIANT \"dark\" -name \""
+                                          frame-name
+                                          "\"")))))
+
+(if (string= window-system "x")
+    (progn
+      (srb/set-frame-dark-theme (selected-frame))
+      (add-hook 'after-make-frame-functions 'srb/set-frame-dark-theme)))
+
 
 ;;;; THEMES
 ;; only load themes when opened in a window system
@@ -173,14 +193,17 @@
 ;; set default font--first one found is selected
 (cond
  ((eq window-system nil) nil)
+ ((font-existsp "Iosevka Curly")
+  (set-face-attribute 'default nil :height 131 :font "Sarasa Mono SC" :weight 'regular)
+  (setq-default line-spacing 0.05))
  ((font-existsp "Iosevka")
-  (progn
-    (set-face-attribute 'default nil :height 131 :font "Iosevka" :weight 'regular)
-    (set-face-attribute 'mode-line nil :height 121 :family "Iosevka" :weight 'regular))
-  (setq-default line-spacing 0.06))
+  (set-face-attribute 'default nil :height 131 :font "Iosevka" :weight 'regular)
+  (setq-default line-spacing 0.05))
  ((font-existsp "PragmataPro")
-  (set-face-attribute 'default nil :height 151 :font "PragmataPro")
-  (setq-default line-spacing 0.06))
+  (set-face-attribute 'default nil :height 141 :font "PragmataPro")
+  (setq-default line-spacing 0.05))
+ ((font-existsp "Roboto Mono")
+  (set-face-attribute 'default nil :height 131 :font "Roboto Mono"))
  ((font-existsp "InconsolataGo")
   (set-face-attribute 'default nil :height 161 :font "InconsolataGo"))
  ((font-existsp "Inconsolata")
@@ -188,7 +211,7 @@
  ((font-existsp "Hasklig")
   (set-face-attribute 'default nil :height 141 :font "Hasklig"))
  ((font-existsp "Fira Code")
-  (set-face-attribute 'default nil :height 141 :font "Fira Code"))
+  (set-face-attribute 'default nil :height 131 :font "Fira Code"))
  ((font-existsp "Source Code Pro")
   (set-face-attribute 'default nil :height 141 :font "Source Code Pro"))
  ((font-existsp "Monaco")

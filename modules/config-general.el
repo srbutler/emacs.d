@@ -75,14 +75,14 @@
 (column-number-mode t)         ;; put column number in mode-line
 (delete-selection-mode)        ;; Replace region when inserting text
 (fset 'yes-or-no-p 'y-or-n-p)  ;; shorten yes-or-no to y-or-n
-(global-hl-line-mode +1)    ;; highlight the current line
+(global-hl-line-mode +1)       ;; highlight the current line
 (global-visual-line-mode 0)    ;; do not wrap long lines
 (line-number-mode t)           ;; put column number in mode-line
-(menu-bar-mode t)           ;; display menu-bar in window only
+(menu-bar-mode nil)            ;; display menu-bar in window only
 (size-indication-mode t)
-(tool-bar-mode 0)           ;; Disable the tool bar
+(tool-bar-mode 0)              ;; Disable the tool bar
 (tooltip-mode 0)
-;; (display-time-mode)            ;; Enable time in the mode-line
+(display-time-mode 0)          ;; Disable time in the mode-line
 
 ;; garbage collect when Emacs loses focus
 ;; (add-hook 'focus-out-hook 'garbage-collect)
@@ -143,6 +143,7 @@
          ("M-/"      . hippie-expand)      ;; try to complete a symbol
          ("<delete>" . delete-region)      ;; try and have a normal way to delete things
          ("C-c l"    . goto-line)          ;; go to line by number
+         ("C-x m"    . menu-bar-mode)      ;; toggle the menu bar
          ("M-o"      . other-window)       ;; jump to other window
          ("M-O"      . other-frame)        ;; jump to other frame
          ("M-c"      . capitalize-dwim)    ;; capitalize the word-at-point or region
@@ -242,7 +243,12 @@
   :init
   ;; install: npm i -g bash-language-server
   (when (executable-find "bash-language-server")
-    (add-hook 'shell-mode-hook #'lsp)))
+    (add-hook 'shell-mode-hook #'lsp))
+
+  (when (executable-find "shellcheck")
+    (with-eval-after-load 'flycheck
+      (setq flycheck-sh-shellcheck-executable "/usr/bin/shellcheck")))
+  )
 
 
 ;; meaningful names for buffers with the same name

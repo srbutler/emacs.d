@@ -2,21 +2,14 @@
 ;;
 ;;; Commentary:
 ;;
-;; this python and elpy setup taken from
-;; https://github.com/seanfarley/dot-files/blob/master/emacs-python.org
-;;
 ;;; Code:
 
 (defvar *python-use-lsp* t)
-;; install: pip install \"python-language-server[all]\"
 
 (use-package python
   :mode (("\\.py\\'" . python-mode)
          ("\\.wsgi$" . python-mode))
   :init
-  ;; (when *python-use-lsp*
-  ;;   (add-hook 'python-mode-hook 'lsp))
-
   (add-hook 'python-mode-hook (lambda ()
                                 (setq tab-width 4)
                                 (setq fill-column 88)))
@@ -47,7 +40,8 @@
   ;; set custom keywords for python-mode
   (font-lock-add-keywords
    'python-mode
-   '(("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
+   '(("[ \t]*\\<\\(from\\)\\>.*" 1 'font-lock-preprocessor-face)
+     ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
@@ -85,8 +79,9 @@
 ;; no config deterministic formatting
 (use-package blacken
   :ensure t
-  :hook (python-mode . blacken-mode)
-  :config (setq blacken-executable "$HOME/.local/bin/black"))
+  ;; :hook (python-mode . blacken-mode)
+  :bind (:map python-mode-map ("C-c C-f" . blacken-buffer))
+  :config (setq blacken-executable "/usr/bin/black"))
 
 
 ;; sort imports
@@ -170,8 +165,9 @@
          ("\\.pxi\\'"  . cython-mode))
   :config
   (font-lock-add-keywords
-   'python-mode
-   '(("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
+   'cython-mode
+   '(("[ \t]*\\<\\(from\\)\\>.*" 1 'font-lock-preprocessor-face)
+     ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
      ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
