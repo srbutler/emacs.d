@@ -65,7 +65,7 @@
             :exclusive 'no
             :company-docsig #'identity))))
 
-(define-derived-mode csc-mode prog-mode "CSC2"
+(define-derived-mode csc-mode prog-mode "comdb2-CSC2"
   "Major mode for editing Comdb2 CSC2 files."
 
   (setq font-lock-defaults '(csc-font-lock-keywords))

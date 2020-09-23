@@ -51,7 +51,7 @@
         ("gnu"          . "https://elpa.gnu.org/packages/")
         ("melpa"        . "https://melpa.org/packages/")
         ("melpa-stable" . "https://stable.melpa.org/packages/")))
-(package-initialize)
+;; (package-initialize)
 
 ;; set up use-package
 (unless (package-installed-p 'use-package)

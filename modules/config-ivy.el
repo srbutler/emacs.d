@@ -131,6 +131,15 @@
   :bind ("C-c y" . ivy-yasnippet))
 
 
+;; workspace symbols for LSP
+(use-package lsp-ivy
+  :ensure t
+  :after (ivy lsp)
+  :commands lsp-ivy-workspace-symbol
+  :bind (:map lsp-ui-mode-map
+              ("C-c C-l w" . lsp-ivy-workspace-symbol)))
+
+
 ;; access to GNU Global tags
 ;; install: brew install global
 (use-package counsel-gtags

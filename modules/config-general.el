@@ -226,8 +226,7 @@
 (use-package saveplace
   :init
   (setq save-place-file (expand-file-name "saveplace" *savefile-dir*))
-  ;; activate it for all buffers
-  (setq-default save-place t))
+  (save-place-mode 1))
 
 
 ;; savehist keeps track of some history
@@ -290,9 +289,6 @@
 (use-package ace-window
   :ensure t)
 
-;; jump windows quickly, linked to key-chords below
-(use-package ace-window
-  :ensure t)
 
 ;; set up proper wrapping for text modes
 (use-package adaptive-wrap
@@ -588,6 +584,7 @@
   :bind (("C-c g b" . magit-branch)
          ("C-c g B" . magit-blame)
          ("C-c g d" . magit-diff)
+         ("C-c g f" . magit-fetch-all)
          ("C-c g l" . magit-log)
          ("C-c g m" . magit-merge)
          ("C-c g p" . magit-pull)
