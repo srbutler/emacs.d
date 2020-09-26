@@ -6,7 +6,7 @@
 
 
 (use-package org
-  :ensure org-plus-contrib
+  :straight org-plus-contrib
   :bind (("C-c o l" . org-store-link)
          ("C-c o a" . org-agenda)
          ("C-c o b" . org-iswitchb)
@@ -48,7 +48,7 @@
 
 (use-package org-ref
   :when (file-exists-p "~/Dropbox/Bib/references.bib")
-  :ensure t
+  :straight t
   :after org
   :init
   (setq reftex-default-bibliography '("~/Dropbox/Bib/references.bib"))
@@ -59,7 +59,7 @@
 
 ;; Fancy bullet rendering.
 (use-package org-bullets
-  :ensure t
+  :straight t
   :defer t
   :hook (org-mode . org-bullets-mode))
 

@@ -33,21 +33,21 @@
 
 
 (use-package intero
-  :ensure t
+  :straight t
   :diminish (intero-mode . "intero")
   :hook (haskell-mode . intero-mode))
 
 
 (use-package hindent
   :when (executable-find "hindent")
-  :ensure t
+  :straight t
   :bind (:map haskell-mode-map ("C-c i" . hindent-reformat-buffer))
   :hook haskell-mode)
 
 
 (use-package company-ghci
   :disabled
-  :ensure t
+  :straight t
   :after haskell
   :config
   (push

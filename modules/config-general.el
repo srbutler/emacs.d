@@ -247,13 +247,11 @@
 
   (when (executable-find "shellcheck")
     (with-eval-after-load 'flycheck
-      (setq flycheck-sh-shellcheck-executable "/usr/bin/shellcheck")))
-  )
+      (setq flycheck-sh-shellcheck-executable "/usr/bin/shellcheck"))))
 
 
 ;; meaningful names for buffers with the same name
 (use-package uniquify
-  :ensure nil
   :init
   (setq uniquify-buffer-name-style 'forward
         uniquify-separator "/"
@@ -285,26 +283,26 @@
 
 ;; jump windows quickly, linked to key-chords below
 (use-package ace-window
-  :ensure t)
+  :straight t)
 
 ;; jump windows quickly, linked to key-chords below
 (use-package ace-window
-  :ensure t)
+  :straight t)
 
 ;; set up proper wrapping for text modes
 (use-package adaptive-wrap
-  :ensure t
+  :straight t
   :hook (visual-line-mode . adaptive-wrap-prefix-mode))
 
 
 ;; linked to key-chords below
 (use-package avy
-  :ensure t)
+  :straight t)
 
 
 ;; autocompletion with company
 (use-package company
-  :ensure t
+  :straight t
   :diminish (company-mode . "comp")
   :custom
   (company-idle-delay 0.5)
@@ -325,7 +323,7 @@
 
 ;; link lsp output with company
 (use-package company-lsp
-  :ensure t
+  :straight t
   :after (lsp-mode company)
   :config
   (push 'company-lsp company-backends)
@@ -338,7 +336,7 @@
 
 ;; rank completions based on usage
 (use-package company-statistics
-  :ensure t
+  :straight t
   :after company
   :custom
   (company-statistics-file
@@ -348,7 +346,7 @@
 
 ;; set up some of crux's convenience functions
 (use-package crux
-  :ensure t
+  :straight t
   :demand
   :bind (("C-x 4 t" . crux-transpose-windows)
          ("C-c I"   . crux-find-user-init-file)
@@ -374,7 +372,7 @@
 
 
 (use-package csv-mode
-  :ensure t
+  :straight t
   :mode (("\\.csv\\'" . csv-mode)
          ("\\.tsv\\'" . csv-mode)))
 
@@ -382,7 +380,7 @@
 ;; set up dash integration
 (use-package dash-at-point
   :when (string-equal system-type "darwin")
-  :ensure t
+  :straight t
   :bind ("C-c d" . dash-at-point-with-docset)
   :config
   (dolist
@@ -395,7 +393,7 @@
 
 ;; diminish keeps the modeline tidy
 (use-package diminish
-  :ensure t)
+  :straight t)
 
 
 ;; for some reason this has to be done manually
@@ -404,34 +402,34 @@
 
 ;; manage docker images
 (use-package docker
-  :ensure t)
+  :straight t)
 
 
 (use-package docker-tramp
-  :ensure t)
+  :straight t)
 
 
 (use-package dockerfile-mode
-  :ensure t
+  :straight t
   :mode ("Dockerfile\\'" . dockerfile-mode))
 
 
 ;; get the PATH variable working correctly
 (use-package exec-path-from-shell
   :when (memq window-system '(mac ns x))
-  :ensure t
+  :straight t
   :config (exec-path-from-shell-initialize))
 
 
 ;; expands the selection region progressively
 (use-package expand-region
-  :ensure t
+  :straight t
   :bind ("C-=" . er/expand-region))
 
 
 ;; syntax-checking
 (use-package flycheck
-  :ensure t
+  :straight t
   :diminish (flycheck-mode . "flyc")
   :config
   (global-flycheck-mode)
@@ -449,7 +447,7 @@
 (use-package git-gutter-fringe
   ;; :when window-system
   :diminish
-  :ensure t
+  :straight t
   :init (global-git-gutter-mode t)
   :config
   ;; shrink values slightly
@@ -460,30 +458,30 @@
 
 ;; navigate through git commit history
 (use-package git-timemachine
-  :ensure t
+  :straight t
   :defer t)
 
 
 ;; major mode for .gitconfig files
 (use-package gitattributes-mode
-  :ensure t
+  :straight t
   :defer t)
 
 
 ;; major mode for .gitconfig files
 (use-package gitconfig-mode
-  :ensure t
+  :straight t
   :defer t)
 
 
 ;; major mode for .gitignore files
 (use-package gitignore-mode
-  :ensure t
+  :straight t
   :defer t)
 
 
 (use-package gnuplot-mode
-  :ensure t
+  :straight t
   :mode (("\\.gpi\\'" . gnuplot-mode)
          ("\\.plt\\'" . gnuplot-mode)
          ("\\.gp\\'"  . gnuplot-mode)))
@@ -491,13 +489,13 @@
 
 ;; for Jenkinsfiles
 (use-package groovy-mode
-  :ensure t
+  :straight t
   :mode ("Jenkinsfile" . groovy-mode))
 
 
 ;; adds guides to show indentation level
 (use-package highlight-indent-guides
-  :ensure t
+  :straight t
   :diminish
   :bind (:map prog-mode-map ("C-c C-i" . highlight-indent-guides-mode))
   :config (setq highlight-indent-guides-method 'character))
@@ -505,23 +503,23 @@
 
 ;; highlight TODO/FIXME/etc. comments
 (use-package hl-todo
-  :ensure t
+  :straight t
   :config (global-hl-todo-mode))
 
 
 ;; make available for other packages for now
 (use-package hydra
-  :ensure t)
+  :straight t)
 
 
 ;; for ini config files
 (use-package ini-mode
-  :ensure t)
+  :straight t)
 
 
 ;; define a bunch of quick key combos for basic actions
 (use-package key-chord
-  :ensure t
+  :straight t
   :after (avy ace-window)
   :init (key-chord-mode +1)
   :config
@@ -534,7 +532,7 @@
 
 ;; make language server protocol services available
 (use-package lsp-mode
-  :ensure t
+  :straight t
   :commands lsp
   :config
   (setq lsp-auto-configure     t
@@ -547,7 +545,7 @@
 
 ;; flycheck support and code previews/lenses
 (use-package lsp-ui
-  :ensure t
+  :straight t
   :after lsp-mode
   :commands lsp-ui-mode
   :hook ((lsp-mode . lsp-ui-mode))
@@ -579,7 +577,7 @@
 
 ;; set up magit for git
 (use-package magit
-  :ensure t
+  :straight t
   :defer t
   :bind (("C-c g b" . magit-branch)
          ("C-c g B" . magit-blame)
@@ -604,18 +602,18 @@
 
 ;; display TODOs in status buffer
 (use-package magit-todos
-  :ensure t
+  :straight t
   :hook (magit-mode . magit-todos-mode))
 
 
 ;; meson build scripts
 (use-package meson-mode
-  :ensure t)
+  :straight t)
 
 
 ;; edit with multiple cursors
 (use-package multiple-cursors
-  :ensure t
+  :straight t
   :config (setq mc/list-file (expand-file-name "mc-lists.el" *savefile-dir*))
   :bind
   (("C-c m t" . mc/mark-all-like-this)
@@ -631,14 +629,14 @@
 
 ;; provides a simple centered mode for prose writing
 (use-package olivetti
-  :ensure t
+  :straight t
   :config (setq olivetti-body-width 88))
 
 
 ;; pandoc
 (use-package pandoc-mode
   :when (executable-find "pandoc")
-  :ensure t
+  :straight t
   :diminish (pandoc-mode . "pandoc")
   :hook (markdown-mode gfm-mode org-mode TeX-mode)
   :config (pandoc-load-default-settings))
@@ -646,20 +644,20 @@
 
 ;; minor-mode and utility for regex conversion (perl <--> elisp)
 (use-package pcre2el
-  :ensure t
+  :straight t
   :diminish (pcre-mode . "pcre")
   :init (pcre-mode +1))
 
 
 ;; workspace management
 (use-package perspective
-  :ensure t
+  :straight t
   :config (persp-mode))
 
 
 ;; project management and fast-switching
 (use-package projectile
-  :ensure t
+  :straight t
   :diminish projectile-mode
   :config
   (projectile-mode t)
@@ -671,20 +669,20 @@
 
 ;; displays colors for color hex values
 (use-package rainbow-mode
-  :ensure t
+  :straight t
   :hook (emacs-lisp-mode css-mode conf-colon-mode conf-space-mode sh-mode)
   :diminish rainbow-mode)
 
 
 ;; make parentheses colorful
 (use-package rainbow-delimiters-mode
-  :ensure rainbow-delimiters
+  :straight rainbow-delimiters
   :hook (prog-mode comint-mode))
 
 
 ;; get smartparens in programming modes
 (use-package smartparens
-  :ensure t
+  :straight t
   :bind (("M-s" . sp-unwrap-sexp))
   :hook ((prog-mode comint-mode) . smartparens-strict-mode)
   :init
@@ -701,13 +699,13 @@
 
 ;; better line-by-line scrolling, especially in terminals
 (use-package smooth-scrolling
-  :ensure t
+  :straight t
   :config (smooth-scrolling-mode 1))
 
 
 ;; visual undo history
 (use-package undo-tree
-  :ensure t
+  :straight t
   :diminish undo-tree-mode
   :config
   (setq undo-tree-history-directory-alist `((".*" . ,*savefile-dir*))
@@ -718,7 +716,7 @@
 
 ;; unfill commandspp
 (use-package unfill
-  :ensure t
+  :straight t
   :commands (unfill-region unfill-paragraph unfill-toggle)
   :bind (("C-M-Q" . unfill-toggle)
          ("M-Q" . unfill-paragraph))
@@ -731,14 +729,14 @@
 
 ;; cause I forget things
 (use-package which-key
-  :ensure t
+  :straight t
   :diminish which-key-mode
   :init (which-key-mode 1))
 
 
 ;; define a bunch of wrapping operations in text modes
 (use-package wrap-region
-  :ensure t
+  :straight t
   :hook ((org-mode markdown-mode text-mode) . wrap-region-mode)
   :diminish (wrap-region-mode . "wrap")
   :config
@@ -770,13 +768,13 @@
 
 ;; unobtrusively trim trailing whitespace
 (use-package ws-butler
-  :ensure t
+  :straight t
   :diminish ws-butler-mode
   :config (ws-butler-global-mode))
 
 
 (use-package yaml-mode
-  :ensure t
+  :straight t
   :mode ("\\.ya?ml\\'" . yaml-mode)
   :hook ((yaml-mode . subword-mode)
          (yaml-mode . highlight-indent-guides-mode)))
@@ -784,7 +782,7 @@
 
 ;; enable YASnippet globally
 (use-package yasnippet
-  :ensure t
+  :straight t
   :init (yas-global-mode)
   :bind (("C-c C-e" . yas-expand))
   :config
@@ -796,7 +794,7 @@
 
 ;; a solid collection of snippets for many modes
 (use-package yasnippet-snippets
-  :ensure t)
+  :straight t)
 
 
 (provide 'config-general)

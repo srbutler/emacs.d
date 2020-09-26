@@ -37,12 +37,12 @@
 
 (use-package material-theme
   :disabled t
-  :ensure t
+  :straight t
   :init (load-theme 'material t))
 
 (use-package solarized-theme
   :disabled t
-  :ensure t
+  :straight t
   :init
   (progn
     ;; these variables need to be preset
@@ -93,12 +93,12 @@
 
 (use-package zenburn-theme
   :disabled t
-  :ensure t
+  :straight t
   :init (load-theme 'zenburn t))
 
 (use-package nord-theme
   :disabled t
-  :ensure t
+  :straight t
   :init (load-theme 'nord t)
   :config
   (with-eval-after-load 'persp-mode
@@ -106,7 +106,7 @@
 
 (use-package modus-operandi-theme
   :disabled t
-  :ensure t
+  :straight t
   :config
   (setq modus-operandi-theme-visible-fringes t
         modus-operandi-theme-distinct-org-blocks t
@@ -114,7 +114,7 @@
 
 (use-package modus-vivendi-theme
   :disabled t
-  :ensure t
+  :straight t
   :config
   (setq modus-vivendi-theme-visible-fringes t
         modus-vivendi-theme-distinct-org-blocks t
@@ -122,7 +122,7 @@
 
 
 (use-package base16-theme
-  :ensure t
+  :straight t
   :config
   (set-face-foreground 'persp-selected-face "#81a2be")
   (setq base16-distinct-fringe-background t
@@ -137,7 +137,7 @@
 ;; needs to be loaded after the theme
 (use-package smart-mode-line
   :disabled t
-  :ensure t
+  :straight t
   :demand t
   :commands sml/apply-theme
   :init
@@ -152,13 +152,13 @@
 
 ;; create a menu for minor-modes
 (use-package minions
-  :ensure t
+  :straight t
   :config (minions-mode 1))
 
 
 ;; a fancy modeline
 (use-package doom-modeline
-  :ensure t
+  :straight t
   :after minions
   :demand t
   :config

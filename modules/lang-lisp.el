@@ -6,7 +6,7 @@
 
 ;; common lisp
 (use-package lisp-mode
-  :ensure nil
+  :straight nil
   :mode (("\\.cl\\'" . lisp-mode)
          ("\\.lisp\\'" . lisp-mode)
          ("\\.sbclrc\\'" . lisp-mode)))
@@ -14,7 +14,7 @@
 
 ;; SLIME replacement
 (use-package sly
-  :ensure t
+  :straight t
   :bind (:map lisp-mode-map ("C-c C-z" . sly))
   :hook ((sly-mrepl-mode . rainbow-delimiters-mode)
          (sly-mrepl-mode . smartparens-strict-mode))
@@ -26,23 +26,23 @@
 
 ;; adds quickload command to sly
 (use-package sly-quicklisp
-  :ensure t)
+  :straight t)
 
 
 ;; adds macro expansion to sly
 (use-package sly-macrostep
-  :ensure t)
+  :straight t)
 
 
 (use-package slime-company
   :disabled t
-  :ensure t)
+  :straight t)
 
 
 ;; common-lisp REPL
 (use-package slime
   :disabled t
-  :ensure t
+  :straight t
   :bind (:map slime-mode-map ("C-c C-s" . slime-selector))
   :hook ((slime-repl-mode . rainbow-delimiters-mode)
          (slime-repl-mode . smartparens-strict-mode))
@@ -76,7 +76,7 @@
 
 ;; REPL and basic scheme hooks
 (use-package geiser
-  :ensure t
+  :straight t
   :defer t
   :commands geiser-default-implementation
   :hook ((scheme-mode . geiser-mode)

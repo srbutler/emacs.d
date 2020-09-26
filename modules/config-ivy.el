@@ -6,14 +6,14 @@
 
 ;; adds usage ordering to counsel-M-x
 (use-package smex
-  :ensure t
+  :straight t
   :config (setq smex-save-file
                 (expand-file-name ".smex-items" *savefile-dir*)))
 
 
 ;; testing out ivy/counsel as replacement for helm
 (use-package counsel
-  :ensure t
+  :straight t
   :after smex
   :demand
   :diminish
@@ -56,11 +56,11 @@
 
 ;; provides sorting for ivy
 (use-package flx
-  :ensure t)
+  :straight t)
 
 
 (use-package ivy
-  :ensure t
+  :straight t
   :demand
   :after flx
   :diminish
@@ -86,7 +86,7 @@
 
 ;; a better version of ivy-switch-buffer
 (use-package ivy-rich
-  :ensure t
+  :straight t
   :after ivy
   :custom
   (ivy-virtual-abbreviate 'full)
@@ -97,20 +97,20 @@
 
 ;; hydra presents menus for ivy commands.
 (use-package ivy-hydra
-  :ensure t
+  :straight t
   :after ivy)
 
 
 ;; use ivy for xref candidates
 (use-package ivy-xref
-  :ensure t
+  :straight t
   :init (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
 
 ;; project browsing
 (use-package counsel-projectile
   :after (counsel projectile)
-  :ensure t
+  :straight t
   :bind (("C-c p p" . counsel-projectile-switch-project)
          ("C-c p f" . counsel-projectile-find-file)
          ("C-c p g" . counsel-projectile-find-file-dwim)
@@ -127,7 +127,7 @@
 
 ;; ivy interface for yasnippet
 (use-package ivy-yasnippet
-  :ensure t
+  :straight t
   :after (ivy yasnippet)
   :bind ("C-c y" . ivy-yasnippet))
 
@@ -138,7 +138,7 @@
   :disabled
   :when (or (executable-find "global")
             (executable-find "gtags"))
-  :ensure t
+  :straight t
   :after counsel
   :diminish (counsel-gtags-mode . "gtags")
   :init (add-hook 'prog-mode-hook 'counsel-gtags-mode)

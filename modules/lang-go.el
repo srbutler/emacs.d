@@ -13,7 +13,7 @@
 ;; install: go get -u github.com/sourcegraph/go-langserver
 
 (use-package go-mode
-  :ensure t
+  :straight t
   :bind (:map go-mode-map
               ("C-h f" . godoc-at-point)
               ("C-c C-f" . gofmt))
@@ -32,7 +32,7 @@
 
 
 (use-package go-eldoc
-  :ensure t
+  :straight t
   :defer t
   :hook (go-mode . go-eldoc-setup))
 
@@ -54,24 +54,24 @@
 
 ;; install: go get -u github.com/derekparker/delve/cmd/dlv
 (use-package go-dlv
-  :ensure t)
+  :straight t)
 
 
 ;; install: go get -u github.com/josharian/impl
 (use-package go-impl
-  :ensure t
+  :straight t
   :bind (:map go-mode-map ("C-c C-r i" . go-impl)))
 
 
 ;; install: go get -u golang.org/x/tools/cmd/gorename
 (use-package go-rename
-  :ensure t
+  :straight t
   :bind (:map go-mode-map ("C-c C-r r" . go-rename)))
 
 
 ;; install: go get -u github.com/fatih/gomodifytags
 (use-package go-tag
-  :ensure t
+  :straight t
   :bind (:map go-mode-map ("C-c C-r t" . go-tag-add))
   :config (setq go-tag-args (list "-transform" "camelcase")))
 

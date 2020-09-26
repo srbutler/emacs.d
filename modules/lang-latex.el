@@ -6,7 +6,7 @@
 
 ;; Basic settings
 (use-package tex
-  :ensure auctex
+  :straight auctex
   :mode ("\\.tex\\'" . LaTeX-mode)
   :hook ((LaTeX-mode . LaTeX-preview-setup)
          (LaTeX-mode . flyspell-mode))
@@ -35,12 +35,12 @@
 
 
 (use-package auctex-latexmk
-  :ensure t
+  :straight t
   :hook (LaTeX-mode . auctex-latexmk-setup))
 
 
 (use-package company-auctex
-  :ensure t
+  :straight t
   :hook (LaTeX-mode . company-auctex-init))
 
 

@@ -5,14 +5,14 @@
 ;;; Code:
 
 (use-package clojure-mode
-  :ensure t
+  :straight t
   :mode ("\\.boot\\'" . clojure-mode))
 
 
 ;; CIDER setup
 (use-package cider
   :defer t
-  :ensure t
+  :straight t
   :commands (cider cider-connect cider-jack-in)
   :bind (:map clojure-mode-map ("C-c C-z" . cider-jack-in))
   :hook ((cider-repl-mode . superword-mode)
@@ -33,14 +33,14 @@
 
 ;; linter setup with flycheck
 (use-package flycheck-clojure
-  :ensure t
+  :straight t
   :hook (flycheck-mode . flycheck-clojure-setup))
 
 
 ;; refactoring with clj-refactor
 ;; refactoring help with C-c r h h
 (use-package clj-refactor
-  :ensure t
+  :straight t
   :hook clojure-mode
   :config (cljr-add-keybindings-with-prefix "C-c C-r")
   :diminish clj-refactor-mode)

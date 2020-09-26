@@ -28,7 +28,7 @@
 
 ;; slightly better font-lock for c++
 (use-package modern-cpp-font-lock
-  :ensure t
+  :straight t
   :diminish
   :defer t
   :hook ((c++-mode . modern-c++-font-lock-mode)))
@@ -38,7 +38,7 @@
 ;; install with `brew tap twlz0ne/homebrew-ccls && brew install ccls'
 (use-package ccls
   :when *cc-use-lsp*
-  :ensure t
+  :straight t
   :hook ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp)))
   :config
   (let ((ccls (executable-find "ccls")))
@@ -54,7 +54,7 @@
 
 
 (use-package flycheck-clang-analyzer
-  :ensure t
+  :straight t
   :after flycheck
   :commands flycheck-clang-analyzer-executable
   :config
@@ -71,7 +71,7 @@
 ;; install: pip3 install cstyle
 (use-package flycheck-cstyle
   :disabled t
-  :ensure t
+  :straight t
   :after lsp-ui
   :config
   (progn
@@ -81,14 +81,14 @@
 
 
 (use-package google-c-style
-  :ensure t
+  :straight t
   :defer t
   :hook ((c-common-mode-hook . google-set-c-style)
          (c-common-mode-hook . google-make-newline-indent)))
 
 
 (use-package clang-format
-  :ensure t
+  :straight t
   :after cc-mode
   :bind (:map c-mode-base-map ("C-c C-f" . clang-format-buffer))
   :config (setq clang-format-style "llvm"))
@@ -97,7 +97,7 @@
 (use-package irony
   :disabled t
   ;; :unless *cc-use-lsp*
-  :ensure t
+  :straight t
   :defer t
   :diminish "irony"
   :hook (c-mode c++-mode objc-mode)
@@ -113,7 +113,7 @@
 (use-package company-irony
   :unless *cc-use-lsp*
   :disabled t
-  :ensure t
+  :straight t
   :hook (irony-mode . company-irony-setup-begin-commands)
   :config
   (eval-after-load 'company
@@ -126,7 +126,7 @@
 (use-package company-irony-c-headers
   :unless *cc-use-lsp*
   :disabled t
-  :ensure t
+  :straight t
   :defer t
   :init
   (eval-after-load 'company
@@ -136,14 +136,14 @@
 (use-package irony-eldoc
   :unless *cc-use-lsp*
   :disabled t
-  :ensure t
+  :straight t
   :defer t
   :hook (irony-mode . irony-eldoc))
 
 
 (use-package cmake-ide
   :disabled t
-  :ensure t
+  :straight t
   :defer t
   :hook ((c-mode c++-mode) . cmake-ide-setup))
 

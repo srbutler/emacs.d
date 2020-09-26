@@ -8,7 +8,7 @@
 ;; install: rustup component add rls-preview rust-analysis rust-src
 
 (use-package rust-mode
-  :ensure t
+  :straight t
   :mode ("\\.rs\\'" . rust-mode)
   :bind (:map rust-mode-map ("C-c C-f" . rust-format-buffer))
   :init (when *rust-use-lsp* (add-hook 'rust-mode-hook 'lsp)))
@@ -16,7 +16,7 @@
 
 (use-package racer
   :unless *rust-use-lsp*
-  :ensure t
+  :straight t
   :bind (:map rust-mode-map
               ("M-." . racer-find-definition)
               ("M-," . pop-tag-mark)
@@ -29,13 +29,13 @@
 
 
 (use-package flycheck-rust
-  :ensure t
+  :straight t
   :defer t
   :hook (flycheck-mode . flycheck-rust-setup))
 
 
 (use-package cargo
-  :ensure t
+  :straight t
   :defer t
   :diminish (cargo-minor-mode . "cargo")
   :hook (rust-mode . cargo-minor-mode))

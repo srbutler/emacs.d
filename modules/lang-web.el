@@ -9,7 +9,7 @@
 ;; install: npm install -g vscode-html-languageserver-bin
 
 (use-package web-mode
-  :ensure t
+  :straight t
   :mode (("\\.html?\\'" . web-mode)
          ("\\.phtml\\'" . web-mode)
          ("\\.tpl\\.php\\'" . web-mode)
@@ -33,7 +33,7 @@
 
 
 (use-package nxml-mode
-  :ensure nil
+  :straight nil
   :mode (("\\.xml\\'" . nxml-mode)
          ("\\.pom\\'" . nxml-mode)
          ("\\.xsd\\'" . nxml-mode)
@@ -51,12 +51,12 @@
 
 
 (use-package json-mode
-  :ensure t
+  :straight t
   :mode ("\\.json\\'" . json-mode))
 
 
 (use-package css-mode
-  :ensure nil
+  :straight nil
   :mode ("\\.rasi\\'" . css-mode)
   :init
   (setq css-indent-offset 2)
@@ -65,7 +65,7 @@
 
 ;; SCSS mode
 (use-package scss-mode
-  :ensure t
+  :straight t
   :defer t
   :init (when *web-use-lsp* (add-hook 'css-mode-hook 'lsp)))
 
@@ -73,13 +73,13 @@
 ;; New `less-css-mode' in Emacs 26
 (use-package less-css-mode
   :unless (fboundp 'less-css-mode)
-  :ensure t
+  :straight t
   :init (when *web-use-lsp* (add-hook 'less-css-mode-hook 'lsp)))
 
 
 ;; CSS eldoc
 (use-package css-eldoc
-  :ensure t
+  :straight t
   :commands turn-on-css-eldoc
   :hook ((css-mode scss-mode less-css-mode) . turn-on-css-eldoc))
 
@@ -87,7 +87,7 @@
 
 ;; emmet mode for efficient xml/html entry
 (use-package emmet-mode
-  :ensure t
+  :straight t
   :diminish (emmet-mode . "emmet")
   :commands emmet-mode
   :hook (sgml-mode css-mode html-mode web-mode nxml-mode)
@@ -98,7 +98,7 @@
 
 ;; formatting/beatufication for HTML/CSS/JS
 (use-package web-beautify
-  :ensure t
+  :straight t
   :init
   (with-eval-after-load 'json-mode
     (bind-key "C-c C-f" #'web-beautify-js json-mode-map))

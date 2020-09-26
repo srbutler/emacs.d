@@ -9,7 +9,7 @@
 
 ;; Ocaml major mode
 (use-package tuareg
-  :ensure t
+  :straight t
   :mode (("\\.ml[ily]?$"  . tuareg-mode)
          ("\\.topml$"     . tuareg-mode)
          ("\\.ocamlinit$" . tuareg-mode))
@@ -32,7 +32,7 @@
 (use-package merlin
   :unless *ocaml-use-lsp*
   :after company
-  :ensure t
+  :straight t
   :defer t
   :after tuareg company
   :defines company-backends
@@ -46,7 +46,7 @@
 
 ;; error checking
 (use-package flycheck-ocaml
-  :ensure t
+  :straight t
   :defer t
   :after merlin
   :init
@@ -59,7 +59,7 @@
 
 ;; REPL control
 (use-package utop
-  :ensure t
+  :straight t
   :defer t
   :hook (tuareg-mode reason-mode)
   :config
@@ -69,14 +69,14 @@
 
 ;; indenting/formatting
 (use-package ocp-indent
-  :ensure t
+  :straight t
   :bind (:map tuareg-mode-map ("C-c C-f" . ocp-indent-buffer))
   :hook (tuareg-mode . ocp-setup-indent))
 
 
 (use-package merlin-eldoc
   :after merlin
-  :ensure t
+  :straight t
   :custom
   (eldoc-echo-area-use-multiline-p t) ; use multiple lines when necessary
   (merlin-eldoc-max-lines 8)          ; but not more than 8
@@ -91,7 +91,7 @@
 
 ;; for using Reason's syntax instead of OCaml's
 (use-package reason-mode
-  :ensure t
+  :straight t
   :mode ("\\.rei?$" . reason-mode)
   :init (when *ocaml-use-lsp* (add-hook 'reason-mode-hook 'lsp))
   :config

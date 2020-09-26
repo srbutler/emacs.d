@@ -18,7 +18,7 @@
 
 
 (use-package emacs-lisp-mode
-  :ensure nil
+  :straight nil
   :mode (("\\.el\\'" . emacs-lisp-mode)
          ("Cask\\'" . emacs-lisp-mode))
   :bind (:map emacs-lisp-mode-map
@@ -45,7 +45,7 @@
 
 
 (use-package ielm
-  :ensure nil
+  :straight nil
   :hook ((ielm-mode . rainbow-delimiters-mode)
          (ielm-mode . smartparens-strict-mode)))
 

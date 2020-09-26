@@ -13,7 +13,7 @@
 
 ;; setup PYIM Chinese input method
 (use-package pyim
-  :ensure t
+  :straight t
   :demand t
   :diminish (pyim-isearch-mode . "pyim")
   :bind (("C-x p" . pyim-convert-string-at-point)
@@ -38,7 +38,7 @@
 
 
 (use-package pyim-basedict
-  :ensure t
+  :straight t
   :after pyim
   :config (pyim-basedict-enable))
 

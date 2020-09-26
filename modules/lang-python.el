@@ -51,7 +51,7 @@
 
 ;; major mode for requirements.txt
 (use-package pip-requirements
-  :ensure t
+  :straight t
   :config
   ;; if a local pip
   (if (boundp '*pip-repo-url*)
@@ -60,7 +60,7 @@
 
 (use-package anaconda-mode
   :disabled t
-  :ensure t
+  :straight t
   :hook ((python-mode . anaconda-mode)
          (python-mode . anaconda-eldoc-mode))
   :init
@@ -70,7 +70,7 @@
 
 (use-package company-anaconda
   :disabled t
-  :ensure t
+  :straight t
   :config
   (eval-after-load 'company
     '(add-to-list 'company-backends '(company-anaconda :with company-capf))))
@@ -78,7 +78,7 @@
 
 ;; no config deterministic formatting
 (use-package blacken
-  :ensure t
+  :straight t
   ;; :hook (python-mode . blacken-mode)
   :bind (:map python-mode-map ("C-c C-f" . blacken-buffer))
   :config (setq blacken-executable "/usr/bin/black"))
@@ -86,19 +86,19 @@
 
 ;; sort imports
 (use-package py-isort
-  :ensure t)
+  :straight t)
 
 
 ;; pytest intgration
 (use-package python-pytest
-  :ensure t
+  :straight t
   :after projectile
   :bind ("C-c C-t" . python-pytest-popup))
 
 
 (use-package lsp-python-ms
   :if *python-use-lsp*
-  :ensure t
+  :straight t
   :hook (python-mode . (lambda ()
                          (require 'lsp-python-ms)
                          (lsp))))
@@ -108,7 +108,7 @@
 (use-package elpy
   :disabled t
   :unless *python-use-lsp*
-  :ensure t
+  :straight t
   :after python
   :commands elpy-enable
   :bind (:map elpy-mode-map
@@ -142,7 +142,7 @@
 (use-package pyenv-mode
   :disabled t
   :when (executable-find "pyenv")
-  :ensure t
+  :straight t
   :hook python-mode
   :config
   (define-key pyenv-mode-map (kbd "C-c C-s") nil)
@@ -158,7 +158,7 @@
 
 ;; cython-mode configuration
 (use-package cython-mode
-  :ensure t
+  :straight t
   :mode (("\\.pyx\\'"  . cython-mode)
          ("\\.spyx\\'" . cython-mode)
          ("\\.pxd\\'"  . cython-mode)

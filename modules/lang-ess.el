@@ -5,7 +5,7 @@
 ;;; Code:
 
 (use-package ess-site
-  :ensure ess
+  :straight ess
   :commands R
   :mode ("\\.[Rr]$" . R-mode)
   :bind (:map ess-mode-map

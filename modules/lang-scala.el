@@ -5,8 +5,7 @@
 ;;; Code:
 
 (use-package scala-mode
-  :ensure t
-  :pin melpa
+  :straight t
   :config
   ;; better newline handling in comments
   (defun scala-mode-newline-comments ()
@@ -22,8 +21,7 @@
 
 
 (use-package sbt-mode
-  :ensure t
-  :pin melpa)
+  :straight t)
 
 
 (provide 'lang-scala)

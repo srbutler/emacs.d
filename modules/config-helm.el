@@ -6,7 +6,7 @@
 
 ;; setup helm for as many things as possible
 (use-package helm
-  :ensure helm
+  :straight helm
   :diminish helm-mode
   :init
   (require 'helm-config)
@@ -67,7 +67,7 @@
 
 
 (use-package helm-projectile
-  :ensure t
+  :straight t
   :after helm projectile
   :init
   :custom
@@ -79,20 +79,20 @@
 ;; use ag for searching in helm
 (use-package helm-ag
   :disabled t
-  :ensure t
+  :straight t
   :after helm
   :commands helm-do-ag
   :bind (("C-c h g" . helm-do-ag)))
 
 
 (use-package helm-rg
-  :ensure t
+  :straight t
   :after helm
   :bind (("C-c k" . helm-rg)))
 
 
 (use-package swiper-helm
-  :ensure t
+  :straight t
   :after helm
   :bind (("C-s" . swiper-helm)
          ("C-r" . swiper-helm)))
@@ -100,7 +100,7 @@
 
 ;; use GNU global
 (use-package helm-gtags
-  :ensure t
+  :straight t
   :after helm
   :diminish (helm-gtags-mode . "gtags")
   :bind (:map helm-gtags-mode-map

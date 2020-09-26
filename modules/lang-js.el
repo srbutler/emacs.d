@@ -11,7 +11,7 @@
 ;; from https://github.com/seagle0128/.emacs.d
 ;; Improved JavaScript editing mode
 (use-package js2-mode
-  :ensure t
+  :straight t
   :mode ("\\.js\\'"  . js2-mode)
   :interpreter ("node" . js2-mode)
   :bind (:map js2-mode-map ("M-." . nil))  ;; don't conflict with xref
@@ -44,7 +44,7 @@
 
 ;; for jsx
 (use-package rjsx-mode
-  :ensure t
+  :straight t
   :mode (("\\.jsx\\'" . rjsx-mode)
          ("components\\/.*\\.js\\'" . rjsx-mode))
   :interpreter ("node" . rjsx-mode)
@@ -64,12 +64,12 @@
 ;; for XREF when LSP is not being used
 (use-package xref-js2
   :when (not *js-use-lsp*)
-  :ensure t
+  :straight t
   :init (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))
 
 ;; REPL/dev environment
 (use-package indium
-  :ensure t
+  :straight t
   :after js2-mode
   :bind (:map js2-mode-map ("C-c C-l" . indium-eval-buffer))
   :hook ((js2-mode . indium-interaction-mode))

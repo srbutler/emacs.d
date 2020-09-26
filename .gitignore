@@ -3,6 +3,8 @@ pyim/
 transient/
 .cache/
 .dap-breakpoints
+straight/
+eln-cache/
 
 # LSP stuff
 eclipse.jdt.ls/

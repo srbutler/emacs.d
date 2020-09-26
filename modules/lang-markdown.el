@@ -6,7 +6,7 @@
 
 
 (use-package markdown-mode
-  :ensure t
+  :straight t
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
@@ -24,7 +24,7 @@
 ;; allows editing of code blocks using major mode in other window
 ;; C-c C-c or C-c ' commits, C-c C-k aborts
 (use-package edit-indirect
-  :ensure t)
+  :straight t)
 
 
 (provide 'lang-markdown)

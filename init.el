@@ -48,34 +48,26 @@
 (require 'package)
 (setq package-archives
       '(("org"          . "https://orgmode.org/elpa/")
-;;      ("gnu"          . "https://elpa.gnu.org/packages/")
-        ("gnu"          . "http://mirrors.163.com/elpa/gnu/")
+        ("gnu"          . "https://elpa.gnu.org/packages/")
+        ;; ("gnu"          . "http://mirrors.163.com/elpa/gnu/")
         ("melpa"        . "https://melpa.org/packages/")
         ("melpa-stable" . "https://stable.melpa.org/packages/")))
-(package-initialize)
 
-;; set up use-package
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-(setq use-package-enable-imenu-support t)
-(require 'use-package)
-(setq use-package-always-ensure nil
-      use-package-compute-statistics t
-      use-package-verbose t)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-;; set up cask
-(use-package cask
-  :ensure t
-  :config (cask-initialize))
+(straight-use-package 'use-package)
 
-;; for the Cask file
-(use-package cask-mode
-  :ensure t)
-
-;; add pallet to manage packages
-(use-package pallet
-  :ensure t
-  :config (pallet-mode t))
 
 (require 'config-general)
 (require 'config-ivy)
@@ -88,8 +80,7 @@
                 (when (eq (length (frame-list)) 2)
                   (progn
                     (with-selected-frame frame
-                      (require 'config-appearance))
-                    ))))
+                      (require 'config-appearance))))))
   (require 'config-appearance))
 
 ;; anything needed outside of VC goes here

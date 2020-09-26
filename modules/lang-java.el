@@ -6,7 +6,7 @@
 ;;; Code:
 
 (use-package lsp-java
-  :ensure t
+  :straight t
   :after lsp
   :hook (java-mode . lsp))
 
