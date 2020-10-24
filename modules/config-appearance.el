@@ -194,7 +194,7 @@
 (cond
  ((eq window-system nil) nil)
  ((font-existsp "Iosevka Curly")
-  (set-face-attribute 'default nil :height 131 :font "Sarasa Mono SC" :weight 'regular)
+  (set-face-attribute 'default nil :height 131 :font "Iosevka Curly" :weight 'regular)
   (setq-default line-spacing 0.05))
  ((font-existsp "Iosevka")
   (set-face-attribute 'default nil :height 131 :font "Iosevka" :weight 'regular)
