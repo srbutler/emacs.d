@@ -287,14 +287,39 @@
 (use-package ace-window
   :ensure t)
 
+
 ;; jump windows quickly, linked to key-chords below
 (use-package ace-window
   :ensure t)
+
 
 ;; set up proper wrapping for text modes
 (use-package adaptive-wrap
   :ensure t
   :hook (visual-line-mode . adaptive-wrap-prefix-mode))
+
+
+(use-package ansible
+  :ensure t
+  :after yaml-mode
+  :config
+  (setq ansible-filename-re
+      ".*\\(main\.yml\\|site\.yml\\|encrypted\.yml\\|roles/.+\.yml\\|group_vars/.+\\|host_vars/.+\\)")
+
+  (defun check-enable-ansible ()
+    "Check to see if ansible-mode should be enabled for a YML buffer."
+    (interactive)
+    (when (and (stringp buffer-file-name)
+               (string-match ansible-filename-re buffer-file-name))
+      (ansible 1)))
+
+  (add-hook 'yaml-mode-hook 'check-enable-ansible))
+
+
+(use-package ansible-doc
+  :ensure t
+  :after ansible
+  :bind (:map ansible-key-map ("C-c D" . ansible-doc)))
 
 
 ;; linked to key-chords below
@@ -517,6 +542,12 @@
 ;; for ini config files
 (use-package ini-mode
   :ensure t)
+
+
+;; for ansible templates
+(use-package jinja2-mode
+  :ensure t
+  :mode ("\\.j2\\'" . jinja2-mode))
 
 
 ;; define a bunch of quick key combos for basic actions
