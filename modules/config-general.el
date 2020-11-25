@@ -144,7 +144,7 @@
          ("<delete>" . delete-region)      ;; try and have a normal way to delete things
          ("C-c l"    . goto-line)          ;; go to line by number
          ("C-x m"    . menu-bar-mode)      ;; toggle the menu bar
-         ("M-o"      . other-window)       ;; jump to other window
+         ;; ("M-o"      . other-window)       ;; jump to other window
          ("M-O"      . other-frame)        ;; jump to other frame
          ("M-c"      . capitalize-dwim)    ;; capitalize the word-at-point or region
          ("M-l"      . downcase-dwim)      ;; lowercase the word-at-point or region
@@ -285,12 +285,9 @@
 
 ;; jump windows quickly, linked to key-chords below
 (use-package ace-window
-  :ensure t)
-
-
-;; jump windows quickly, linked to key-chords below
-(use-package ace-window
-  :ensure t)
+  :ensure t
+  :bind (("C-c o" . ace-window)
+         ("M-o" . ace-window)))
 
 
 ;; set up proper wrapping for text modes
@@ -347,18 +344,10 @@
     (define-key company-active-map (kbd "C-n") #'company-select-next)
     (define-key company-active-map (kbd "C-p") #'company-select-previous)))
 
-
-;; link lsp output with company
-(use-package company-lsp
+;; icons for company
+(use-package company-box
   :ensure t
-  :after (lsp-mode company)
-  :config
-  (push 'company-lsp company-backends)
-
-  (setq company-lsp-async t
-        company-lsp-cache-candidates nil
-        company-lsp-enable-recompletion t
-        company-lsp-enable-snippet t))
+  :hook (company-mode . company-box-mode))
 
 
 ;; rank completions based on usage
@@ -438,7 +427,8 @@
 
 (use-package dockerfile-mode
   :ensure t
-  :mode ("Dockerfile\\'" . dockerfile-mode))
+  :mode (("Dockerfile\\'" . dockerfile-mode)
+         ("Containerfile\\'" . dockerfile-mode)))
 
 
 ;; get the PATH variable working correctly
@@ -567,13 +557,27 @@
 (use-package lsp-mode
   :ensure t
   :commands lsp
+  :hook (lsp-mode . lsp-enable-which-key-integration)
+  :bind (:map lsp-mode-map
+              ("C-c C-f" . lsp-format-buffer)
+              ("C-c C-l a" . lsp-execute-code-action)
+              ("C-c C-l f" . lsp-format-buffer)
+              ("C-c C-l h" . lsp-describe-thing-at-point)
+              ("C-c C-l r i" . lsp-organize-imports)
+              ("C-c C-l r r" . lsp-rename)
+              ("C-c C-l s d" . lsp-describe-session)
+              ("C-c C-l s s" . lsp)
+              ("C-c C-l s r" . lsp-workspace-restart)
+              ("C-c C-l s q" . lsp-workspace-shutdown))
   :config
-  (setq lsp-auto-configure     t
-        lsp-enable-xref        t
-        lsp-diagnostic-package 'flycheck)
-
-  (with-eval-after-load 'counsel-gtags
-    (counsel-gtags-mode -1)))
+  (setq lsp-auto-configure                 t
+        lsp-enable-imenu                   t
+        lsp-enable-indentation             t
+        lsp-enable-xref                    t
+        lsp-headerline-breadcrumb-enable   t
+        lsp-headerline-breadcrumb-segments '(path-up-to-project file)
+        lsp-keymap-prefix                  "C-c C-l"
+        lsp-diagnostics-provider           :flycheck))
 
 
 ;; flycheck support and code previews/lenses
@@ -581,31 +585,26 @@
   :ensure t
   :after lsp-mode
   :commands lsp-ui-mode
-  :hook ((lsp-mode . lsp-ui-mode))
+  :hook (lsp-mode . lsp-ui-mode)
   :bind (:map lsp-ui-mode-map
               ;; use the peek functions instead of jumps
               ("M-." . lsp-ui-peek-find-definitions)
               ("M-?" . lsp-ui-peek-find-references)
               ("C-c i" . lsp-ui-imenu)
-              ("C-c C-l c" . lsp-capabilities)
-              ("C-c C-l d" . lsp-ui-doc-enable)
-              ("C-c C-l f" . lsp-format-buffer)
-              ("C-c C-l h" . lsp-describe-thing-at-point)
-              ("C-c C-l r" . lsp-rename)
-              ("C-c C-l s" . lsp-ui-sideline-toggle-symbols-info)
+              ("C-c C-l x d" . lsp-ui-peek-find-definitions)
+              ("C-c C-l x i" . lsp-ui-peek-find-implementation)
+              ("C-c C-l x r" . lsp-ui-peek-find-references)
+              ("C-c C-l x w" . lsp-ui-peek-find-workspace-symbol)
               :map lsp-ui-peek-mode-map
               ("C-j" . lsp-ui-peek--goto-xref))
   :config
-  (setq lsp-ui-sideline-delay 0.5
-        lsp-ui-sideline-ignore-duplicate t)
-
-  (defun restart-lsp-server ()
-    "Restart LSP server."
-    (interactive)
-    (lsp-restart-workspace)
-    (revert-buffer t t)
-    (message "LSP server restarted."))
-  (bind-key "C-c C-l w" 'restart-lsp-server lsp-ui-mode-map))
+  (setq lsp-ui-doc-enable                 t
+        lsp-ui-doc-max-width              75
+        lsp-ui-sideline-delay             0.5
+        lsp-ui-sideline-show-diagnostics  t
+        lsp-ui-sideline-show-hover        nil  ;; disable repeated docs
+        lsp-ui-sideline-show-code-actions t
+        lsp-ui-sideline-ignore-duplicate  t))
 
 
 ;; set up magit for git
@@ -629,8 +628,7 @@
   :config
   ;; (magit-auto-revert-mode t)
   (setq magit-completing-read-function 'ivy-completing-read
-        magit-diff-refine-hunk t
-        magit-remote-set-if-missing t))
+        magit-diff-refine-hunk t))
 
 
 ;; display TODOs in status buffer
@@ -658,12 +656,6 @@
    ("C-c m p" . mc/mark-previous-like-this)
    ("C-c m s" . mc/mark-sgml-tag-pair)
    ("C-c m d" . mc/mark-all-like-this-in-defun)))
-
-
-;; provides a simple centered mode for prose writing
-(use-package olivetti
-  :ensure t
-  :config (setq olivetti-body-width 88))
 
 
 ;; pandoc

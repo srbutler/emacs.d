@@ -7,10 +7,19 @@
 ;;  - install: go get -u golang.org/x/tools/cmd/goimports
 ;;  - install: go get -u github.com/rogpeppe/godef
 ;;
+;; For fedora, install via DNF:
+;; - golang-x-tools-gorename.x86_64
+;; - golang-godoc.x86_64
+;; - golang-x-tools-goimports.x86_64
+;; - golang-x-tools-guru.x86_64
+;; - golang-x-tools-gopls.x86_64
+;;
+;; Then (use -insecure in toolbox):
+;; go get -u github.com/motemen/gore/cmd/gore
+;;
 ;;; Code:
 
-(defvar *go-use-lsp* nil)
-;; install: go get -u github.com/sourcegraph/go-langserver
+(defvar *go-use-lsp* t)
 
 (use-package go-mode
   :ensure t
@@ -31,52 +40,12 @@
   (add-hook 'before-save-hook 'gofmt-before-save nil t))
 
 
-(use-package go-eldoc
-  :ensure t
-  :defer t
-  :hook (go-mode . go-eldoc-setup))
-
-
-;; install: go get -u github.com/mdempsky/gocode
-(use-package company-go
-  :unless *go-use-lsp*
-  :after company-mode
-  :defines company-backends
-  :init (add-to-list 'company-backends 'company-go))
-
-
-(use-package go-projectile
-  :after projectile-mode
-  :commands (go-projectile-mode go-projectile-switch-project)
-  :hook ((go-mode . go-projectile-mode)
-         (projectile-after-switch-project . go-projectile-switch-project)))
-
-
-;; install: go get -u github.com/derekparker/delve/cmd/dlv
-(use-package go-dlv
-  :ensure t)
-
-
-;; install: go get -u github.com/josharian/impl
-(use-package go-impl
-  :ensure t
-  :bind (:map go-mode-map ("C-c C-r i" . go-impl)))
-
-
-;; install: go get -u golang.org/x/tools/cmd/gorename
-(use-package go-rename
-  :ensure t
-  :bind (:map go-mode-map ("C-c C-r r" . go-rename)))
-
-
-;; install: go get -u github.com/fatih/gomodifytags
 (use-package go-tag
   :ensure t
   :bind (:map go-mode-map ("C-c C-r t" . go-tag-add))
   :config (setq go-tag-args (list "-transform" "camelcase")))
 
 
-;; install: go get -u github.com/cweill/gotests/...
 (use-package gotest
   :bind (:map go-mode-map
               ("C-c C-t f" . go-test-current-file)

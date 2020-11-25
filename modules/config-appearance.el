@@ -1,5 +1,4 @@
 ;;; config-appearance.el -- Summary
-
 ;;
 ;;; Commentary:
 ;;
@@ -35,92 +34,6 @@
 ;;;; THEMES
 ;; only load themes when opened in a window system
 
-(use-package material-theme
-  :disabled t
-  :ensure t
-  :init (load-theme 'material t))
-
-(use-package solarized-theme
-  :disabled t
-  :ensure t
-  :init
-  (progn
-    ;; these variables need to be preset
-    (setq solarized-distinct-doc-face t
-          solarized-distinct-fringe-background nil
-          solarized-emphasize-indicators nil
-          solarized-high-contrast-mode-line nil
-          solarized-scale-org-headlines t
-          solarized-use-variable-pitch nil
-          solarized-use-less-bold t
-          solarized-use-more-italic nil)
-
-    ;; make the mode-line underlining disappear
-    (setq x-underline-at-descent-line t)
-
-    ;; finally load the theme
-    (load-theme 'solarized-dark t))
-
-  :config
-  ;; custom font-lock setup
-  (set-face-foreground 'font-lock-preprocessor-face "#cb4b16")
-  (set-face-foreground 'font-lock-constant-face "#6c71c4")
-  (set-face-foreground 'font-lock-variable-name-face "#b58900")
-  (set-face-foreground 'font-lock-doc-face "#d33682")
-  (set-face-attribute 'font-lock-constant-face nil :bold nil)
-  (set-face-attribute 'font-lock-builtin-face nil :bold t)
-
-  ;; get rid of nasty underlining
-  (with-eval-after-load 'org-mode
-    (set-face-attribute 'org-block-begin-line nil :underline nil)
-    (set-face-attribute 'org-block-end-line nil :underline nil))
-
-  ;; make rainbow delimiters less monotonous
-  (with-eval-after-load 'rainbow-delimiters
-    (set-face-foreground 'rainbow-delimiters-depth-1-face "#cb4b16")
-    (set-face-foreground 'rainbow-delimiters-depth-6-face "#d33682"))
-
-  ;; fix info fringe for flycheck
-  (with-eval-after-load 'flycheck
-    (set-face-foreground 'flycheck-fringe-info "#268bd2"))
-
-  ;; make the indicators more readable
-  (with-eval-after-load 'git-gutter
-    (progn
-      (set-face-foreground 'git-gutter:added "#859900")
-      (set-face-foreground 'git-gutter:deleted "#dc322f")
-      (set-face-foreground 'git-gutter:modified "#b58900"))))
-
-(use-package zenburn-theme
-  :disabled t
-  :ensure t
-  :init (load-theme 'zenburn t))
-
-(use-package nord-theme
-  :disabled t
-  :ensure t
-  :init (load-theme 'nord t)
-  :config
-  (with-eval-after-load 'persp-mode
-    (set-face-foreground 'persp-selected-face "#5E81AC")))
-
-(use-package modus-operandi-theme
-  :disabled t
-  :ensure t
-  :config
-  (setq modus-operandi-theme-visible-fringes t
-        modus-operandi-theme-distinct-org-blocks t
-        modus-operandi-theme-subtle-diffs t))
-
-(use-package modus-vivendi-theme
-  :disabled t
-  :ensure t
-  :config
-  (setq modus-vivendi-theme-visible-fringes t
-        modus-vivendi-theme-distinct-org-blocks t
-        modus-vivendi-theme-subtle-diffs t))
-
-
 (use-package base16-theme
   :ensure t
   :config
@@ -128,7 +41,6 @@
   (setq base16-distinct-fringe-background t
         base16-highlight-mode-line t
         base16-theme-256-color-source 'base16-shell)
-
   (load-theme 'base16-tomorrow-night t))
 
 
@@ -200,7 +112,7 @@
   (set-face-attribute 'default nil :height 131 :font "Iosevka" :weight 'regular)
   (setq-default line-spacing 0.05))
  ((font-existsp "PragmataPro")
-  (set-face-attribute 'default nil :height 141 :font "PragmataPro")
+  (set-face-attribute 'default nil :height 131 :font "PragmataPro")
   (setq-default line-spacing 0.05))
  ((font-existsp "Roboto Mono")
   (set-face-attribute 'default nil :height 131 :font "Roboto Mono"))

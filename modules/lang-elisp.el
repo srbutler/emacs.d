@@ -30,7 +30,6 @@
   :config
   (defun srb/emacs-lisp-hook ()
     (setq mode-name "ELisp")
-    (counsel-gtags-mode -1)
     (rainbow-mode t))
   (add-hook 'emacs-lisp-mode-hook 'srb/emacs-lisp-hook)
 

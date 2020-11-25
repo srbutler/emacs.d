@@ -132,26 +132,5 @@
   :bind ("C-c y" . ivy-yasnippet))
 
 
-;; access to GNU Global tags
-;; install: brew install global
-(use-package counsel-gtags
-  :disabled
-  :when (or (executable-find "global")
-            (executable-find "gtags"))
-  :ensure t
-  :after counsel
-  :diminish (counsel-gtags-mode . "gtags")
-  :init (add-hook 'prog-mode-hook 'counsel-gtags-mode)
-  :bind (:map counsel-gtags-mode-map
-              ("M-." . counsel-gtags-dwim)
-              ("C-c C-t c" . counsel-gtags-create-tags)
-              ("C-c C-t u" . counsel-gtags-update-tags)
-              ("C-c C-t d" . counsel-gtags-find-definition)
-              ("C-c C-t r" . counsel-gtags-find-reference)
-              ("C-c C-t s" . counsel-gtags-find-symbol)
-              ("C-c C-t f" . counsel-gtags-go-forward)
-              ("C-c C-t b" . counsel-gtags-go-backward)))
-
-
 (provide 'config-ivy)
 ;;; config-ivy.el ends here
