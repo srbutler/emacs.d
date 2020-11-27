@@ -88,7 +88,6 @@
 ;; emmet mode for efficient xml/html entry
 (use-package emmet-mode
   :ensure t
-  :diminish (emmet-mode . "emmet")
   :commands emmet-mode
   :hook (sgml-mode css-mode html-mode web-mode nxml-mode)
   :custom

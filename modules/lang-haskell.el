@@ -34,7 +34,6 @@
 
 (use-package intero
   :ensure t
-  :diminish (intero-mode . "intero")
   :hook (haskell-mode . intero-mode))
 
 

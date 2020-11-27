@@ -16,27 +16,26 @@
   :ensure t
   :after smex
   :demand
-  :diminish
   :bind  (("M-x" . counsel-M-x)
           ("M-y" . counsel-yank-pop)
           ("C-s" . counsel-grep-or-swiper)
           ("C-r" . counsel-grep-or-swiper)
+          ("C-h a" . counsel-apropros)
           ("C-h b" . counsel-descbinds)
           ("C-h f" . counsel-describe-function)
+          ("C-h F" . counsel-describe-face)
           ("C-h v" . counsel-describe-variable)
           ("C-c i" . counsel-imenu)
           ("C-x l" . counsel-locate)
           ("C-x C-f" . counsel-find-file)
           ("C-x C-r" . counsel-recentf)
+          ("C-c C-u" . counsel-unicode-char)
           ("C-h C-l" . counsel-find-library)
           ("C-h SPC" . counsel-mark-ring))
-  :custom
-  (counsel-find-file-at-point t)
-  (counsel-find-file-ignore-regexp
-   "\\.DS_Store\\|.git\\|\.*~undo-tree~\\|GPATH\\|GRTAGS\\|GTAGS\\|.*.elc")
-
   :config
-  (counsel-mode 1)
+  (setq swiper-action-recenter t
+        counsel-find-file-at-point t
+        counsel-find-file-ignore-regexp "\\.DS_Store\\|.git\\|\.*~undo-tree~\\|.*.elc")
 
   ;; rg > ag > grep, set command appropriately
   (cond
@@ -51,8 +50,9 @@
       (bind-key "C-c k" 'counsel-ag)
       (setq counsel-grep-base-command
             "ag -i --noheading --nocolor --nofilename --numbers '%s' %s")))
-   (t (bind-key "C-c k" 'counsel-git-grep))))
+   (t (bind-key "C-c k" 'counsel-git-grep)))
 
+  (counsel-mode 1))
 
 ;; provides sorting for ivy
 (use-package flx
@@ -63,7 +63,6 @@
   :ensure t
   :demand
   :after flx
-  :diminish
   :bind (("C-x b" . ivy-switch-buffer)
          ("C-x C-b" . ivy-switch-buffer)
          ("C-c C-r" . ivy-resume)
@@ -122,7 +121,17 @@
          ("C-c p s r" . counsel-projectile-rg)
          ("C-c p SPC" . counsel-projectile)
          ("C-c p o" . counsel-projectile-org-capture))
-  :config (counsel-projectile-mode))
+  :config (counsel-projectile-mode)
+
+  ;; taken from doom-emacs
+  (add-to-list 'counsel-compile-root-functions #'projectile-project-root)
+
+  (defun srb/compile-project ()
+    "Execute a compile command from the current project's root."
+    (interactive)
+    (counsel-compile (projectile-project-root)))
+  (bind-key "C-c C-c" 'srb/compile-project)
+  (bind-key "C-c p c" 'srb/compile-project))
 
 
 ;; ivy interface for yasnippet

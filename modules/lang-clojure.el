@@ -42,8 +42,7 @@
 (use-package clj-refactor
   :ensure t
   :hook clojure-mode
-  :config (cljr-add-keybindings-with-prefix "C-c C-r")
-  :diminish clj-refactor-mode)
+  :config (cljr-add-keybindings-with-prefix "C-c C-r"))
 
 
 (provide 'lang-clojure)

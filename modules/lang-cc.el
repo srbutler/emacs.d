@@ -29,7 +29,6 @@
 ;; slightly better font-lock for c++
 (use-package modern-cpp-font-lock
   :ensure t
-  :diminish
   :defer t
   :hook ((c++-mode . modern-c++-font-lock-mode)))
 
@@ -99,7 +98,6 @@
   ;; :unless *cc-use-lsp*
   :ensure t
   :defer t
-  :diminish "irony"
   :hook (c-mode c++-mode objc-mode)
   :config
   (define-key irony-mode-map [remap completion-at-point]

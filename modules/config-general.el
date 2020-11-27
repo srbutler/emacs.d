@@ -144,7 +144,6 @@
          ("<delete>" . delete-region)      ;; try and have a normal way to delete things
          ("C-c l"    . goto-line)          ;; go to line by number
          ("C-x m"    . menu-bar-mode)      ;; toggle the menu bar
-         ;; ("M-o"      . other-window)       ;; jump to other window
          ("M-O"      . other-frame)        ;; jump to other frame
          ("M-c"      . capitalize-dwim)    ;; capitalize the word-at-point or region
          ("M-l"      . downcase-dwim)      ;; lowercase the word-at-point or region
@@ -158,7 +157,6 @@
 
 ;; revert buffers automatically when underlying files are changed externally
 (use-package autorevert
-  :diminish (auto-revert-mode . "ar")
   :config (global-auto-revert-mode t))
 
 
@@ -185,7 +183,6 @@
 
 ;; display certain documentation in the minibuffer
 (use-package eldoc-mode
-  :diminish
   :hook prog-mode
   :config
   ;; give current argument distinctive highlighting
@@ -286,8 +283,7 @@
 ;; jump windows quickly, linked to key-chords below
 (use-package ace-window
   :ensure t
-  :bind (("C-c o" . ace-window)
-         ("M-o" . ace-window)))
+  :bind ("M-o" . ace-window))
 
 
 ;; set up proper wrapping for text modes
@@ -296,12 +292,13 @@
   :hook (visual-line-mode . adaptive-wrap-prefix-mode))
 
 
+;; special handling for ansible yaml files
 (use-package ansible
   :ensure t
   :after yaml-mode
   :config
   (setq ansible-filename-re
-      ".*\\(main\.yml\\|site\.yml\\|encrypted\.yml\\|roles/.+\.yml\\|group_vars/.+\\|host_vars/.+\\)")
+        ".*\\(main\.yml\\|site\.yml\\|encrypted\.yml\\|roles/.+\.yml\\|group_vars/.+\\|host_vars/.+\\)")
 
   (defun check-enable-ansible ()
     "Check to see if ansible-mode should be enabled for a YML buffer."
@@ -319,30 +316,39 @@
   :bind (:map ansible-key-map ("C-c D" . ansible-doc)))
 
 
-;; linked to key-chords below
+;; quick jumps
 (use-package avy
-  :ensure t)
+  :ensure t
+  :demand t
+  :bind ("M-j" . avy-goto-word-1))
 
 
 ;; autocompletion with company
 (use-package company
   :ensure t
-  :diminish (company-mode . "comp")
-  :custom
-  (company-idle-delay 0.5)
-  (company-tooltip-limit 10)
-  (company-minimum-prefix-length 2)
-  (company-selection-wrap-around t)
-  (company-tooltip-flip-when-above t)
+  :bind (:map company-active-map
+              ("M-n" . nil)
+              ("M-p" . nil)
+              ("C-n" . company-select-next)
+              ("C-p" . company-select-previous))
   :config
-  (global-company-mode 1)
+  (setq company-idle-delay                0.5
+        company-tooltip-limit             10
+        company-minimum-prefix-length     2
+        company-selection-wrap-around     t
+        company-tooltip-flip-when-above   t
+        company-tooltip-limit             14
+        company-tooltip-align-annotations t
+        company-require-match             'never
+        company-backends                  '(company-capf)
+        company-auto-complete             nil
+        company-auto-complete-chars       nil
+        company-dabbrev-other-buffers     nil
+        company-dabbrev-ignore-case       nil
+        company-dabbrev-downcase          nil
+        company-frontends                 '(company-pseudo-tooltip-frontend))
+  (global-company-mode 1))
 
-  ;; remap select-next/prev to use normal up/down
-  (with-eval-after-load 'company
-    (define-key company-active-map (kbd "M-n") nil)
-    (define-key company-active-map (kbd "M-p") nil)
-    (define-key company-active-map (kbd "C-n") #'company-select-next)
-    (define-key company-active-map (kbd "C-p") #'company-select-previous)))
 
 ;; icons for company
 (use-package company-box
@@ -393,29 +399,6 @@
          ("\\.tsv\\'" . csv-mode)))
 
 
-;; set up dash integration
-(use-package dash-at-point
-  :when (string-equal system-type "darwin")
-  :ensure t
-  :bind ("C-c d" . dash-at-point-with-docset)
-  :config
-  (dolist
-      (pair
-       '('(python-mode . "python3") '(sh-mode . "bash") '(emacs-lisp-mode . "elisp")
-         '(LaTeX-mode . "latex") '(js2-mode . "javascript") '(rjsx-mode . "javascript")
-         '(tuareg-mode . "ocaml") '(ess-mode . "r")))
-    (add-to-list 'dash-at-point-mode-alist pair)))
-
-
-;; diminish keeps the modeline tidy
-(use-package diminish
-  :ensure t)
-
-
-;; for some reason this has to be done manually
-(diminish 'eldoc-mode)
-
-
 ;; manage docker images
 (use-package docker
   :ensure t)
@@ -441,13 +424,13 @@
 ;; expands the selection region progressively
 (use-package expand-region
   :ensure t
-  :bind ("C-=" . er/expand-region))
+  :bind (("C-=" . er/expand-region)
+         ("C-c =" . er/expand-region)))
 
 
 ;; syntax-checking
 (use-package flycheck
   :ensure t
-  :diminish (flycheck-mode . "flyc")
   :config
   (global-flycheck-mode)
 
@@ -463,7 +446,6 @@
 ;; have git indications in gutter
 (use-package git-gutter-fringe
   ;; :when window-system
-  :diminish
   :ensure t
   :init (global-git-gutter-mode t)
   :config
@@ -471,12 +453,6 @@
   (set-face-attribute 'git-gutter-fr:added nil :height 0.9)
   (set-face-attribute 'git-gutter-fr:deleted nil :height 0.9)
   (set-face-attribute 'git-gutter-fr:modified nil :height 0.9))
-
-
-;; navigate through git commit history
-(use-package git-timemachine
-  :ensure t
-  :defer t)
 
 
 ;; major mode for .gitconfig files
@@ -513,9 +489,7 @@
 ;; adds guides to show indentation level
 (use-package highlight-indent-guides
   :ensure t
-  :diminish
-  :bind (:map prog-mode-map ("C-c C-i" . highlight-indent-guides-mode))
-  :config (setq highlight-indent-guides-method 'character))
+  :config (setq highlight-indent-guides-method 'bitmap))
 
 
 ;; highlight TODO/FIXME/etc. comments
@@ -540,35 +514,12 @@
   :mode ("\\.j2\\'" . jinja2-mode))
 
 
-;; define a bunch of quick key combos for basic actions
-(use-package key-chord
-  :ensure t
-  :after (avy ace-window)
-  :init (key-chord-mode +1)
-  :config
-  ;; quick avy calls
-  (key-chord-define-global "jj" 'avy-goto-word-1)
-  (key-chord-define-global "jk" 'avy-goto-char)
-  (key-chord-define-global "jl" 'avy-goto-line)
-  (key-chord-define-global "kk" 'ace-window))
-
-
 ;; make language server protocol services available
 (use-package lsp-mode
   :ensure t
   :commands lsp
   :hook (lsp-mode . lsp-enable-which-key-integration)
-  :bind (:map lsp-mode-map
-              ("C-c C-f" . lsp-format-buffer)
-              ("C-c C-l a" . lsp-execute-code-action)
-              ("C-c C-l f" . lsp-format-buffer)
-              ("C-c C-l h" . lsp-describe-thing-at-point)
-              ("C-c C-l r i" . lsp-organize-imports)
-              ("C-c C-l r r" . lsp-rename)
-              ("C-c C-l s d" . lsp-describe-session)
-              ("C-c C-l s s" . lsp)
-              ("C-c C-l s r" . lsp-workspace-restart)
-              ("C-c C-l s q" . lsp-workspace-shutdown))
+  :bind (:map lsp-mode-map ("C-c C-f" . lsp-format-buffer))
   :config
   (setq lsp-auto-configure                 t
         lsp-enable-imenu                   t
@@ -591,10 +542,6 @@
               ("M-." . lsp-ui-peek-find-definitions)
               ("M-?" . lsp-ui-peek-find-references)
               ("C-c i" . lsp-ui-imenu)
-              ("C-c C-l x d" . lsp-ui-peek-find-definitions)
-              ("C-c C-l x i" . lsp-ui-peek-find-implementation)
-              ("C-c C-l x r" . lsp-ui-peek-find-references)
-              ("C-c C-l x w" . lsp-ui-peek-find-workspace-symbol)
               :map lsp-ui-peek-mode-map
               ("C-j" . lsp-ui-peek--goto-xref))
   :config
@@ -626,7 +573,6 @@
          ("C-c g v" . magit-revert)
          ("C-c g x" . magit-run))
   :config
-  ;; (magit-auto-revert-mode t)
   (setq magit-completing-read-function 'ivy-completing-read
         magit-diff-refine-hunk t))
 
@@ -662,7 +608,6 @@
 (use-package pandoc-mode
   :when (executable-find "pandoc")
   :ensure t
-  :diminish (pandoc-mode . "pandoc")
   :hook (markdown-mode gfm-mode org-mode TeX-mode)
   :config (pandoc-load-default-settings))
 
@@ -670,7 +615,6 @@
 ;; minor-mode and utility for regex conversion (perl <--> elisp)
 (use-package pcre2el
   :ensure t
-  :diminish (pcre-mode . "pcre")
   :init (pcre-mode +1))
 
 
@@ -683,7 +627,6 @@
 ;; project management and fast-switching
 (use-package projectile
   :ensure t
-  :diminish projectile-mode
   :config
   (projectile-mode t)
   (setq projectile-cache-file
@@ -695,8 +638,7 @@
 ;; displays colors for color hex values
 (use-package rainbow-mode
   :ensure t
-  :hook (emacs-lisp-mode css-mode conf-colon-mode conf-space-mode sh-mode)
-  :diminish rainbow-mode)
+  :hook (emacs-lisp-mode css-mode conf-colon-mode conf-space-mode sh-mode))
 
 
 ;; make parentheses colorful
@@ -719,7 +661,8 @@
         sp-hybrid-kill-entire-symbol nil)
 
   ;; conflicts with xref
-  (define-key smartparens-mode-map (kbd "M-?") nil))
+  (define-key smartparens-mode-map (kbd "M-?") nil)
+  (define-key smartparens-mode-map (kbd "M-j") nil))
 
 
 ;; better line-by-line scrolling, especially in terminals
@@ -731,7 +674,6 @@
 ;; visual undo history
 (use-package undo-tree
   :ensure t
-  :diminish undo-tree-mode
   :config
   (setq undo-tree-history-directory-alist `((".*" . ,*savefile-dir*))
         undo-tree-auto-save-history t
@@ -755,7 +697,6 @@
 ;; cause I forget things
 (use-package which-key
   :ensure t
-  :diminish which-key-mode
   :init (which-key-mode 1))
 
 
@@ -763,7 +704,6 @@
 (use-package wrap-region
   :ensure t
   :hook ((org-mode markdown-mode text-mode) . wrap-region-mode)
-  :diminish (wrap-region-mode . "wrap")
   :config
   (wrap-region-add-wrappers
    '(("(" ")")
@@ -794,7 +734,6 @@
 ;; unobtrusively trim trailing whitespace
 (use-package ws-butler
   :ensure t
-  :diminish ws-butler-mode
   :config (ws-butler-global-mode))
 
 

@@ -15,7 +15,6 @@
 (use-package pyim
   :ensure t
   :demand t
-  :diminish (pyim-isearch-mode . "pyim")
   :bind (("C-x p" . pyim-convert-string-at-point)
          ("C-;" . pyim-delete-word-from-personal-buffer))
   :config
