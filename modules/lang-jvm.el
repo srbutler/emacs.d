@@ -1,8 +1,20 @@
-;;; lang-scala.el --- Summary:
+;;; lang-java.el --- Summary:
 ;;
 ;;; Commentary:
+;;  Follow instructions in: https://github.com/emacs-lsp/lsp-java
 ;;
 ;;; Code:
+
+(use-package lsp-java
+  :ensure t
+  :after lsp
+  :hook (java-mode . lsp))
+
+
+(use-package clojure-mode
+  :ensure t
+  :mode ("\\.boot\\'" . clojure-mode))
+
 
 (use-package scala-mode
   :ensure t
@@ -21,10 +33,5 @@
   (scala-mode:goto-start-of-code))
 
 
-(use-package sbt-mode
-  :ensure t
-  :pin melpa)
-
-
-(provide 'lang-scala)
-;;; lang-scala.el ends here
+(provide 'lang-java)
+;;; lang-java.el ends here

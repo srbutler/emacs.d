@@ -25,6 +25,7 @@
           ("C-h f" . counsel-describe-function)
           ("C-h F" . counsel-describe-face)
           ("C-h v" . counsel-describe-variable)
+          ("C-h C-v" . counsel-set-variable)
           ("C-c i" . counsel-imenu)
           ("C-x l" . counsel-locate)
           ("C-x C-f" . counsel-find-file)

@@ -39,20 +39,32 @@
          ("\\.xsd\\'" . nxml-mode)
          ("\\.bml\\'" . nxml-mode)
          ("\\.rsd\\'" . nxml-mode))
-  :custom
-  (nxml-child-indent 2)
-  (nxml-attribute-indent 2)
-  (nxml-auto-insert-xml-declaration-flag nil)
-  (nxml-bind-meta-tab-to-complete-flag t)
-  (nxml-slash-auto-complete-flag t)
+  :hook (nxml-mode . emmet-mode)
+  :bind (:map nxml-mode-map
+              ("<return>" . newline-and-indent)
+              ("C-c M-h"  . tidy-xml-buffer))
+  :preface
+  (defun tidy-xml-buffer ()
+    (interactive)
+    (save-excursion
+      (call-process-region (point-min) (point-max) "tidy" t t nil
+                           "-xml" "-i" "-wrap" "0" "-omit" "-q" "-utf8")))
   :config
-  (add-hook 'nxml-mode-hook 'smartparens-mode)
-  (add-hook 'nxml-mode-hook 'emmet-mode))
+  (setq nxml-child-indent 2
+        nxml-attribute-indent 2
+        nxml-auto-insert-xml-declaration-flag nil
+        nxml-bind-meta-tab-to-complete-flag t
+        nxml-slash-auto-complete-flag t))
 
 
 (use-package json-mode
   :ensure t
   :mode ("\\.json\\'" . json-mode))
+
+
+(use-package json-reformat
+  :ensure t
+  :after json-mode)
 
 
 (use-package css-mode

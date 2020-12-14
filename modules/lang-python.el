@@ -4,8 +4,6 @@
 ;;
 ;;; Code:
 
-(defvar *python-use-lsp* t)
-
 (use-package python
   :mode (("\\.py\\'" . python-mode)
          ("\\.wsgi$" . python-mode))
@@ -57,11 +55,25 @@
       (setq pip-requirements-index-url *pip-repo-url*)))
 
 
+;; pytest intgration
+(use-package python-pytest
+  :ensure t
+  :after projectile
+  :bind (:map python-mode-map ("C-c C-p t" . python-pytest-dispatch)))
+
+
+;; better LSP server
+(use-package lsp-python-ms
+  :init (setq lsp-python-ms-auto-install-server t)
+  :ensure t
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-python-ms)
+                         (lsp))))
+
+
 ;; no config deterministic formatting
 (use-package blacken
   :ensure t
-  ;; :hook (python-mode . blacken-mode)
-  :bind (:map python-mode-map ("C-c C-f" . blacken-buffer))
   :config (setq blacken-executable "/usr/bin/black"))
 
 
@@ -70,20 +82,28 @@
   :ensure t)
 
 
-;; pytest intgration
-(use-package python-pytest
+;; clean imports
+(use-package pyimport
   :ensure t
-  :after projectile
-  :bind ("C-c C-t" . python-pytest-popup))
+  :config (setq pyimport-pyflakes-path "/usr/bin/pyflakes"))
 
 
-(use-package lsp-python-ms
-  :if *python-use-lsp*
-  :init (setq lsp-python-ms-auto-install-server t)
-  :ensure t
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-python-ms)
-                         (lsp))))
+(defun srb/python-cleanup-imports ()
+  "Remove unused imports and sort."
+  (interactive)
+  (progn
+    (pyimport-remove-unused)
+    (py-isort-buffer)))
+(bind-key "C-c C-p i" 'srb/python-cleanup-imports python-mode-map)
+
+
+(defun srb/python-format-buffer ()
+  "Clean up imports and format with black."
+  (interactive)
+  (progn
+    (srb/python-cleanup-imports)
+    (blacken-buffer)))
+(bind-key "C-c C-p f" 'srb/python-format-buffer python-mode-map)
 
 
 (provide 'lang-python)

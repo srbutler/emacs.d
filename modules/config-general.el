@@ -193,10 +193,9 @@
 
 
 (use-package prog-mode
-  :config
-  (add-hook 'prog-mode-hook (lambda () (setq-local show-trailing-whitespace t)))
-  (add-hook 'prog-mode-hook 'electric-indent-mode)
-  (add-hook 'prog-mode-hook 'subword-mode))
+  :hook (prog-mode . (lambda () (setq-local show-trailing-whitespace t)))
+  :hook (prog-mode . electric-indent-mode)
+  :hook (prog-mode . subword-mode))
 
 
 ;; save recent files
@@ -260,7 +259,23 @@
 
 ;; indicates whitespace characters
 (use-package whitespace-mode
-  :bind ("C-c C-w" . whitespace-mode))
+  :bind ("C-c C-w" . whitespace-mode)
+  :preface
+  (defun srb/normalize-file ()
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (whitespace-cleanup)
+      (delete-trailing-whitespace)
+      (goto-char (point-max))
+      (delete-blank-lines)
+      (set-buffer-file-coding-system 'unix)
+      (goto-char (point-min))
+      (while (re-search-forward "\r$" nil t)
+        (replace-match ""))
+      (set-buffer-file-coding-system 'utf-8)
+      (let ((require-final-newline t))
+        (save-buffer)))))
 
 
 ;; use shift + arrow keys to switch between visible buffers
@@ -296,18 +311,17 @@
 (use-package ansible
   :ensure t
   :after yaml-mode
-  :config
-  (setq ansible-filename-re
-        ".*\\(main\.yml\\|site\.yml\\|encrypted\.yml\\|roles/.+\.yml\\|group_vars/.+\\|host_vars/.+\\)")
+  :hook (yaml-mode . check-enable-ansible)
+  :preface
+  (defvar ansible-filename-re
+    ".*\\(main\.yml\\|site\.yml\\|encrypted\.yml\\|roles/.+\.yml\\|group_vars/.+\\|host_vars/.+\\)")
 
   (defun check-enable-ansible ()
     "Check to see if ansible-mode should be enabled for a YML buffer."
     (interactive)
     (when (and (stringp buffer-file-name)
                (string-match ansible-filename-re buffer-file-name))
-      (ansible 1)))
-
-  (add-hook 'yaml-mode-hook 'check-enable-ansible))
+      (ansible 1))))
 
 
 (use-package ansible-doc
@@ -414,6 +428,11 @@
          ("Containerfile\\'" . dockerfile-mode)))
 
 
+;; R/Stata/etc.
+(use-package ess
+  :ensure t)
+
+
 ;; get the PATH variable working correctly
 (use-package exec-path-from-shell
   :when (memq window-system '(mac ns x))
@@ -500,7 +519,14 @@
 
 ;; make available for other packages for now
 (use-package hydra
-  :ensure t)
+  :ensure t
+  :config
+  (defhydra hydra-zoom (global-map "C-c +")
+    "zoom"
+    ("+" text-scale-increase "in")
+    ("=" text-scale-increase "in")
+    ("-" text-scale-decrease "out")
+    ("_" text-scale-decrease "out")))
 
 
 ;; for ini config files
@@ -519,7 +545,6 @@
   :ensure t
   :commands lsp
   :hook (lsp-mode . lsp-enable-which-key-integration)
-  :bind (:map lsp-mode-map ("C-c C-f" . lsp-format-buffer))
   :config
   (setq lsp-auto-configure                 t
         lsp-enable-imenu                   t
@@ -562,6 +587,8 @@
          ("C-c g B" . magit-blame)
          ("C-c g d" . magit-diff)
          ("C-c g f" . magit-fetch-all)
+         ("C-c g F" . magit-file-dispatch)
+         ("C-c g g" . magit-dispatch)
          ("C-c g l" . magit-log)
          ("C-c g m" . magit-merge)
          ("C-c g p" . magit-pull)
@@ -627,6 +654,7 @@
 ;; project management and fast-switching
 (use-package projectile
   :ensure t
+  :bind ("C-c p h" . projectile-find-other-file)
   :config
   (projectile-mode t)
   (setq projectile-cache-file

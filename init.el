@@ -97,13 +97,11 @@
 
 ;; load language-specific config files
 (require 'lang-cc)
-(require 'lang-clojure)
 (require 'lang-elisp)
-(require 'lang-ess)
 (require 'lang-go)
 (require 'lang-haskell)
-(require 'lang-java)
 (require 'lang-js)
+(require 'lang-jvm)
 (require 'lang-latex)
 (require 'lang-lisp)
 (require 'lang-markdown)
@@ -111,7 +109,6 @@
 (require 'lang-org)
 (require 'lang-python)
 (require 'lang-rust)
-(require 'lang-scala)
 (require 'lang-web)
 
 ;; anything needed locally (work, etc.) not in before-init.el
