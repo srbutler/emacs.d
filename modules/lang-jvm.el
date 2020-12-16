@@ -7,8 +7,11 @@
 
 (use-package lsp-java
   :ensure t
-  :after lsp
-  :hook (java-mode . lsp))
+  :hook (java-mode . (lambda () (require 'lsp-java) (lsp))))
+
+
+(use-package kotlin-mode
+  :ensure t)
 
 
 (use-package clojure-mode
@@ -17,20 +20,7 @@
 
 
 (use-package scala-mode
-  :ensure t
-  :pin melpa
-  :config
-  ;; better newline handling in comments
-  (defun scala-mode-newline-comments ()
-    "Custom newline appropriate for `scala-mode'."
-    ;; shouldn't this be in a post-insert hook?
-    (interactive)
-    (newline-and-indent)
-    (scala-indent:insert-asterisk-on-multiline-comment))
-  (bind-key "RET" 'scala-mode-newline-comments scala-mode-map)
-
-  ;; skips headers, goes to go when opening a file
-  (scala-mode:goto-start-of-code))
+  :ensure t)
 
 
 (provide 'lang-java)

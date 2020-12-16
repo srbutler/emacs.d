@@ -7,43 +7,47 @@
 (use-package python
   :mode (("\\.py\\'" . python-mode)
          ("\\.wsgi$" . python-mode))
-  :init
-  (add-hook 'python-mode-hook (lambda ()
-                                (setq tab-width 4)
-                                (setq fill-column 88)))
-  :config
-  (setq indent-tabs-mode nil
-        python-indent-offset 4)
+  :hook (python-mode . srb/python-config)
+  :hook (python-mode . srb/set-python-interpreter)
+  :hook (inferior-python-mode . srb/inferior-python-config)
+  :preface
+  ;; this will get used when venvs are activated as well
+  (defun srb/set-python-interpreter (&optional venv-dir)
+    "Set the python interpretor, prepending VENV-DIR if supplied."
+    (let* ((venv-bin-dir (if venv-dir (concat venv-dir "bin/") nil))
+           (ipy3-exe (concat venv-bin-dir "ipython3"))
+           (py3-exe (concat venv-bin-dir "python3"))
+           (ipy-exe (concat venv-bin-dir "ipython")))
+      (cond
+       ((executable-find ipy3-exe)
+        (setq python-shell-interpreter ipy3-exe
+              python-shell-interpreter-args "-i --simple-prompt"))
+       ((executable-find py3-exe)
+        (setq python-shell-interpreter py3-exe))
+       ((executable-find ipy-exe)
+        (setq python-shell-interpreter ipy-exe
+              python-shell-interpreter-args "-i --simple-prompt"))
+       (t (user-error
+           "Virtualenv does not appear to be active and/or have an interpreter")))))
 
-  ;; use ipython instead of standard interpreter if found
-  (when (executable-find "ipython")
-    (setq python-shell-interpreter "ipython"
-          python-shell-interpreter-args "-i --simple-prompt"))
+  (defun srb/python-config ()
+    (setq-local tab-width 4
+                fill-column 88
+                indent-tabs-mode nil))
 
-  ;; inferior python shell setup
   (defun srb/inferior-python-config ()
     (indent-tabs-mode t)
     (rainbow-delimiters-mode t)
     (smartparens-strict-mode t))
-  (add-hook 'inferior-python-mode-hook 'srb/inferior-python-config)
 
-  (defun send-input-and-indent()
-    (interactive)
-    (comint-send-input)
-    (indent-for-tab-command))
-  (bind-key "<enter>" 'send-input-and-indent inferior-python-mode-map)
-  (bind-key "C-j" 'send-input-and-indent inferior-python-mode-map)
-
-  ;; set custom keywords for python-mode
-  (font-lock-add-keywords
-   'python-mode
-   '(("[ \t]*\\<\\(from\\)\\>.*" 1 'font-lock-preprocessor-face)
-     ("[ \t]*\\<\\(from\\)\\>.*\\<import\\>" 1 'font-lock-preprocessor-face)
-     ("[ \t]*\\(\\<\\(from\\)\\>.*\\)?\\<\\(import\\)\\>" 3 'font-lock-preprocessor-face)
-     ("[ \t]*\\(\\<from\\>.*\\)?\\<\\(import\\)\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
-     ("[ \t]*\\(\\<from\\>.*\\)?\\<import\\>.*\\<\\(as\\)\\>" 2 'font-lock-preprocessor-face)
-     ("\\<[\\+-]?[0-9]+\\(.[0-9]+\\|L\\)?\\>" 0 'font-lock-constant-face)
-     ("\\([][{}()~^<>:=,.\\+*/%-]\\)" 0 'widget-inactive-face))))
+  :init (setq python-indent-guess-indent-offset-verbose nil)
+  :config
+  ;; interferes with smartparens
+  (define-key python-mode-map (kbd "DEL") nil)
+  (sp-local-pair 'python-mode "'" nil
+                 :unless '(sp-point-before-word-p
+                           sp-point-after-word-p
+                           sp-point-before-same-p)))
 
 
 ;; major mode for requirements.txt
@@ -55,20 +59,32 @@
       (setq pip-requirements-index-url *pip-repo-url*)))
 
 
+;; manage virtualenvs
+(use-package pyvenv
+  :ensure t
+  :after python-mode
+  :hook (python-mode . pyvenv-mode)
+  :bind (:map python-mode-map ("C-c C-x v" . pyvenv-workon))
+  :config
+  (setq pyvenv-post-activate-hooks (list (srb/set-python-interpreter pyvenv-virtual-env)))
+  (setq pyvenv-post-deactivate-hooks (list (srb/set-python-interpreter))))
+
+
 ;; pytest intgration
 (use-package python-pytest
   :ensure t
-  :after projectile
-  :bind (:map python-mode-map ("C-c C-p t" . python-pytest-dispatch)))
+  :bind (:map python-mode-map ("C-c C-x t" . python-pytest-dispatch)))
 
 
 ;; better LSP server
 (use-package lsp-python-ms
-  :init (setq lsp-python-ms-auto-install-server t)
   :ensure t
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-python-ms)
-                         (lsp))))
+  :init (setq lsp-python-ms-auto-install-server t)
+  :preface
+  (defun srb/lsp-python-init ()
+    (require 'lsp-python-ms)
+    (lsp))
+  :hook (python-mode . srb/lsp-python-init))
 
 
 ;; no config deterministic formatting
@@ -79,7 +95,8 @@
 
 ;; sort imports
 (use-package py-isort
-  :ensure t)
+  :ensure t
+  :config (setq py-isort-options "--profile black"))
 
 
 ;; clean imports
@@ -91,19 +108,17 @@
 (defun srb/python-cleanup-imports ()
   "Remove unused imports and sort."
   (interactive)
-  (progn
-    (pyimport-remove-unused)
-    (py-isort-buffer)))
-(bind-key "C-c C-p i" 'srb/python-cleanup-imports python-mode-map)
+  (pyimport-remove-unused)
+  (py-isort-buffer))
+(bind-key "C-c C-x i" 'srb/python-cleanup-imports python-mode-map)
 
 
 (defun srb/python-format-buffer ()
   "Clean up imports and format with black."
   (interactive)
-  (progn
-    (srb/python-cleanup-imports)
-    (blacken-buffer)))
-(bind-key "C-c C-p f" 'srb/python-format-buffer python-mode-map)
+  (srb/python-cleanup-imports)
+  (blacken-buffer))
+(bind-key "C-c C-x f" 'srb/python-format-buffer python-mode-map)
 
 
 (provide 'lang-python)
