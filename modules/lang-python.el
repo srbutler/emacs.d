@@ -80,45 +80,48 @@
 (use-package lsp-python-ms
   :ensure t
   :init (setq lsp-python-ms-auto-install-server t)
+  :hook (python-mode . srb/lsp-python-init)
   :preface
   (defun srb/lsp-python-init ()
     (require 'lsp-python-ms)
-    (lsp))
-  :hook (python-mode . srb/lsp-python-init))
-
-
-;; no config deterministic formatting
-(use-package blacken
-  :ensure t
-  :config (setq blacken-executable "/usr/bin/black"))
+    (lsp)))
 
 
 ;; sort imports
 (use-package py-isort
   :ensure t
+  :after python-mode
   :config (setq py-isort-options "--profile black"))
 
 
 ;; clean imports
 (use-package pyimport
   :ensure t
-  :config (setq pyimport-pyflakes-path "/usr/bin/pyflakes"))
+  :after py-isort
+  :config
+  (setq pyimport-pyflakes-path "pyflakes")
+
+  (defun srb/python-cleanup-imports ()
+    "Remove unused imports and sort."
+    (interactive)
+    (pyimport-remove-unused)
+    (py-isort-buffer))
+  (bind-key "C-c C-x i" 'srb/python-cleanup-imports python-mode-map))
 
 
-(defun srb/python-cleanup-imports ()
-  "Remove unused imports and sort."
-  (interactive)
-  (pyimport-remove-unused)
-  (py-isort-buffer))
-(bind-key "C-c C-x i" 'srb/python-cleanup-imports python-mode-map)
+;; no config deterministic formatting
+(use-package blacken
+  :ensure t
+  :after pyimport
+  :config
+  (setq blacken-executable "black")
 
-
-(defun srb/python-format-buffer ()
-  "Clean up imports and format with black."
-  (interactive)
-  (srb/python-cleanup-imports)
-  (blacken-buffer))
-(bind-key "C-c C-x f" 'srb/python-format-buffer python-mode-map)
+  (defun srb/python-format-buffer ()
+    "Clean up imports and format with black."
+    (interactive)
+    (srb/python-cleanup-imports)
+    (blacken-buffer))
+  (bind-key "C-c C-x f" 'srb/python-format-buffer python-mode-map))
 
 
 (provide 'lang-python)

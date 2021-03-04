@@ -384,27 +384,28 @@
 (use-package crux
   :ensure t
   :demand
-  :bind (("C-x 4 t" . crux-transpose-windows)
-         ("C-c I"   . crux-find-user-init-file)
-         ("C-c S"   . crux-find-shell-init-file)
-         ("C-c n"   . crux-cleanup-buffer-or-region)
-         ("C-c r"   . crux-rename-file-and-buffer)
-         ("C-c TAB" . crux-indent-rigidly-and-copy-to-clipboard)
-         :map emacs-lisp-mode-map
-         ("C-c e"   . crux-eval-and-replace))
+  :bind (([remap kill-line] . crux-smart-kill-line)
+         ([remap open-line] . crux-smart-open-line)
+         ([remap kill-whole-line] . crux-kill-whole-line)
+         ([remap move-beginning-of-line] . crux-move-beginning-of-line)
+         ("C-x 4 t"     . crux-transpose-windows)
+         ("C-c C-x n"   . crux-cleanup-buffer-or-region)
+         ("C-c C-x r"   . crux-rename-file-and-buffer)
+         ("C-c C-x s"   . crux-sudo-edit)
+         ("C-c C-x TAB" . crux-indent-rigidly-and-copy-to-clipboard))
+  :bind (:map emacs-lisp-mode-map ("C-c e" . crux-eval-and-replace))
   :config
-  ;; kills to end of line first, then whole line
-  (global-set-key [remap kill-line] #'crux-smart-kill-line)
-  (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line)
-  (global-set-key [remap open-line] #'crux-smart-open-line)
-  (global-set-key [remap kill-whole-line] #'crux-kill-whole-line)
-
   ;; advice that modifies some general behavior
   ;; C-M-\ indents the whole file
   (crux-with-region-or-buffer indent-region)
   ;; tabify/untabify the whole buffer
   (crux-with-region-or-buffer untabify)
   (crux-with-region-or-buffer tabify))
+
+
+(use-package csharp-mode
+  :ensure t
+  :hook lsp)
 
 
 (use-package csv-mode
@@ -430,7 +431,7 @@
 
 ;; R/Stata/etc.
 (use-package ess
-  :ensure t)
+  :ensure ess)
 
 
 ;; get the PATH variable working correctly
