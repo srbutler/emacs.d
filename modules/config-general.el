@@ -16,8 +16,7 @@
                  "%b"))))
 
 ;; setup savefiles/backups in a way that's not annoying
-(setq auto-save-file-name-transforms `((".*" ,*savefile-dir* t))
-      backup-directory-alist `((".*" . ,*savefile-dir*))
+(setq backup-directory-alist `(("." . ,*savefile-dir*))
       backup-by-copying t
       delete-old-versions t
       kept-new-versions 6

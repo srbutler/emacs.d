@@ -54,6 +54,10 @@
         ("melpa-stable" . "https://stable.melpa.org/packages/")))
 (package-initialize)
 
+;; natively-compile if available (gccemacs)
+(when (boundp 'package-native-compile)
+    (setq package-native-compile t))
+
 ;; set up use-package
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))

@@ -1,7 +1,7 @@
 ;;; config-ivy.el -- Summary
 ;;
 ;;; Commentary:
-;;    Load this in `init.el' if to use it instead of helm.
+;;
 ;;; Code:
 
 ;; adds usage ordering to counsel-M-x
@@ -43,7 +43,6 @@
    ((executable-find "rg")
     (progn
       (bind-key "C-c k" 'counsel-rg)
-
       (setq counsel-grep-base-command
             "rg -i -M 120 --no-heading --line-number --color never '%s' %s")))
    ((executable-find "ag")
@@ -110,6 +109,7 @@
 ;; project browsing
 (use-package counsel-projectile
   :after (counsel projectile)
+  :demand t
   :ensure t
   :bind (("C-c p p" . counsel-projectile-switch-project)
          ("C-c p f" . counsel-projectile-find-file)

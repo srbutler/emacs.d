@@ -33,7 +33,7 @@
 
 
 (use-package intero
-  :ensure t
+  :disabled t
   :hook (haskell-mode . intero-mode))
 
 
@@ -45,7 +45,7 @@
 
 
 (use-package company-ghci
-  :disabled
+  :disabled t
   :ensure t
   :after haskell
   :config

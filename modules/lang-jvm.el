@@ -23,5 +23,5 @@
   :ensure t)
 
 
-(provide 'lang-java)
+(provide 'lang-jvm)
 ;;; lang-java.el ends here
