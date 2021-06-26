@@ -13,6 +13,7 @@
 
 ;; setup PYIM Chinese input method
 (use-package pyim
+  :disabled t
   :ensure t
   :demand t
   :bind (("C-x p" . pyim-convert-string-at-point)
