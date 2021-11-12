@@ -25,10 +25,10 @@
                                           frame-name
                                           "\"")))))
 
-(if (string= window-system "x")
-    (progn
-      (srb/set-frame-dark-theme (selected-frame))
-      (add-hook 'after-make-frame-functions 'srb/set-frame-dark-theme)))
+;; (if (string= window-system "x")
+;;     (progn
+;;       (srb/set-frame-dark-theme (selected-frame))
+;;       (add-hook 'after-make-frame-functions 'srb/set-frame-dark-theme)))
 
 
 ;;;; THEMES
