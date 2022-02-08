@@ -655,6 +655,7 @@
 (use-package projectile
   :ensure t
   :bind ("C-c p h" . projectile-find-other-file)
+  :demand t
   :config
   (projectile-mode t)
   (setq projectile-cache-file
